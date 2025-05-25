@@ -19,6 +19,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-8">
             <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
             <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
+            <Link to="/prompt-engineering" className="text-gray-600 hover:text-gray-900 transition-colors">Learn Prompting</Link>
             <Link to="/login" className="text-gray-600 hover:text-gray-900 transition-colors">Login</Link>
             <Link to="/dashboard">
               <Button className="bg-blue-600 hover:bg-blue-700">Get Started</Button>
@@ -41,6 +42,7 @@ const Navbar = () => {
             <div className="flex flex-col space-y-3">
               <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
               <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
+              <Link to="/prompt-engineering" className="text-gray-600 hover:text-gray-900 transition-colors">Learn Prompting</Link>
               <Link to="/login" className="text-gray-600 hover:text-gray-900 transition-colors">Login</Link>
               <Link to="/dashboard">
                 <Button className="bg-blue-600 hover:bg-blue-700 w-full">Get Started</Button>

@@ -12,6 +12,8 @@ import Dashboard from "./pages/Dashboard";
 import Pricing from "./pages/Pricing";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import PromptEngineering from "./pages/PromptEngineering";
+import ExerciseEmbed from "./pages/ExerciseEmbed";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +44,8 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/pricing" element={<Pricing />} />
+                <Route path="/prompt-engineering" element={<PromptEngineering />} />
+                <Route path="/prompt-engineering/exercise-embed" element={<ExerciseEmbed />} />
                 <Route 
                   path="/dashboard" 
                   element={
@@ -53,7 +57,7 @@ const App = () => (
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
-          </LanguageProvider>
+          </LanguagePath>
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
