@@ -409,14 +409,14 @@ Constraints & Requirements:
 - Keep industry-appropriate and professional
 
 **Format Requirements:**
-```
+\`\`\`
 ## Blog Post Idea #[Number]
 **Title:** [SEO-Optimized Title - Character Count: X/60]
 **Type:** [How-to/Listicle/Case Study/Guide/Trend Analysis]
 **Target Keyword:** [Primary SEO keyword]
 **Description:** [Pain point addressed] [Unique value proposition]
 **Estimated Word Count:** [750-2000 words]
-```
+\`\`\`
 
 **Quality Standards:**
 - Each idea must solve a real problem
@@ -922,10 +922,6 @@ Budget: [AVAILABLE_RESOURCES]`,
       ]
     }
   ],
-  intermediate: [
-    // ... (continuing with intermediate exercises)
-  ],
-  advanced: [
-    // ... (continuing with advanced exercises)
-  ]
+  intermediate: [],
+  advanced: []
 };
