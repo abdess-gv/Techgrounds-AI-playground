@@ -3,303 +3,222 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, RotateCcw, CheckCircle, XCircle, Lightbulb, Target, Code, Database } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Play, Brain, Target, BookOpen, Lightbulb, Award } from "lucide-react";
+import EnhancedInteractiveExercise from './EnhancedInteractiveExercise';
+import { exerciseDatabase, Exercise } from './ExerciseData';
 
 interface ExercisePlayerProps {
   level: "beginner" | "intermediate" | "advanced";
 }
 
 const ExercisePlayer = ({ level }: ExercisePlayerProps) => {
-  const [currentExercise, setCurrentExercise] = useState(0);
-  const [userPrompt, setUserPrompt] = useState("");
-  const [showHint, setShowHint] = useState(false);
-  const [isEmbedded, setIsEmbedded] = useState(false);
+  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
+  const [completedExercises, setCompletedExercises] = useState<Set<string>>(new Set());
+  const [exerciseScores, setExerciseScores] = useState<{ [key: string]: number }>({});
 
-  const exercises = {
-    beginner: [
-      {
-        title: "Basic Instruction Following",
-        type: "prompting",
-        difficulty: "Easy",
-        description: "Write a prompt that asks the AI to summarize a text in exactly 3 sentences.",
-        context: "You have a long article about climate change and need a concise summary.",
-        hint: "Be specific about the length requirement and mention what type of content to focus on.",
-        solution: "Please summarize the following article about climate change in exactly 3 sentences, focusing on the main causes, effects, and potential solutions:",
-        evaluation: ["Clear length specification", "Mentions the topic", "Asks for structured content"]
-      },
-      {
-        title: "Role-based Prompting",
-        type: "prompting",
-        difficulty: "Easy",
-        description: "Create a prompt that makes the AI act as a helpful teacher explaining photosynthesis to a 10-year-old.",
-        context: "You need to explain a complex scientific concept to a young student.",
-        hint: "Define the role clearly and specify the audience age and explanation style.",
-        solution: "Act as a patient and encouraging elementary school teacher. Explain photosynthesis to a 10-year-old student using simple words, fun analogies, and an enthusiastic tone:",
-        evaluation: ["Defines clear role", "Specifies audience age", "Mentions communication style"]
-      }
-    ],
-    intermediate: [
-      {
-        title: "Chain-of-Thought Reasoning",
-        type: "prompting",
-        difficulty: "Medium",
-        description: "Design a prompt for solving multi-step math word problems using chain-of-thought reasoning.",
-        context: "The AI needs to show its work step-by-step for complex problems.",
-        hint: "Include examples of step-by-step reasoning and ask the AI to think through each step.",
-        solution: "Solve this step-by-step, showing your reasoning at each stage:\n\n1. First, identify what information is given\n2. Determine what you need to find\n3. Break down the problem into smaller steps\n4. Solve each step and explain your reasoning\n5. Check your final answer\n\nProblem:",
-        evaluation: ["Provides clear structure", "Asks for step-by-step reasoning", "Includes verification step"]
-      },
-      {
-        title: "RAG System Query Design",
-        type: "rag",
-        difficulty: "Medium",
-        description: "Create a query strategy for a RAG system that retrieves relevant documents about renewable energy policies.",
-        context: "You're building a system to answer policy questions using a database of government documents.",
-        hint: "Consider different types of queries, synonyms, and how to structure the retrieval prompt.",
-        solution: "Query: 'renewable energy policy incentives tax credits subsidies legislation'\nRetrieval prompt: 'Given these retrieved documents about renewable energy policies, provide a comprehensive answer about available incentives, including tax credits, subsidies, and regulatory frameworks. Cite specific document sections when possible.'",
-        evaluation: ["Uses relevant keywords", "Includes synonyms", "Structures retrieval prompt clearly"]
-      }
-    ],
-    advanced: [
-      {
-        title: "Fine-tuning Data Preparation",
-        type: "fine-tuning",
-        difficulty: "Hard",
-        description: "Design a training dataset for fine-tuning a model to generate legal contract summaries.",
-        context: "You need to prepare data that will teach the model to identify key contract terms and obligations.",
-        hint: "Consider input-output pairs, data diversity, and quality control measures.",
-        solution: "Dataset structure:\n{\n  'input': 'Contract text with key sections marked',\n  'output': 'Structured summary with: Parties, Terms, Obligations, Deadlines, Penalties'\n}\n\nQuality measures: Legal review, consistent formatting, edge case coverage",
-        evaluation: ["Defines clear input-output structure", "Considers data quality", "Addresses domain specificity"]
-      },
-      {
-        title: "Multi-Agent System Design",
-        type: "agent-system",
-        difficulty: "Hard",
-        description: "Design a prompt system for coordinating multiple AI agents in a research task.",
-        context: "You need agents to research, fact-check, and synthesize information collaboratively.",
-        hint: "Define agent roles, communication protocols, and coordination mechanisms.",
-        solution: "Agent Roles:\n- Researcher: Gather information from sources\n- Fact-checker: Verify claims and sources\n- Synthesizer: Combine verified information\n\nCoordination: Central coordinator assigns tasks, agents report findings with confidence scores, synthesis occurs after fact-checking approval.",
-        evaluation: ["Defines clear agent roles", "Establishes communication protocol", "Includes quality control"]
-      }
-    ]
+  const exercises = exerciseDatabase[level] || [];
+  const completionRate = exercises.length > 0 ? (completedExercises.size / exercises.length) * 100 : 0;
+  const averageScore = Object.keys(exerciseScores).length > 0 
+    ? Object.values(exerciseScores).reduce((sum, score) => sum + score, 0) / Object.values(exerciseScores).length
+    : 0;
+
+  const handleExerciseComplete = (exerciseId: string, score: number) => {
+    setCompletedExercises(prev => new Set([...prev, exerciseId]));
+    setExerciseScores(prev => ({ ...prev, [exerciseId]: score }));
   };
 
-  const currentExercises = exercises[level];
-  const exercise = currentExercises[currentExercise];
-
-  const generateEmbedCode = () => {
-    const embedUrl = `${window.location.origin}/prompt-engineering/exercise-embed?level=${level}&exercise=${currentExercise}`;
-    return `<iframe src="${embedUrl}" width="100%" height="600" frameborder="0"></iframe>`;
+  const difficultyColors = {
+    beginner: 'bg-green-100 text-green-800 border-green-300',
+    intermediate: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+    advanced: 'bg-red-100 text-red-800 border-red-300'
   };
+
+  if (selectedExercise) {
+    return (
+      <EnhancedInteractiveExercise
+        exercise={selectedExercise}
+        onComplete={(score) => handleExerciseComplete(selectedExercise.id, score)}
+        onBack={() => setSelectedExercise(null)}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
-      {/* Exercise Navigation */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center space-x-4">
-          <h2 className="text-2xl font-bold">Interactive Exercises</h2>
-          <Badge variant="outline">{level.charAt(0).toUpperCase() + level.slice(1)}</Badge>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentExercise(Math.max(0, currentExercise - 1))}
-            disabled={currentExercise === 0}
-          >
-            Previous
-          </Button>
-          <span className="text-sm text-gray-600">
-            {currentExercise + 1} of {currentExercises.length}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentExercise(Math.min(currentExercises.length - 1, currentExercise + 1))}
-            disabled={currentExercise === currentExercises.length - 1}
-          >
-            Next
-          </Button>
-        </div>
+      {/* Exercise Hub Header */}
+      <Card className="border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-blue-50">
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Brain className="h-6 w-6 text-purple-600" />
+            <span className="text-purple-900">
+              {level.charAt(0).toUpperCase() + level.slice(1)} Exercise Hub
+            </span>
+          </CardTitle>
+          <CardDescription className="text-purple-700">
+            Complete {exercises.length} interactive exercises to master prompt engineering skills
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-3 gap-4 mb-4">
+            <div className="text-center p-4 bg-white rounded-lg border">
+              <div className="text-2xl font-bold text-purple-600">{exercises.length}</div>
+              <div className="text-sm text-purple-700">Total Exercises</div>
+            </div>
+            <div className="text-center p-4 bg-white rounded-lg border">
+              <div className="text-2xl font-bold text-green-600">{completedExercises.size}</div>
+              <div className="text-sm text-green-700">Completed</div>
+            </div>
+            <div className="text-center p-4 bg-white rounded-lg border">
+              <div className="text-2xl font-bold text-blue-600">{Math.round(averageScore)}%</div>
+              <div className="text-sm text-blue-700">Avg Score</div>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-semibold text-purple-800">Overall Progress</span>
+            <span className="text-sm text-purple-600">
+              {completedExercises.size} / {exercises.length} completed
+            </span>
+          </div>
+          <Progress value={completionRate} className="h-3 bg-purple-100" />
+        </CardContent>
+      </Card>
+
+      {/* Exercise Grid */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {exercises.map((exercise, index) => {
+          const isCompleted = completedExercises.has(exercise.id);
+          const score = exerciseScores[exercise.id];
+          
+          return (
+            <Card 
+              key={exercise.id}
+              className={`hover:shadow-lg transition-all duration-200 border-2 ${
+                isCompleted 
+                  ? 'border-green-300 bg-green-50' 
+                  : 'border-gray-200 hover:border-purple-300'
+              }`}
+            >
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <CardTitle className="text-lg leading-tight mb-2">
+                      {exercise.title}
+                    </CardTitle>
+                    <CardDescription className="text-sm">
+                      {exercise.description}
+                    </CardDescription>
+                  </div>
+                  <div className="ml-3">
+                    <Badge className={`${difficultyColors[exercise.difficulty]} text-xs`}>
+                      {exercise.difficulty}
+                    </Badge>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Exercise Details */}
+                  <div className="flex items-center justify-between text-sm text-gray-600">
+                    <span className="flex items-center">
+                      <Target className="h-3 w-3 mr-1" />
+                      {exercise.category}
+                    </span>
+                    <span className="flex items-center">
+                      <BookOpen className="h-3 w-3 mr-1" />
+                      {exercise.estimatedTime}
+                    </span>
+                  </div>
+
+                  {/* Features */}
+                  <div className="flex flex-wrap gap-1">
+                    <Badge variant="outline" className="text-xs">
+                      <Lightbulb className="h-2 w-2 mr-1" />
+                      {exercise.hints.length} hints
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      <Award className="h-2 w-2 mr-1" />
+                      {exercise.tips.length} tips
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      📚 {exercise.resources.length} resources
+                    </Badge>
+                  </div>
+
+                  {/* Score Display */}
+                  {isCompleted && score !== undefined && (
+                    <div className="bg-green-100 p-2 rounded border border-green-300">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-green-800">Completed</span>
+                        <span className="text-sm font-bold text-green-900">{Math.round(score)}%</span>
+                      </div>
+                      <Progress value={score} className="h-1 mt-1 bg-green-200" />
+                    </div>
+                  )}
+
+                  {/* Action Button */}
+                  <Button 
+                    onClick={() => setSelectedExercise(exercise)}
+                    className={`w-full ${
+                      isCompleted 
+                        ? 'bg-green-600 hover:bg-green-700' 
+                        : 'bg-purple-600 hover:bg-purple-700'
+                    }`}
+                  >
+                    <Play className="h-4 w-4 mr-2" />
+                    {isCompleted ? 'Review Exercise' : 'Start Exercise'}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
-      <Tabs defaultValue="exercise" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="exercise">Exercise</TabsTrigger>
-          <TabsTrigger value="examples">Examples</TabsTrigger>
-          <TabsTrigger value="embed">Embed</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="exercise" className="space-y-6">
-          {/* Exercise Header */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Target className="h-5 w-5 text-blue-600" />
-                    <span>{exercise.title}</span>
-                  </CardTitle>
-                  <CardDescription className="mt-2">{exercise.description}</CardDescription>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Badge variant="secondary">{exercise.type}</Badge>
-                  <Badge variant={exercise.difficulty === "Easy" ? "default" : exercise.difficulty === "Medium" ? "secondary" : "destructive"}>
-                    {exercise.difficulty}
-                  </Badge>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-2">Context:</h4>
-                <p className="text-blue-800">{exercise.context}</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Exercise Workspace */}
-          <div className="grid lg:grid-cols-2 gap-6">
-            {/* Input Area */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Code className="h-5 w-5" />
-                  <span>Your Solution</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Textarea
-                  placeholder="Write your prompt here..."
-                  value={userPrompt}
-                  onChange={(e) => setUserPrompt(e.target.value)}
-                  className="min-h-[200px] font-mono"
-                />
-                
-                <div className="flex items-center space-x-2">
-                  <Button>
-                    <Play className="h-4 w-4 mr-2" />
-                    Test Prompt
-                  </Button>
-                  <Button variant="outline" onClick={() => setUserPrompt("")}>
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Reset
-                  </Button>
-                  <Button variant="outline" onClick={() => setShowHint(!showHint)}>
-                    <Lightbulb className="h-4 w-4 mr-2" />
-                    {showHint ? "Hide" : "Show"} Hint
-                  </Button>
-                </div>
-
-                {showHint && (
-                  <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                    <div className="flex items-start space-x-2">
-                      <Lightbulb className="h-5 w-5 text-yellow-600 mt-0.5" />
-                      <div>
-                        <h4 className="font-semibold text-yellow-900">Hint:</h4>
-                        <p className="text-yellow-800">{exercise.hint}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Evaluation Area */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <CheckCircle className="h-5 w-5" />
-                  <span>Evaluation</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <h4 className="font-semibold">Evaluation Criteria:</h4>
-                  {exercise.evaluation.map((criterion, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="w-4 h-4 border-2 border-gray-300 rounded"></div>
-                      <span className="text-sm">{criterion}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Sample Solution:</h4>
-                  <pre className="text-sm bg-white p-3 rounded border overflow-x-auto">
-                    {exercise.solution}
-                  </pre>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="examples" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Related Examples</CardTitle>
-              <CardDescription>See how similar problems are solved</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="border-l-4 border-blue-500 pl-4">
-                  <h4 className="font-semibold">Example 1: Good Prompt</h4>
-                  <pre className="bg-gray-50 p-3 rounded mt-2 text-sm overflow-x-auto">
-                    {exercise.solution}
-                  </pre>
-                  <p className="text-sm text-gray-600 mt-2">
-                    ✅ Clear, specific, and follows best practices
-                  </p>
-                </div>
-                
-                <div className="border-l-4 border-red-500 pl-4">
-                  <h4 className="font-semibold">Example 2: Poor Prompt</h4>
-                  <pre className="bg-gray-50 p-3 rounded mt-2 text-sm overflow-x-auto">
-                    Summarize this text.
-                  </pre>
-                  <p className="text-sm text-gray-600 mt-2">
-                    ❌ Too vague, no specific requirements
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="embed" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Embed This Exercise</CardTitle>
-              <CardDescription>Use this exercise on your own website or learning platform</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h4 className="font-semibold mb-2">Embed Code:</h4>
-                <pre className="bg-gray-100 p-4 rounded text-sm overflow-x-auto">
-                  {generateEmbedCode()}
-                </pre>
-              </div>
-              
-              <div>
-                <h4 className="font-semibold mb-2">Direct Link:</h4>
-                <code className="bg-gray-100 p-2 rounded text-sm">
-                  {window.location.origin}/prompt-engineering/exercise-embed?level={level}&exercise={currentExercise}
-                </code>
-              </div>
-
-              <Button onClick={() => {
-                navigator.clipboard.writeText(generateEmbedCode());
-              }}>
-                Copy Embed Code
+      {/* Completion Celebration */}
+      {completionRate === 100 && (
+        <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-300">
+          <CardContent className="p-8 text-center">
+            <div className="text-6xl mb-4">🎉</div>
+            <h3 className="text-2xl font-bold text-green-900 mb-2">
+              Congratulations! Level Complete!
+            </h3>
+            <p className="text-green-700 mb-4">
+              You've completed all {exercises.length} exercises in the {level} track with an average score of {Math.round(averageScore)}%!
+            </p>
+            <div className="flex justify-center space-x-4">
+              <Button size="lg" className="bg-green-600 hover:bg-green-700">
+                Continue to Next Level
               </Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+              <Button variant="outline" size="lg">
+                Review All Exercises
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Getting Started Guide */}
+      {completedExercises.size === 0 && (
+        <Card className="bg-blue-50 border-blue-200">
+          <CardContent className="p-6">
+            <h3 className="font-bold text-blue-900 mb-3">🚀 Getting Started</h3>
+            <div className="space-y-2 text-blue-800">
+              <p>• Each exercise includes hints, tips, and learning resources</p>
+              <p>• Practice with real-world scenarios and get instant feedback</p>
+              <p>• Build your skills progressively from basic to advanced concepts</p>
+              <p>• Track your progress and review completed exercises anytime</p>
+            </div>
+            <Button 
+              className="mt-4 bg-blue-600 hover:bg-blue-700"
+              onClick={() => exercises[0] && setSelectedExercise(exercises[0])}
+            >
+              Start Your First Exercise
+            </Button>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
