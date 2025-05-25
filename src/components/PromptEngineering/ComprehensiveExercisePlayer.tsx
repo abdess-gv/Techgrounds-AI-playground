@@ -245,7 +245,8 @@ Dataset Generation Framework:
    - Domain constraints: [DOMAIN_RULES]
 
 2. **Data Architecture**
-   ```json
+   
+   Data Format:
    {
      "input": "[INSTRUCTION_OR_CONTEXT]",
      "output": "[DESIRED_RESPONSE]", 
@@ -256,7 +257,6 @@ Dataset Generation Framework:
        "validation_notes": "[QUALITY_CHECKS]"
      }
    }
-   ```
 
 3. **Diversity Strategy**
    
