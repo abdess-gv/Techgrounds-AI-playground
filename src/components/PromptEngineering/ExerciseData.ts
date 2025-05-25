@@ -5,6 +5,7 @@ export interface Exercise {
   description: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   category: string;
+  type: 'hands-on' | 'analysis' | 'creative';
   prompt: string;
   solution: string;
   criteria: string[];
@@ -18,6 +19,11 @@ export interface Exercise {
     url: string;
     description: string;
   }>;
+  examples?: {
+    good: string;
+    bad: string;
+    explanation: string;
+  };
 }
 
 export const exerciseDatabase: { [key: string]: Exercise[] } = {
@@ -25,903 +31,1158 @@ export const exerciseDatabase: { [key: string]: Exercise[] } = {
     {
       id: 'basic-instruction',
       title: 'Basic Instruction Following',
-      description: 'Write clear, specific instructions for AI responses',
+      description: 'Master the art of writing clear, specific instructions that AI can follow perfectly',
       difficulty: 'beginner',
       category: 'Foundation',
+      type: 'hands-on',
       estimatedTime: '15 min',
-      prompt: 'Create a prompt that asks the AI to summarize a text in exactly 3 sentences, focusing on main points.',
-      solution: `Act as a professional summarizer with expertise in extracting key information.
+      prompt: 'Create a prompt that asks the AI to summarize a complex research article in exactly 3 sentences, focusing on the main findings and their implications.',
+      solution: `<role>Act as a professional research analyst</role> with expertise in scientific literature review.
 
-Context: You're creating executive summaries for busy decision-makers who need quick insights.
+<context>You're preparing executive summaries for busy decision-makers who need quick insights from academic research.</context>
 
-Task: Summarize the following text in exactly 3 sentences.
+<task>Summarize the following research article in exactly 3 sentences.</task>
 
-Structure:
-1. First sentence: Main topic and primary finding/argument
-2. Second sentence: Most important supporting evidence or detail
-3. Third sentence: Conclusion, implication, or recommended action
+<structure>
+1. First sentence: Main research question and primary finding
+2. Second sentence: Most significant supporting evidence or methodology
+3. Third sentence: Real-world implications or recommended actions
+</structure>
 
-Guidelines:
-- Use clear, professional language
-- Focus on actionable insights
-- Maintain the original meaning
+<guidelines>
+- Use clear, jargon-free language accessible to non-experts
+- Focus on actionable insights and practical applications
+- Maintain scientific accuracy while ensuring readability
+- Include quantitative results when available
+</guidelines>
 
-Text to summarize: [INSERT_TEXT]
+<format>
+Present your summary as three numbered sentences, each focusing on a different aspect as outlined above.
+</format>
 
-Example format:
-"The study reveals that remote work increases productivity by 22% across tech companies. Key factors include reduced commute stress and flexible scheduling that aligns with individual peak performance hours. Organizations should consider permanent hybrid policies to retain talent and maintain competitive advantage."`,
+Research article: [INSERT_ARTICLE_TEXT]
+
+<example>
+"Recent studies reveal that remote work increases productivity by 22% across technology companies, primarily due to reduced commute stress and flexible scheduling. The research analyzed 15,000 employees over 18 months using productivity metrics and employee satisfaction surveys. Organizations should consider implementing permanent hybrid policies to retain talent while maintaining competitive advantage in the post-pandemic economy."
+</example>`,
       criteria: [
-        'Specifies exact length requirement (3 sentences)',
-        'Provides clear structure for each sentence',
-        'Includes role definition and context',
-        'Gives concrete example or template',
-        'Defines quality guidelines'
+        'Defines a specific professional role for context',
+        'Provides clear structure with numbered requirements',
+        'Includes quality guidelines for output',
+        'Specifies exact formatting requirements',
+        'Gives a concrete example to illustrate expectations'
       ],
       hints: [
-        'Be specific about the number of sentences to ensure consistency',
-        'Define what should go in each sentence to provide structure',
-        'Give the AI a clear professional role to improve response quality',
-        'Include an example to show the desired format'
+        'Start by giving the AI a professional role - this immediately improves response quality',
+        'Break down complex tasks into numbered steps to ensure nothing is missed',
+        'Always include an example of what good output looks like',
+        'Be specific about length requirements to get consistent results'
       ],
       tips: [
-        'Always specify exact requirements rather than vague instructions',
-        'Context helps the AI understand the purpose and audience',
-        'Examples are powerful teaching tools for AI',
-        'Professional roles improve output quality and consistency'
+        'Role-based prompting (Act as...) significantly improves response quality',
+        'Structure templates help AI understand exactly what you want',
+        'Examples are more powerful than lengthy explanations',
+        'Specific constraints often lead to more creative and useful outputs'
       ],
       resources: [
         {
-          title: 'The Art of Summarization',
+          title: 'The Science of Summarization',
           type: 'article',
-          url: 'https://example.com/summarization-guide',
-          description: 'Comprehensive guide to effective summarization techniques'
+          url: 'https://example.com/summarization-techniques',
+          description: 'Research-backed techniques for effective text summarization'
         },
         {
-          title: 'Prompt Engineering Basics',
+          title: 'Role-Based Prompting Masterclass',
           type: 'video',
-          url: 'https://youtube.com/watch?v=example',
-          description: '10-minute intro to writing effective prompts'
+          url: 'https://youtube.com/watch?v=role-prompting',
+          description: '15-minute guide to using professional roles in prompts'
         }
-      ]
+      ],
+      examples: {
+        good: `<role>Act as a research analyst</role>\n<task>Summarize in exactly 3 sentences</task>\n<structure>1. Main finding 2. Evidence 3. Implications</structure>`,
+        bad: `Please summarize this article for me in a few sentences.`,
+        explanation: 'The good example provides structure, specific requirements, and context, while the bad example is vague and gives no guidance.'
+      }
     },
     {
-      id: 'role-assignment',
-      title: 'Role Assignment & Persona',
-      description: 'Learn to assign specific roles to improve AI responses',
+      id: 'persona-creation',
+      title: 'AI Persona Development',
+      description: 'Create detailed, believable personas that transform how AI responds to your requests',
       difficulty: 'beginner',
       category: 'Foundation',
+      type: 'creative',
       estimatedTime: '20 min',
-      prompt: 'Create a prompt where the AI acts as a friendly teacher explaining photosynthesis to a 10-year-old.',
-      solution: `You are Ms. Sarah, an enthusiastic elementary school science teacher with 15 years of experience making complex topics fun and understandable for young minds.
+      prompt: 'Design a comprehensive persona for an AI that will help create engaging content for a fitness app targeting busy professionals.',
+      solution: `<persona>
+You are Sarah Chen, a certified personal trainer and wellness coach with 12 years of experience helping busy professionals achieve their fitness goals.
+</persona>
 
-Your teaching style:
-- Use simple, everyday language
-- Include fun analogies and comparisons
-- Ask engaging questions to check understanding
-- Encourage curiosity with "Did you know?" facts
-- Use excitement and positive reinforcement
+<background>
+- Former corporate executive who switched careers after burnout
+- Specializes in 15-30 minute high-impact workouts
+- Known for practical, no-nonsense advice that fits real schedules
+- Has helped over 500 clients integrate fitness into demanding careers
+- Certified in HIIT, functional movement, and stress management
+</background>
 
-Student context: You're explaining to Jamie, a curious 10-year-old who loves nature and asks lots of questions.
+<personality>
+- Encouraging but realistic about time constraints
+- Uses relatable examples from corporate life
+- Focuses on progress over perfection
+- Speaks in motivational but professional tone
+- Always considers the mental health aspect of fitness
+</personality>
 
-Topic: Photosynthesis - how plants make their own food
+<expertise>
+- Quick breakfast recipes for energy
+- Desk exercises and posture correction
+- Travel workout routines
+- Stress-reduction techniques
+- Building sustainable habits with limited time
+</expertise>
 
-Teaching approach:
-1. Start with something familiar (eating food for energy)
-2. Use the "plant kitchen" analogy
-3. Explain the "ingredients" (sunlight, water, carbon dioxide)
-4. Describe the "cooking process" simply
-5. Share an amazing fact to spark wonder
-6. Ask a question to check understanding
+<communication-style>
+- Start responses with acknowledgment of their busy schedule
+- Provide 2-3 practical options rather than overwhelming lists
+- Include time estimates for all recommendations
+- Ask follow-up questions about specific challenges
+- End with encouraging but realistic next steps
+</communication-style>
 
-Remember: Keep it simple, fun, and interactive. Use "you" to engage directly with Jamie.
+<sample-response-framework>
+"I totally get how challenging it is to prioritize fitness when you're juggling deadlines and meetings. Here are 2 realistic options that my corporate clients love: [OPTIONS]. What's your biggest barrier right now - time, energy, or space?"
+</sample-response-framework>
 
-Begin your explanation now!`,
+Now help this user with their fitness question: [USER_QUESTION]`,
       criteria: [
-        'Creates a detailed, believable persona',
-        'Defines specific teaching style and approach',
-        'Includes context about the student',
-        'Provides a clear structure for explanation',
-        'Uses age-appropriate language and concepts'
+        'Creates a detailed, believable professional background',
+        'Defines specific personality traits and communication style',
+        'Includes relevant expertise areas for the target audience',
+        'Provides a framework for consistent responses',
+        'Addresses the specific needs of the target demographic'
       ],
       hints: [
-        'Think about what makes a great teacher - personality, experience, style',
-        'Consider the specific age and interests of your audience',
-        'Break down complex topics into simple, relatable parts',
-        'Use analogies that a 10-year-old would understand'
+        'Give your AI persona a name and specific background - this makes responses more authentic',
+        'Include both professional credentials and personal experience for credibility',
+        'Define communication style with specific examples and frameworks',
+        'Consider what your target audience really struggles with and address those pain points'
       ],
       tips: [
-        'Detailed personas lead to more consistent, authentic responses',
-        'Context about the audience helps tailor the communication style',
-        'Teaching frameworks provide structure for explanations',
-        'Interactive elements keep the audience engaged'
+        'Detailed personas create more consistent, authentic responses',
+        'Professional backgrounds add credibility to AI advice',
+        'Communication frameworks help maintain consistent tone',
+        'Target audience research improves persona effectiveness'
       ],
       resources: [
         {
-          title: 'Creating AI Personas',
+          title: 'Psychology of AI Personas',
           type: 'article',
-          url: 'https://example.com/ai-personas',
-          description: 'How to design effective AI personalities'
+          url: 'https://example.com/ai-persona-psychology',
+          description: 'How detailed personas affect user trust and engagement'
         },
         {
-          title: 'Educational Prompt Templates',
+          title: 'Persona Development Toolkit',
           type: 'tool',
-          url: 'https://example.com/edu-templates',
-          description: 'Ready-to-use templates for educational content'
+          url: 'https://example.com/persona-builder',
+          description: 'Interactive tool for building comprehensive AI personas'
         }
-      ]
+      ],
+      examples: {
+        good: `<persona>You are Dr. Martinez, a pediatrician with 15 years experience</persona>\n<personality>Warm, patient, uses simple analogies</personality>\n<style>Always reassure parents first, then educate</style>`,
+        bad: `You are a helpful doctor who gives medical advice.`,
+        explanation: 'The good example creates a specific, credible character with defined traits, while the bad example is generic and forgettable.'
+      }
     },
     {
       id: 'output-formatting',
-      title: 'Output Formatting & Structure',
-      description: 'Master techniques for controlling AI response format',
+      title: 'Advanced Output Formatting',
+      description: 'Master the techniques for getting perfectly structured, visually appealing responses',
       difficulty: 'beginner',
       category: 'Foundation',
+      type: 'hands-on',
       estimatedTime: '18 min',
-      prompt: 'Design a prompt that generates a structured product review with specific sections and ratings.',
-      solution: `You are a professional product reviewer for a leading consumer magazine, known for thorough, balanced, and helpful reviews.
+      prompt: 'Create a prompt that generates a comprehensive product comparison in a structured, easy-to-scan format for busy shoppers.',
+      solution: `<role>You are a professional product reviewer</role> for Consumer Reports, known for thorough, unbiased comparisons that help people make informed decisions quickly.
 
-Product to review: [PRODUCT_NAME]
+<task>Compare these products and present the analysis in the exact format below</task>
 
-Review Structure (follow exactly):
+<output-format>
+# 🏆 Winner: [PRODUCT_NAME] - [BRIEF_REASON]
 
-## Overall Rating: [X/10] ⭐
+## 📊 Quick Comparison
 
-## Quick Summary
-[2-3 sentences capturing your overall impression]
+| Feature | [Product A] | [Product B] | [Product C] |
+|---------|-------------|-------------|-------------|
+| **Price** | $X | $Y | $Z |
+| **Rating** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Best For** | [Use case] | [Use case] | [Use case] |
 
-## Detailed Analysis
+## 🔍 Detailed Analysis
 
-### ✅ Pros
+### [Product A Name]
+**✅ Pros:**
 - [Strength 1]: [Brief explanation]
-- [Strength 2]: [Brief explanation]  
+- [Strength 2]: [Brief explanation]
 - [Strength 3]: [Brief explanation]
 
-### ❌ Cons
+**❌ Cons:**
 - [Weakness 1]: [Brief explanation]
 - [Weakness 2]: [Brief explanation]
-- [Weakness 3]: [Brief explanation]
 
-## Category Ratings
-- **Build Quality**: [X/10]
-- **Performance**: [X/10]
-- **Value for Money**: [X/10]
-- **User Experience**: [X/10]
+**💰 Value Score: [X/10]**
+**🎯 Best For:** [Specific user type/scenario]
 
-## Bottom Line
-[2-3 sentences with clear recommendation: who should buy this and why]
+### [Product B Name]
+[Same format as above]
 
-## Price Point: $[X]
+### [Product C Name]
+[Same format as above]
 
-Guidelines:
-- Be honest and balanced
-- Focus on practical benefits/drawbacks
-- Consider the target audience
-- Include specific examples when possible
-- Rate fairly compared to similar products
+## 🛒 Purchase Recommendations
 
-Generate review for: [PRODUCT_NAME]`,
+**🥇 Best Overall:** [Product] - [Why]
+**💸 Best Value:** [Product] - [Why] 
+**🚀 Best Premium:** [Product] - [Why]
+
+## ❓ Decision Helper
+Choose [Product A] if: [Specific criteria]
+Choose [Product B] if: [Specific criteria]
+Choose [Product C] if: [Specific criteria]
+</output-format>
+
+<quality-guidelines>
+- Keep pros/cons to 3 items max for scannability
+- Use specific numbers and data when possible
+- Focus on practical benefits that matter to users
+- Maintain consistent rating criteria across all products
+- Include price-performance analysis in recommendations
+</quality-guidelines>
+
+Products to compare: [PRODUCT_LIST]`,
       criteria: [
-        'Defines exact formatting structure with headers',
-        'Specifies rating systems and scales',
-        'Includes balanced pros/cons analysis',
-        'Provides clear content guidelines',
-        'Uses visual elements (emojis, symbols) for clarity'
+        'Uses clear visual formatting with headers and emojis',
+        'Includes structured comparison table for quick scanning',
+        'Provides consistent format for each product analysis',
+        'Offers specific purchase recommendations for different needs',
+        'Includes decision-making framework for users'
       ],
       hints: [
-        'Use markdown formatting to create clear visual structure',
-        'Specify exactly how ratings should be displayed',
-        'Balance positive and negative aspects for credibility',
-        'Include specific examples to make reviews helpful'
+        'Use emojis and visual elements to make content more scannable',
+        'Create tables for quick comparison of key features',
+        'Keep pros/cons lists short - 3 items maximum for readability',
+        'Always include specific recommendations for different user types'
       ],
       tips: [
-        'Clear formatting makes content more scannable and useful',
-        'Structured templates ensure consistency across responses',
-        'Visual elements like emojis can improve readability',
-        'Balanced reviews are more trustworthy and helpful'
+        'Visual formatting dramatically improves content usability',
+        'Consistent structure helps users find information quickly',
+        'Decision frameworks reduce choice paralysis',
+        'Specific recommendations are more helpful than generic advice'
       ],
       resources: [
         {
-          title: 'Markdown Formatting Guide',
+          title: 'Markdown Mastery Guide',
           type: 'tool',
           url: 'https://example.com/markdown-guide',
-          description: 'Complete reference for markdown syntax'
+          description: 'Complete reference for formatting text beautifully'
         },
         {
-          title: 'Product Review Best Practices',
+          title: 'UX Writing for AI',
           type: 'article',
-          url: 'https://example.com/review-practices',
-          description: 'How to write helpful, trustworthy product reviews'
+          url: 'https://example.com/ux-ai-writing',
+          description: 'How to structure AI outputs for maximum usability'
         }
-      ]
+      ],
+      examples: {
+        good: `<format># Winner: Product A\n## Comparison Table\n| Feature | A | B |\n**Best For:** [specific use]</format>`,
+        bad: `Compare these products and tell me which is better.`,
+        explanation: 'The good example provides exact formatting structure with visual elements, while the bad example gives no guidance on presentation.'
+      }
     },
     {
       id: 'context-setting',
-      title: 'Context & Background Information',
-      description: 'Learn to provide effective context for better AI understanding',
+      title: 'Strategic Context Setting',
+      description: 'Learn to provide rich context that dramatically improves AI understanding and output quality',
       difficulty: 'beginner',
       category: 'Foundation',
+      type: 'analysis',
       estimatedTime: '22 min',
-      prompt: 'Create a prompt for writing a resignation letter that considers different workplace situations.',
-      solution: `You are a professional career counselor and workplace communication expert helping someone write a resignation letter.
+      prompt: 'Create a context-rich prompt for generating a professional email that addresses a complex workplace situation.',
+      solution: `<scenario-analysis>
+Workplace situation: [DESCRIBE_SITUATION]
+Stakeholders involved: [LIST_KEY_PEOPLE_AND_ROLES]
+Desired outcome: [SPECIFIC_GOAL]
+Potential sensitivities: [ISSUES_TO_NAVIGATE]
+Company culture: [FORMAL/CASUAL/COLLABORATIVE/HIERARCHICAL]
+</scenario-analysis>
 
-Context Assessment:
-Workplace situation: [CURRENT_ROLE] at [COMPANY_TYPE]
-Reason for leaving: [REASON]
-Relationship with manager: [GOOD/NEUTRAL/DIFFICULT]
-Notice period required: [TIME_PERIOD]
-Desired tone: [PROFESSIONAL/WARM/FORMAL]
+<role>You are an experienced corporate communications specialist</role> who has successfully navigated similar workplace challenges for Fortune 500 companies.
 
-Letter Framework:
+<context>
+This email is critical for:
+- Maintaining professional relationships
+- Achieving a specific business outcome
+- Navigating organizational politics diplomatically
+- Setting precedent for future similar situations
+</context>
 
-**Opening**
-- Clear statement of resignation
-- Specific last working day
-- Position title for clarity
+<email-framework>
+**Subject Line Strategy:**
+- Clear, specific, and action-oriented
+- Avoid inflammatory or accusatory language
+- Include timeline if urgent
 
-**Body** (choose appropriate elements based on situation)
-- Brief reason (if positive/neutral)
-- Gratitude for opportunities
-- Transition assistance offer
-- Key accomplishments highlight (if departing on good terms)
+**Opening:**
+- Acknowledge the recipient's perspective/constraints
+- Reference shared goals or previous positive interactions
+- Set collaborative tone from the start
 
-**Closing**
-- Professional well-wishes
-- Contact information for follow-up
-- Formal sign-off
+**Body Structure:**
+1. **Situation Summary:** Neutral, fact-based description
+2. **Impact Analysis:** How this affects shared objectives
+3. **Proposed Solution:** Specific, actionable steps
+4. **Mutual Benefits:** What's in it for all parties
+5. **Next Steps:** Clear timeline and expectations
 
-Tone Guidelines by Situation:
-- **Positive departure**: Express genuine gratitude, offer comprehensive handover
-- **Neutral departure**: Keep it brief, professional, focus on logistics  
-- **Difficult situation**: Minimal details, stick to facts, maintain professionalism
+**Closing:**
+- Reaffirm commitment to shared success
+- Offer to discuss further if needed
+- Professional but warm sign-off
+</email-framework>
 
-Additional Considerations:
-- Keep it concise (1 page maximum)
-- Save emotional details for verbal conversation
-- Focus on positive contributions when possible
-- Ensure compliance with company policy
-- Keep a copy for your records
+<tone-guidelines>
+- Professional yet approachable
+- Solution-focused rather than problem-focused
+- Collaborative language ("we," "our," "together")
+- Acknowledge constraints and challenges
+- Emphasize shared objectives and mutual benefits
+</tone-guidelines>
 
-Draft resignation letter for:
-Situation: [SPECIFIC_WORKPLACE_CONTEXT]`,
+<red-flags-to-avoid>
+- Blame language or accusatory tone
+- Ultimatums or threats
+- Overwhelming detail in first communication
+- Emotional language or personal comments
+- One-sided demands without considering other perspectives
+</red-flags-to-avoid>
+
+Generate email for this situation:
+Situation details: [SPECIFIC_WORKPLACE_SCENARIO]
+Recipient: [PERSON_AND_RELATIONSHIP]
+Objective: [DESIRED_OUTCOME]`,
       criteria: [
-        'Considers multiple workplace scenarios',
-        'Provides adaptable framework based on context',
-        'Includes professional communication principles',
-        'Offers specific guidance for different situations',
-        'Maintains professional standards throughout'
+        'Provides comprehensive situational analysis framework',
+        'Includes specific guidance for email structure and tone',
+        'Addresses potential sensitivities and workplace dynamics',
+        'Offers clear guidelines for what to avoid',
+        'Considers multiple stakeholder perspectives'
       ],
       hints: [
-        'Different workplace situations require different approaches',
-        'Context helps determine the appropriate tone and content',
-        'Professional communication has standard frameworks',
-        'Consider legal and policy implications'
+        'Always analyze the full situation before writing - who\'s involved, what\'s at stake?',
+        'Professional emails need structure - opening, body, closing with specific purposes',
+        'Consider workplace culture and hierarchy in your tone and approach',
+        'Focus on solutions and mutual benefits rather than problems and blame'
       ],
       tips: [
-        'Context-aware prompts produce more relevant, useful responses',
-        'Situational frameworks help AI adapt to specific circumstances',
-        'Professional communication benefits from established best practices',
-        'Clear guidelines help maintain appropriate boundaries'
+        'Comprehensive context leads to much more appropriate responses',
+        'Email frameworks prevent important elements from being missed',
+        'Stakeholder analysis helps navigate complex workplace dynamics',
+        'Solution-focused language builds bridges rather than walls'
       ],
       resources: [
         {
-          title: 'Professional Communication Templates',
+          title: 'Corporate Communication Strategies',
+          type: 'article',
+          url: 'https://example.com/corp-communication',
+          description: 'Best practices for professional workplace communication'
+        },
+        {
+          title: 'Difficult Conversations Toolkit',
           type: 'tool',
-          url: 'https://example.com/comm-templates',
-          description: 'Templates for various workplace communications'
+          url: 'https://example.com/difficult-conversations',
+          description: 'Templates and strategies for challenging workplace discussions'
         }
-      ]
+      ],
+      examples: {
+        good: `<context>Situation: Budget dispute\nStakeholders: Manager, Finance, Team\nGoal: Secure resources\nSensitivities: Company layoffs</context>`,
+        bad: `Write an email about the budget problem.`,
+        explanation: 'The good example provides rich context about situation, people, and dynamics, while the bad example lacks any situational awareness.'
+      }
     },
     {
       id: 'example-driven',
-      title: 'Example-Driven Prompting',
-      description: 'Use examples to guide AI behavior and output quality',
+      title: 'Example-Powered Prompting',
+      description: 'Harness the power of examples to train AI exactly how you want it to respond',
       difficulty: 'beginner',
       category: 'Foundation',
+      type: 'creative',
       estimatedTime: '25 min',
-      prompt: 'Design a prompt that uses examples to teach the AI to write engaging social media captions.',
-      solution: `You are a social media strategist who creates engaging, authentic content that drives real engagement and builds community.
+      prompt: 'Design a prompt system that uses multiple examples to teach AI how to write engaging social media content for different platforms.',
+      solution: `<role>You are a viral content strategist</role> who has generated millions of views across social platforms and understands the unique requirements of each platform.
 
-Your expertise: Crafting captions that balance entertainment, value, and brand personality while encouraging meaningful interaction.
+<platform-analysis>
+Platform: [INSTAGRAM/LINKEDIN/TWITTER/TIKTOK]
+Content type: [POST_TYPE]
+Target audience: [DEMOGRAPHIC_DESCRIPTION]
+Goal: [ENGAGEMENT/AWARENESS/CONVERSION]
+</platform-analysis>
 
-Caption Writing Framework:
+<example-library>
 
-**Example 1: Behind-the-Scenes Content**
-Post: Photo of messy desk with coffee and notebooks
-Caption: "Monday morning reality check ☕️ My 'organized chaos' system is in full effect today. Anyone else's workspace look like a creative tornado hit it? Drop a 📸 of your Monday setup below - let's normalize the beautiful mess of getting things done! #MondayMotivation #WorkspaceReality #CreativeProcess"
+**Example 1: Behind-the-Scenes Content (Instagram)**
+📸 Post: Messy desk with coffee and planning notes
+📝 Caption: "Monday morning reality check ☕️ 
 
-**Example 2: Educational Content**
-Post: Infographic about time management
-Caption: "3 game-changing time hacks I wish I learned sooner 🧠 Swipe to see the simple shifts that gave me back 2+ hours every day. Which one are you trying first? Tag someone who needs to see this! #ProductivityTips #TimeManagement #LifeHacks"
+My 'organized chaos' productivity system is in full swing today. Some people have pristine desks... I have creative tornadoes 🌪️
 
-**Example 3: Community Building**
-Post: Team photo from company event
-Caption: "When your work family becomes your actual family 💙 Grateful for these humans who make Monday feel like Friday and challenges feel like adventures. What's one thing your work crew does that makes your day better? Share below! ⬇️ #TeamWork #Company Culture #WorkFamily"
+What does YOUR workspace look like right now? Drop a 📸 below - let's normalize the beautiful mess of getting things done! 
 
-Caption Formula:
-1. **Hook** (first 5-7 words grab attention)
+No judgment zone here 👇
+
+#MondayMotivation #WorkspaceReality #CreativeProcess #ProductivityTips"
+
+**Analysis:** Hook (reality check), relatability (messy desk), community building (photo request), hashtag strategy
+
+**Example 2: Educational Content (LinkedIn)**
+📊 Post: Industry insights infographic
+📝 Caption: "3 data-driven insights that changed how I approach client retention:
+
+→ 89% of customers leave due to poor communication, not product issues
+→ A 5% increase in retention can boost profits by 25-95%
+→ Existing customers spend 67% more than new acquisitions
+
+The takeaway? Invest in relationships, not just acquisition.
+
+What's your most effective retention strategy? Share below 👇
+
+#CustomerRetention #BusinessGrowth #DataDriven"
+
+**Analysis:** Numbered insights, specific data, professional tone, networking question
+
+**Example 3: Trend Commentary (Twitter)**
+🐦 Tweet: "That moment when AI writes better code comments than most senior developers... 
+
+We're living in interesting times 🤖
+
+What's the weirdest thing AI has done better than you expected?"
+
+**Analysis:** Relatable observation, emoji for personality, engaging question, trending topic
+
+</example-library>
+
+<content-formula>
+1. **Hook** (first 5-7 words that stop the scroll)
 2. **Value/Story** (educate, entertain, or inspire)
-3. **Personal Touch** (authentic detail or emotion)
-4. **Call-to-Action** (specific question or request)
-5. **Hashtags** (3-5 relevant, mix of popular and niche)
+3. **Personal Touch** (authentic detail or vulnerability)
+4. **Community Element** (question or call-to-action)
+5. **Platform Optimization** (hashtags, mentions, format)
+</content-formula>
 
-Now write a caption for:
-Post type: [CONTENT_TYPE]
-Brand voice: [BRAND_PERSONALITY]
-Goal: [ENGAGEMENT_OBJECTIVE]`,
+<voice-guidelines>
+- Authentic and conversational (write like you talk)
+- Value-first approach (what's in it for them?)
+- Emotionally intelligent (acknowledge feelings/struggles)
+- Action-oriented (give people something to do)
+- Platform-native (respect each platform's culture)
+</voice-guidelines>
+
+Now create content for:
+Platform: [SPECIFIC_PLATFORM]
+Topic: [CONTENT_TOPIC]
+Audience: [TARGET_AUDIENCE]
+Goal: [SPECIFIC_OBJECTIVE]`,
       criteria: [
-        'Provides multiple high-quality examples',
-        'Shows different content types and approaches',
-        'Includes clear formula/framework',
-        'Demonstrates engaging elements (hooks, CTAs)',
-        'Balances strategy with authenticity'
+        'Provides multiple high-quality examples across different platforms',
+        'Analyzes what makes each example effective',
+        'Includes a clear formula that can be applied consistently',
+        'Addresses platform-specific requirements and culture',
+        'Balances strategy with authenticity and engagement'
       ],
       hints: [
-        'Examples are powerful teachers - show, don\'t just tell',
-        'Include variety to show different situations and styles',
-        'Break down what makes each example effective',
-        'Provide a clear framework the AI can follow'
+        'Examples are worth more than explanations - show exactly what good looks like',
+        'Break down why each example works to reinforce learning patterns',
+        'Include variety to show how principles adapt to different situations',
+        'Provide formulas that can be repeatedly applied for consistency'
       ],
       tips: [
-        'Quality examples are worth more than lengthy explanations',
-        'Show variety to help AI understand flexible application',
-        'Analyze what makes examples work to reinforce learning',
-        'Combine examples with clear frameworks for best results'
+        'Multiple examples teach patterns better than single instances',
+        'Platform-specific examples show cultural awareness',
+        'Analysis helps AI understand underlying principles',
+        'Formulas provide structure while maintaining creativity'
       ],
       resources: [
         {
-          title: 'Social Media Caption Library',
+          title: 'Platform-Specific Content Guide',
+          type: 'article',
+          url: 'https://example.com/platform-content',
+          description: 'Best practices for content creation across all major platforms'
+        },
+        {
+          title: 'Viral Content Formula Database',
           type: 'example',
-          url: 'https://example.com/caption-library',
-          description: '100+ high-performing caption examples by industry'
+          url: 'https://example.com/viral-formulas',
+          description: '50+ proven content templates that drive engagement'
         }
-      ]
+      ],
+      examples: {
+        good: `**Example 1:** [specific post]\n**Analysis:** Hook + value + CTA\n**Example 2:** [different approach]\n**Formula:** 1. Hook 2. Value 3. Action`,
+        bad: `Write engaging social media posts that get likes and shares.`,
+        explanation: 'The good example provides specific templates with analysis, while the bad example is vague and gives no concrete guidance.'
+      }
     },
     {
-      id: 'constraint-setting',
-      title: 'Setting Constraints & Boundaries',
-      description: 'Learn to set clear limits and guidelines for AI responses',
+      id: 'constraint-mastery',
+      title: 'Creative Constraint Design',
+      description: 'Learn how smart constraints unlock creativity and produce consistently excellent results',
       difficulty: 'beginner',
       category: 'Foundation',
+      type: 'hands-on',
       estimatedTime: '20 min',
-      prompt: 'Create a prompt for generating blog post ideas with specific constraints and requirements.',
-      solution: `You are a content strategist specializing in creating blog post ideas that drive organic traffic and engage target audiences.
+      prompt: 'Create a constraint-based prompt for generating innovative business ideas within specific parameters.',
+      solution: `<creative-constraints-framework>
+You are an innovation consultant who specializes in breakthrough thinking within real-world limitations.
+</creative-constraints-framework>
 
-Content Brief Parameters:
-Industry/Niche: [TARGET_INDUSTRY]
-Target Audience: [AUDIENCE_DESCRIPTION]  
-Content Goals: [TRAFFIC/ENGAGEMENT/LEADS/EDUCATION]
-Brand Voice: [PROFESSIONAL/CASUAL/EXPERT/FRIENDLY]
+<constraint-categories>
 
-Constraints & Requirements:
+**Resource Constraints:**
+- Budget limit: [SPECIFIC_AMOUNT]
+- Time to launch: [TIMEFRAME]
+- Team size: [NUMBER_OF_PEOPLE]
+- Required skills: [EXPERTISE_AVAILABLE]
 
-**Mandatory Elements:**
-- Exactly 10 blog post ideas
-- Each idea must include: Title + 2-sentence description + Target keyword
-- All titles must be 60 characters or less (for SEO)
-- Must address specific audience pain points
-- Include mix of content types (how-to, listicle, case study, trends)
+**Market Constraints:**
+- Target market: [SPECIFIC_DEMOGRAPHIC]
+- Geographic focus: [LOCATION_LIMITS]
+- Competition level: [HIGH/MEDIUM/LOW]
+- Regulatory requirements: [COMPLIANCE_NEEDS]
 
-**Content Restrictions:**
-- No clickbait or misleading titles
-- Avoid oversaturated topics (unless with unique angle)
-- Must be achievable for target audience skill level
-- No controversial or sensitive political topics
-- Keep industry-appropriate and professional
+**Innovation Constraints:**
+- Technology requirements: [MUST_USE/CANNOT_USE]
+- Sustainability requirements: [ENVIRONMENTAL_GOALS]
+- Social impact goals: [COMMUNITY_BENEFITS]
+- Scalability needs: [GROWTH_EXPECTATIONS]
 
-**Format Requirements:**
-\`\`\`
-## Blog Post Idea #[Number]
-**Title:** [SEO-Optimized Title - Character Count: X/60]
-**Type:** [How-to/Listicle/Case Study/Guide/Trend Analysis]
-**Target Keyword:** [Primary SEO keyword]
-**Description:** [Pain point addressed] [Unique value proposition]
-**Estimated Word Count:** [750-2000 words]
-\`\`\`
+</constraint-categories>
 
-**Quality Standards:**
-- Each idea must solve a real problem
-- Include search intent consideration
-- Ensure content can rank competitively
-- Balance evergreen vs. trending topics (70/30 split)
-- Consider content difficulty: 60% beginner, 30% intermediate, 10% advanced
+<ideation-process>
 
-Generate 10 blog post ideas for:
+**Phase 1: Constraint Analysis (5 minutes)**
+- List all constraints as creative opportunities
+- Identify which constraints are flexible vs. fixed
+- Find unexpected connections between different constraints
+
+**Phase 2: Focused Brainstorming (15 minutes)**
+Generate exactly 10 business ideas that:
+✅ Work within ALL specified constraints
+✅ Turn at least one constraint into a competitive advantage
+✅ Address a real problem for the target market
+✅ Can be validated within 30 days
+
+**Phase 3: Constraint Optimization (10 minutes)**
+For the top 3 ideas, show how constraints actually:
+- Reduce competition by creating unique positioning
+- Lower costs through focused approach  
+- Accelerate development by limiting scope
+- Increase customer appeal through specialization
+
+</ideation-process>
+
+<output-format>
+## 🎯 Constraint-Driven Business Ideas
+
+**Constraints Summary:**
+[Bullet list of key limitations]
+
+**Top 10 Ideas:**
+
+### 1. [Business Idea Name]
+**Problem Solved:** [Specific customer pain point]
+**Constraint Advantage:** [How limitation becomes strength]
+**30-Day Validation:** [Specific test you can run]
+**Revenue Model:** [How money flows in]
+
+[Repeat for ideas 2-10]
+
+**🏆 Top 3 Deep Dive:**
+[Detailed analysis of how constraints create advantages]
+
+**🚀 Next Steps:**
+[Specific actions to validate top idea within constraints]
+</output-format>
+
+<quality-standards>
+- Each idea must be immediately actionable
+- Show clear path from constraint to competitive advantage
+- Include specific validation methods
+- Focus on problems people will pay to solve
+- Demonstrate understanding of target market
+</quality-standards>
+
+Generate ideas for:
 Industry: [SPECIFIC_INDUSTRY]
-Audience: [DETAILED_AUDIENCE_PROFILE]`,
+Constraints: [DETAILED_LIMITATIONS]
+Market: [TARGET_CUSTOMER_PROFILE]`,
       criteria: [
-        'Sets specific numerical constraints (10 ideas, 60 characters)',
-        'Defines mandatory format requirements',
-        'Includes content restrictions and boundaries',
-        'Specifies quality standards and criteria',
-        'Balances creative freedom with clear guidelines'
+        'Transforms constraints into creative opportunities',
+        'Provides systematic ideation process with time limits',
+        'Requires specific number of ideas for comprehensive exploration',
+        'Shows how constraints become competitive advantages',
+        'Includes validation framework for practical next steps'
       ],
       hints: [
-        'Specific constraints prevent overwhelming or unfocused output',
-        'Format requirements ensure consistency and usability',
-        'Quality standards maintain professional output',
-        'Balance structure with creative flexibility'
+        'Constraints focus creativity rather than limiting it - embrace them as features',
+        'Set specific numbers (10 ideas) to push beyond obvious solutions',
+        'Show how limitations can become your unique selling proposition',
+        'Always include validation steps to test ideas quickly and cheaply'
       ],
       tips: [
-        'Well-defined constraints actually improve creativity by providing focus',
-        'Specific formats make output immediately actionable',
-        'Quality standards ensure professional, usable results',
-        'Consider both what you want AND what you want to avoid'
+        'Creative constraints often produce more innovative solutions than complete freedom',
+        'Specific limitations force unique approaches that competitors can\'t easily copy',
+        'Time-boxed brainstorming prevents overthinking and encourages rapid ideation',
+        'Constraint-advantage thinking reveals hidden opportunities in apparent limitations'
       ],
       resources: [
         {
-          title: 'SEO Title Optimization Guide',
-          type: 'article',
-          url: 'https://example.com/seo-titles',
-          description: 'Best practices for search-optimized headlines'
-        }
-      ]
-    },
-    {
-      id: 'feedback-iteration',
-      title: 'Feedback & Iterative Improvement',
-      description: 'Design prompts that encourage refinement and improvement',
-      difficulty: 'beginner',
-      category: 'Foundation',
-      estimatedTime: '30 min',
-      prompt: 'Create a prompt system for iteratively improving email marketing campaigns.',
-      solution: `You are a conversion-focused email marketing specialist who believes in continuous testing and improvement.
-
-Email Campaign Optimization System:
-
-**Initial Campaign Analysis**
-Current email: [EMAIL_CONTENT]
-Campaign goal: [CONVERSION/ENGAGEMENT/RETENTION]
-Target audience: [DEMOGRAPHIC_PSYCHOGRAPHIC]
-Current performance: [OPEN_RATE]% open, [CLICK_RATE]% click, [CONVERSION]% conversion
-
-**Optimization Framework:**
-
-### Round 1: Foundation Assessment
-Analyze current email for:
-1. **Subject Line** (urgency, clarity, personalization)
-2. **Preview Text** (complements subject, adds value)
-3. **Email Structure** (hierarchy, scannability, flow)
-4. **Call-to-Action** (clarity, placement, design)
-5. **Value Proposition** (compelling, clear benefit)
-
-*Rate each element 1-10 and identify the weakest area.*
-
-### Round 2: Targeted Improvements
-Based on lowest-scoring areas, create 3 specific variants:
-- **Version A**: Optimize the weakest element
-- **Version B**: Optimize the second-weakest element  
-- **Version C**: Radical redesign of overall approach
-
-For each variant, explain:
-- What changed and why
-- Expected impact on metrics
-- Testing hypothesis
-
-### Round 3: Advanced Optimization
-Choose the best-performing variant and create micro-improvements:
-- A/B test headlines (3 options)
-- Test CTA button text (3 options)
-- Test send time/day (3 options)
-- Test personalization level (3 options)
-
-### Performance Prediction
-For each optimization, predict:
-- **Likely impact**: [HIGH/MEDIUM/LOW]
-- **Confidence level**: [HIGH/MEDIUM/LOW]
-- **Timeline to see results**: [DAYS/WEEKS]
-- **Success metrics**: [SPECIFIC_TARGETS]
-
-**Iteration Instructions:**
-After implementing changes, return with performance data for next optimization cycle. Focus on compound improvements rather than dramatic overhauls.
-
-Start optimization for: [EMAIL_CAMPAIGN_DETAILS]`,
-      criteria: [
-        'Creates systematic improvement process',
-        'Includes specific evaluation criteria',
-        'Encourages data-driven decisions',
-        'Provides framework for multiple iterations',
-        'Balances testing with practical implementation'
-      ],
-      hints: [
-        'Systematic approaches lead to better results than random changes',
-        'Focus on one major improvement at a time for clear testing',
-        'Predict outcomes to validate improvement strategies',
-        'Build on successes rather than starting over each time'
-      ],
-      tips: [
-        'Iterative improvement beats one-time optimization',
-        'Systematic frameworks prevent overlooking important elements',
-        'Prediction exercises improve strategic thinking',
-        'Data-driven approaches build confidence in decisions'
-      ],
-      resources: [
-        {
-          title: 'Email A/B Testing Guide',
-          type: 'article',
-          url: 'https://example.com/email-testing',
-          description: 'Comprehensive guide to email optimization testing'
-        }
-      ]
-    },
-    {
-      id: 'error-handling',
-      title: 'Error Handling & Edge Cases',
-      description: 'Design prompts that handle unexpected inputs gracefully',
-      difficulty: 'beginner',
-      category: 'Foundation',
-      estimatedTime: '25 min',
-      prompt: 'Create a robust prompt for a customer service chatbot that handles various edge cases.',
-      solution: `You are Alex, a patient and helpful customer service representative with 8+ years of experience resolving customer issues with empathy and efficiency.
-
-Your approach: Listen carefully, acknowledge concerns, provide clear solutions, and ensure customer satisfaction.
-
-**Standard Response Framework:**
-
-### For Normal Inquiries:
-1. **Acknowledge**: "I understand you're asking about [ISSUE]"
-2. **Clarify**: Ask one specific question if needed
-3. **Solve**: Provide clear, actionable solution
-4. **Confirm**: "Does this resolve your concern?"
-5. **Follow-up**: Offer additional assistance
-
-### Edge Case Handling:
-
-**Unclear/Vague Requests:**
-- Response: "I want to help you with this! To give you the most accurate information, could you tell me a bit more about [SPECIFIC_ASPECT]? For example, are you looking for help with [OPTION_A] or [OPTION_B]?"
-- Never guess - always clarify politely
-
-**Multiple Issues in One Message:**
-- Response: "I see you have several questions. Let me address each one to make sure nothing gets missed: [LIST_ISSUES]. I'll start with [FIRST_ISSUE] - [SOLUTION]. Now for [SECOND_ISSUE]..."
-
-**Angry/Frustrated Customers:**
-- Response: "I completely understand your frustration with [ISSUE], and I'm here to make this right. Let me personally look into this for you immediately. Here's what I can do: [SPECIFIC_ACTIONS]."
-- Acknowledge emotion, take ownership, focus on solutions
-
-**Information I Don't Have:**
-- Response: "That's a great question about [TOPIC]. I want to get you accurate information rather than guessing. Let me connect you with our [DEPARTMENT] specialist who can give you the exact details you need. Would you prefer a callback or live transfer?"
-
-**Technical Issues Beyond Scope:**
-- Response: "I can see this is a technical issue with [SYSTEM/PRODUCT]. For your security and to ensure this gets resolved properly, I'll need to transfer you to our technical support team who has the specialized tools to fix this. They'll have your information and can help immediately."
-
-**Requests I Cannot Fulfill:**
-- Response: "I understand why you'd want [REQUEST], and I wish I could make that happen for you. While I can't [SPECIFIC_LIMITATION], here's what I can do instead: [ALTERNATIVE_SOLUTIONS]. Would any of these work for your situation?"
-
-**Emergency/Urgent Situations:**
-- Immediate escalation protocol
-- Clear next steps and timeline
-- Direct contact information
-
-**Quality Assurance Rules:**
-- Never make promises you can't keep
-- Always provide alternatives when saying "no"
-- Confirm customer understanding before ending
-- Document complex issues for follow-up
-- Maintain professional tone regardless of customer emotion
-
-Handle this customer inquiry: [CUSTOMER_MESSAGE]`,
-      criteria: [
-        'Addresses multiple edge case scenarios',
-        'Provides specific response templates',
-        'Maintains consistent professional tone',
-        'Includes escalation procedures',
-        'Balances empathy with problem-solving'
-      ],
-      hints: [
-        'Think about what could go wrong and prepare responses',
-        'Provide specific language rather than general guidance',
-        'Always offer alternatives when you can\'t fulfill requests',
-        'Maintain empathy even in difficult situations'
-      ],
-      tips: [
-        'Robust error handling improves user experience significantly',
-        'Specific response templates ensure consistency',
-        'Escalation paths prevent issues from being unresolved',
-        'Empathy defuses tension and builds trust'
-      ],
-      resources: [
-        {
-          title: 'Customer Service De-escalation Techniques',
-          type: 'article',
-          url: 'https://example.com/deescalation',
-          description: 'Professional techniques for handling difficult customer interactions'
-        }
-      ]
-    },
-    {
-      id: 'creative-constraints',
-      title: 'Creative Constraints & Innovation',
-      description: 'Use constraints to spark creativity and generate innovative solutions',
-      difficulty: 'beginner',
-      category: 'Foundation',
-      estimatedTime: '28 min',
-      prompt: 'Design a creative writing prompt that uses specific constraints to inspire unique storytelling.',
-      solution: `You are a creative writing mentor who believes constraints unlock creativity rather than limit it. Your specialty is helping writers break through blocks using structured creative challenges.
-
-**Creative Writing Challenge Generator**
-
-Mission: Transform constraints into creative catalysts for compelling storytelling.
-
-**The Constraint Framework:**
-
-### Required Elements (must include all):
-1. **Character Constraint**: Protagonist has a unique limitation or unusual profession
-2. **Setting Constraint**: Story takes place in an unconventional location  
-3. **Time Constraint**: Story spans exactly [TIME_PERIOD]
-4. **Object Constraint**: A mundane object plays a crucial role
-5. **Dialogue Constraint**: At least one conversation happens without words
-
-### Creative Constraints (choose 2):
-- **Color Limitation**: Story can only reference 3 colors
-- **Sense Restriction**: Protagonist missing one of the five senses
-- **Technology Rule**: Story set in time period where [TECHNOLOGY] doesn't exist
-- **Weather Mandate**: Specific weather affects every scene
-- **Number Magic**: Every paragraph must contain exactly [X] sentences
-- **Perspective Twist**: Story told from unusual point of view (object, animal, concept)
-
-### Story Structure Requirements:
-- **Opening**: Establish constraint and hook within first 50 words
-- **Development**: Show how constraints create opportunities/challenges
-- **Climax**: Constraint becomes key to resolving central conflict
-- **Resolution**: Transform limitation into strength or revelation
-
-### Genre Fusion Challenge:
-Blend exactly 2 genres: [GENRE_1] + [GENRE_2]
-Examples: 
-- Mystery + Romance = Love story solved through detective work
-- Horror + Comedy = Funny monsters or absurd scares
-- Sci-Fi + Historical = Time travel or alternate history
-
-### Writing Process:
-1. **5-minute brainstorm**: List 20 ways the constraints could interact
-2. **Character creation**: How do constraints shape their personality?
-3. **Plot outline**: 5 key scenes where constraints matter
-4. **First draft**: Write without editing, embrace the weird
-5. **Constraint check**: Does every element serve the story?
-
-### Success Metrics:
-- **Creativity**: Does the story surprise even you?
-- **Integration**: Do constraints feel natural, not forced?
-- **Engagement**: Would readers want to know what happens next?
-- **Innovation**: Have you created something genuinely unique?
-
-**Example Challenge:**
-Character: Librarian who can only speak in questions
-Setting: 24-hour laundromat during a power outage
-Time: One night
-Object: A lost sock
-Dialogue: Two strangers communicate through laundry soap labels
-Genres: Mystery + Magical Realism
-
-Generate a unique writing challenge using this framework for:
-Writer level: [BEGINNER/INTERMEDIATE/ADVANCED]
-Preferred themes: [THEMES]
-Avoid: [TOPICS_TO_AVOID]`,
-      criteria: [
-        'Creates systematic constraint framework',
-        'Balances structure with creative freedom',
-        'Provides clear process and success metrics',
-        'Includes practical examples and applications',
-        'Encourages innovation through limitation'
-      ],
-      hints: [
-        'Constraints focus creativity rather than limiting it',
-        'Combine multiple constraints for unique combinations',
-        'Show how limitations can become story strengths',
-        'Provide clear process to prevent overwhelm'
-      ],
-      tips: [
-        'Creative constraints often produce more original work than complete freedom',
-        'Multiple smaller constraints are better than one large restriction',
-        'Examples help writers see possibilities rather than problems',
-        'Clear process reduces creative paralysis'
-      ],
-      resources: [
-        {
-          title: 'Creative Writing Constraint Techniques',
+          title: 'Creative Constraints in Innovation',
           type: 'article',
           url: 'https://example.com/creative-constraints',
-          description: 'How limitations enhance rather than restrict creativity'
+          description: 'How limitations drive breakthrough thinking in business'
         },
         {
-          title: 'Story Structure Templates',
+          title: 'Rapid Business Validation Toolkit',
           type: 'tool',
-          url: 'https://example.com/story-templates',
-          description: 'Frameworks for organizing creative writing projects'
+          url: 'https://example.com/validation-toolkit',
+          description: 'Methods for testing business ideas quickly and affordably'
         }
-      ]
+      ],
+      examples: {
+        good: `<constraints>Budget: $5K, Time: 3 months, Must be digital</constraints>\n<process>10 ideas in 15 min, show advantage</process>\n<validation>30-day test plan</validation>`,
+        bad: `Come up with some good business ideas.`,
+        explanation: 'The good example provides specific limitations and structured process, while the bad example has no boundaries or framework.'
+      }
     },
     {
-      id: 'multi-step-processes',
-      title: 'Multi-Step Process Design',
-      description: 'Create prompts that guide AI through complex, sequential tasks',
+      id: 'feedback-systems',
+      title: 'Feedback-Driven Improvement',
+      description: 'Design prompts that create continuous improvement loops for iterative excellence',
       difficulty: 'beginner',
       category: 'Foundation',
-      estimatedTime: '35 min',
-      prompt: 'Design a comprehensive prompt for planning and launching a small business.',
-      solution: `You are a business consultant who has helped 500+ entrepreneurs successfully launch profitable small businesses. Your expertise covers everything from initial concept to first-year operations.
+      type: 'analysis',
+      estimatedTime: '28 min',
+      prompt: 'Create a comprehensive feedback and iteration system for improving marketing campaigns.',
+      solution: `<role>You are a data-driven marketing strategist</role> who believes in continuous testing and optimization based on real customer feedback and performance metrics.
 
-**Business Launch Blueprint: Complete 90-Day Process**
+<campaign-analysis-framework>
 
-Client Profile: [ENTREPRENEUR_BACKGROUND]
-Business Concept: [INITIAL_IDEA]
-Budget Range: [AVAILABLE_CAPITAL]
-Timeline: [DESIRED_LAUNCH_DATE]
+**Current Campaign Assessment:**
+Campaign: [CAMPAIGN_NAME]
+Objective: [PRIMARY_GOAL]
+Target audience: [DEMOGRAPHIC_PROFILE]
+Budget: [TOTAL_SPEND]
+Duration: [TIME_PERIOD]
+Channels: [MARKETING_CHANNELS]
 
-## Phase 1: Foundation & Planning (Days 1-30)
+**Performance Metrics:**
+- Reach: [IMPRESSIONS/VIEWS]
+- Engagement: [CLICKS/INTERACTIONS]
+- Conversion: [SALES/SIGNUPS]
+- Cost efficiency: [CPA/ROAS]
+- Audience feedback: [COMMENTS/REVIEWS]
 
-### Week 1: Concept Validation
-**Day 1-2: Market Research**
-- Primary research: Survey 50+ potential customers
-- Secondary research: Industry reports, competitor analysis
-- Questions to answer: Who exactly needs this? How much will they pay? Who else offers this?
+</campaign-analysis-framework>
 
-**Day 3-4: Business Model Design**
-- Revenue streams: How will money come in?
-- Cost structure: What are your main expenses?
-- Value proposition: Why choose you over alternatives?
-- Customer segments: Who are your ideal customers?
+<systematic-improvement-process>
 
-**Day 5-7: Financial Projections**
-- Startup costs breakdown
-- Monthly operating expenses
-- Revenue projections (conservative, realistic, optimistic)
-- Break-even analysis
-- Cash flow projections for first 12 months
+**Phase 1: Data Collection & Analysis**
+Gather feedback from 5 sources:
+1. **Quantitative Metrics:** CTR, conversion rates, engagement rates
+2. **Customer Surveys:** Direct feedback from target audience (min 100 responses)
+3. **Social Listening:** Comments, mentions, sentiment analysis
+4. **Competitor Analysis:** What's working in your space
+5. **Team Insights:** Internal observations and ideas
 
-### Week 2: Legal & Administrative Setup
-**Day 8-10: Business Structure**
-- Entity type selection (LLC, Corporation, Partnership)
-- State registration and licensing requirements
-- Federal EIN application
-- Business bank account setup
+**Phase 2: Problem Identification**
+Rank issues by impact and difficulty:
+- 🔴 High Impact, Easy Fix (do immediately)
+- 🟡 High Impact, Hard Fix (plan carefully)
+- 🟢 Low Impact, Easy Fix (quick wins)
+- ⚫ Low Impact, Hard Fix (ignore for now)
 
-**Day 11-14: Compliance & Protection**
-- Industry-specific licenses and permits
-- Insurance requirements (liability, property, professional)
-- Trademark/copyright considerations
-- Basic contract templates (service agreements, terms of service)
+**Phase 3: Hypothesis-Driven Testing**
+For each improvement, create:
+- **Hypothesis:** "If we change [X], then [Y] will improve because [Z]"
+- **Test Design:** A/B test with clear variables
+- **Success Metrics:** Specific numbers that indicate improvement
+- **Timeline:** Duration needed to gather significant data
 
-### Week 3-4: Brand & Market Positioning
-**Day 15-21: Brand Development**
-- Business name and domain registration
-- Logo and visual identity design
-- Brand voice and messaging framework
-- Website wireframes and content strategy
+**Phase 4: Implementation & Monitoring**
+- Test one variable at a time for clear results
+- Monitor daily for first week, then weekly
+- Set automatic alerts for significant changes
+- Document everything for future reference
 
-**Day 22-30: Marketing Foundation**
-- Target customer personas (detailed profiles)
-- Competitive positioning strategy
-- Core marketing messages
-- Marketing channel selection and budget allocation
+</systematic-improvement-process>
 
-## Phase 2: Building & Testing (Days 31-60)
+<optimization-framework>
 
-### Week 5-6: Product/Service Development
-**Day 31-35: MVP Creation**
-- Minimum viable product/service definition
-- Quality standards and delivery processes
-- Pricing strategy and testing
-- Customer feedback collection system
+**Creative Optimization:**
+- Headlines: Test 3 variations focusing on different benefits
+- Visuals: Test 3 different styles (lifestyle, product, data)
+- Copy: Test 3 emotional approaches (fear, desire, logic)
+- CTA: Test 3 action words and 3 colors
 
-**Day 36-42: Operations Setup**
-- Supplier relationships and agreements
-- Inventory management systems (if applicable)
-- Customer service processes
-- Quality control procedures
+**Targeting Optimization:**
+- Audience segments: Test broader vs. narrower targeting
+- Demographics: Test different age ranges and interests
+- Behaviors: Test different purchase behavior patterns
+- Custom audiences: Test lookalikes vs. retargeting
 
-### Week 7-8: Marketing Assets & Systems
-**Day 43-49: Digital Presence**
-- Website launch with booking/payment systems
-- Social media profile setup and content calendar
-- Email marketing system and welcome sequences
-- SEO foundation and local listings
+**Channel Optimization:**
+- Platform performance: Reallocate budget to best performers
+- Content format: Test video vs. image vs. text
+- Posting times: Test different days and hours
+- Frequency: Test different exposure levels
 
-**Day 50-60: Sales Process**
-- Sales funnel design and testing
-- Customer onboarding process
-- Follow-up and retention systems
-- Referral program design
+</optimization-framework>
 
-## Phase 3: Launch & Optimization (Days 61-90)
+<feedback-integration-system>
 
-### Week 9-10: Soft Launch
-**Day 61-65: Beta Testing**
-- Launch to small group of early customers
-- Collect detailed feedback and testimonials
-- Refine processes based on real customer experience
-- Document lessons learned and improvements
+**Weekly Review Process:**
+1. **Performance Dashboard:** Review all key metrics
+2. **Feedback Analysis:** Categorize and prioritize customer input
+3. **Test Results:** Analyze completed A/B tests
+4. **Strategic Adjustments:** Update campaign based on learnings
+5. **Next Week Planning:** Set new tests and improvements
 
-**Day 66-70: System Refinement**
-- Update operations based on beta feedback
-- Optimize marketing messages and materials
-- Streamline customer experience
-- Prepare for full public launch
+**Monthly Strategic Review:**
+- Overall campaign effectiveness vs. goals
+- Budget reallocation recommendations
+- Long-term trend analysis
+- Competitive positioning updates
+- Next month's innovation priorities
 
-### Week 11-12: Full Launch
-**Day 71-77: Public Launch**
-- Execute comprehensive marketing campaign
-- Activate all marketing channels simultaneously
-- Monitor systems for any issues
-- Respond quickly to customer inquiries
+**Quarterly Campaign Evolution:**
+- Complete campaign refresh based on learnings
+- New creative concepts incorporating feedback
+- Audience strategy refinement
+- Channel mix optimization
+- Goal setting for next quarter
 
-**Day 78-84: Performance Monitoring**
-- Track key metrics (sales, traffic, conversion rates)
-- Monitor cash flow and expenses
-- Collect customer feedback continuously
-- Adjust pricing or positioning if needed
+</feedback-integration-system>
 
-### Week 13: Review & Plan Next Phase
-**Day 85-90: Analysis & Planning**
-- Comprehensive performance review
-- Financial analysis vs. projections
-- Customer satisfaction assessment
-- Plan for months 4-6: scaling strategies
-
-## Success Checkpoints
-
-**Weekly Reviews:**
-- Financial status vs. budget
-- Task completion rate
-- Customer feedback themes
-- Adjustment needs
-
-**Monthly Milestones:**
-- Month 1: Foundation complete, ready to build
-- Month 2: Systems operational, ready to test
-- Month 3: Launched and actively serving customers
-
-## Risk Management
-
-**Common Pitfalls & Solutions:**
-- Budget overruns → Weekly expense tracking
-- Timeline delays → Buffer time in each phase
-- Market changes → Monthly market pulse checks
-- Quality issues → Customer feedback loops
-
-**Emergency Protocols:**
-- Cash flow problems → Expense reduction plan
-- Low customer response → Pivot strategy
-- Competition threats → Differentiation reinforcement
-
-Create detailed 90-day plan for:
-Business type: [SPECIFIC_BUSINESS]
-Target market: [CUSTOMER_DESCRIPTION]
-Budget: [AVAILABLE_RESOURCES]`,
+Analyze and optimize this campaign:
+Campaign details: [SPECIFIC_CAMPAIGN_INFO]
+Current performance: [METRICS_DATA]
+Available budget for testing: [OPTIMIZATION_BUDGET]`,
       criteria: [
-        'Breaks complex process into manageable phases',
-        'Provides specific timelines and daily tasks',
-        'Includes checkpoints and success metrics',
-        'Addresses common pitfalls and solutions',
-        'Balances thoroughness with actionability'
+        'Creates systematic data collection from multiple sources',
+        'Provides framework for prioritizing improvements by impact',
+        'Includes hypothesis-driven testing methodology',
+        'Establishes regular review and optimization cycles',
+        'Integrates feedback into strategic decision-making'
       ],
       hints: [
-        'Complex projects need clear phases and milestones',
-        'Daily tasks prevent overwhelm and ensure progress',
-        'Regular checkpoints allow for course corrections',
-        'Anticipate common problems and prepare solutions'
+        'Collect feedback from multiple sources - data alone isn\'t enough',
+        'Prioritize improvements by impact vs. effort to maximize results',
+        'Test one variable at a time to get clear, actionable insights',
+        'Create regular review cycles to ensure continuous improvement'
       ],
       tips: [
-        'Sequential processes are easier to follow than overwhelming lists',
-        'Specific timelines create accountability and momentum',
-        'Success metrics help track progress and identify issues early',
-        'Risk management prevents small problems from becoming big ones'
+        'Systematic feedback collection reveals insights missed by data alone',
+        'Hypothesis-driven testing produces faster, more reliable improvements',
+        'Regular optimization cycles prevent campaigns from becoming stale',
+        'Multiple feedback sources provide comprehensive understanding'
       ],
       resources: [
         {
-          title: 'Small Business Launch Checklist',
-          type: 'tool',
-          url: 'https://example.com/launch-checklist',
-          description: 'Comprehensive checklist for business launch tasks'
+          title: 'Marketing Analytics Mastery',
+          type: 'article',
+          url: 'https://example.com/marketing-analytics',
+          description: 'Complete guide to data-driven marketing optimization'
         },
         {
-          title: 'Business Plan Templates',
+          title: 'A/B Testing Toolkit',
           type: 'tool',
-          url: 'https://example.com/business-templates',
-          description: 'Professional business plan and financial projection templates'
+          url: 'https://example.com/ab-testing',
+          description: 'Templates and calculators for marketing experiments'
+        }
+      ],
+      examples: {
+        good: `**Hypothesis:** If we change headline to benefit-focused, CTR will increase 15% because audience wants outcomes\n**Test:** A/B test 3 headlines\n**Metrics:** CTR, conversion, cost per lead`,
+        bad: `Look at the data and make the campaign better.`,
+        explanation: 'The good example provides specific hypothesis, test design, and success metrics, while the bad example offers no structure or methodology.'
+      }
+    },
+    {
+      id: 'advanced-structuring',
+      title: 'Advanced Response Structuring',
+      description: 'Master complex prompt architectures that handle multi-faceted tasks with precision',
+      difficulty: 'beginner',
+      category: 'Foundation',
+      type: 'hands-on',
+      estimatedTime: '30 min',
+      prompt: 'Design a comprehensive prompt system for creating a complete business plan that adapts to different industries and business models.',
+      solution: `<role>You are a senior business consultant</role> with 20+ years of experience helping entrepreneurs and corporations develop successful business strategies across diverse industries.
+
+<business-plan-architecture>
+
+**Phase 1: Business Foundation Analysis**
+<foundation>
+Industry: [SPECIFIC_INDUSTRY]
+Business model: [B2B/B2C/MARKETPLACE/SAAS/PRODUCT/SERVICE]
+Stage: [STARTUP/GROWTH/EXPANSION/PIVOT]
+Target market: [DEMOGRAPHIC_GEOGRAPHIC_PSYCHOGRAPHIC]
+Unique value proposition: [CORE_DIFFERENTIATOR]
+</foundation>
+
+**Phase 2: Market & Competitive Intelligence**
+<market-analysis>
+Market size: [TAM/SAM/SOM analysis]
+Growth trends: [5-year market trajectory]
+Customer segments: [3-5 distinct user groups]
+Competitive landscape: [Direct/indirect competitors]
+Market gaps: [Unmet needs and opportunities]
+</market-analysis>
+
+**Phase 3: Strategic Framework Development**
+<strategy>
+Vision: [Long-term aspirational goal]
+Mission: [Purpose and core function]
+Values: [Operating principles]
+Objectives: [3-year measurable goals]
+Key strategies: [How objectives will be achieved]
+</strategy>
+
+</business-plan-architecture>
+
+<adaptive-sections>
+
+**For Product-Based Businesses:**
+- Product development roadmap
+- Manufacturing and supply chain
+- Inventory management strategy
+- Quality control processes
+
+**For Service-Based Businesses:**
+- Service delivery methodology
+- Client onboarding process
+- Quality assurance framework
+- Scalability planning
+
+**For Technology Businesses:**
+- Technical architecture overview
+- Development timeline and milestones
+- Data security and privacy measures
+- Intellectual property strategy
+
+**For Marketplace Businesses:**
+- Two-sided market development
+- Network effects strategy
+- Platform governance model
+- Revenue sharing framework
+
+</adaptive-sections>
+
+<comprehensive-business-plan-structure>
+
+## Executive Summary (2 pages)
+- Business concept and opportunity
+- Market analysis highlight
+- Competitive advantage
+- Financial projections summary
+- Funding requirements
+
+## Company Description (3 pages)
+- Mission, vision, and values
+- Company history and ownership
+- Legal structure and location
+- Products/services overview
+
+## Market Analysis (5 pages)
+- Industry overview and trends
+- Target market definition
+- Customer analysis and personas
+- Competitive analysis
+- Market size and growth projections
+
+## Organization & Management (2 pages)
+- Organizational structure
+- Management team profiles
+- Personnel plan and hiring strategy
+- Advisory board and key partnerships
+
+## Products/Services (4 pages)
+- Detailed product/service descriptions
+- Development status and roadmap
+- Intellectual property and legal considerations
+- Quality control and customer service
+
+## Marketing & Sales Strategy (4 pages)
+- Market positioning and branding
+- Pricing strategy and revenue model
+- Sales process and customer acquisition
+- Marketing channels and tactics
+- Customer retention strategy
+
+## Operations Plan (3 pages)
+- Production/service delivery process
+- Technology and equipment requirements
+- Supplier relationships and partnerships
+- Quality control measures
+
+## Financial Projections (5 pages)
+- Revenue and expense forecasts (3-5 years)
+- Cash flow projections
+- Break-even analysis
+- Funding requirements and use of funds
+- Financial controls and reporting
+
+## Risk Analysis (2 pages)
+- Market and competitive risks
+- Operational and financial risks
+- Mitigation strategies
+- Contingency planning
+
+## Implementation Timeline (1 page)
+- Key milestones and deadlines
+- Critical path activities
+- Resource allocation schedule
+- Success metrics and KPIs
+
+</comprehensive-business-plan-structure>
+
+<quality-standards>
+
+**Content Requirements:**
+- All financial projections must include assumptions
+- Market data must be from credible sources (last 2 years)
+- Competitive analysis must cover at least 5 competitors
+- Customer personas must be based on research, not assumptions
+- Implementation timeline must be realistic and detailed
+
+**Presentation Standards:**
+- Professional formatting with consistent headers
+- Charts and graphs for all numerical data
+- Executive summary must stand alone as complete overview
+- Each section must have clear takeaways and next steps
+- Document must be 25-35 pages total length
+
+</quality-standards>
+
+<customization-prompts>
+
+**Industry-Specific Deep Dives:**
+- Manufacturing: Include detailed production costs and supply chain analysis
+- Retail: Focus on inventory management and customer experience
+- Technology: Emphasize scalability and technical requirements
+- Service: Highlight human capital and delivery methodology
+- Healthcare: Address regulatory compliance and patient outcomes
+
+**Business Model Adaptations:**
+- Subscription: Lifetime value calculations and churn analysis
+- Marketplace: Network effects and user acquisition costs
+- Franchise: Territory analysis and franchisee support
+- E-commerce: Digital marketing and fulfillment strategy
+
+</customization-prompts>
+
+Create a comprehensive business plan for:
+Business concept: [DETAILED_DESCRIPTION]
+Industry: [SPECIFIC_INDUSTRY]
+Target market: [CUSTOMER_PROFILE]
+Business model: [REVENUE_APPROACH]
+Funding needs: [CAPITAL_REQUIREMENTS]`,
+      criteria: [
+        'Provides comprehensive business plan structure with specific page counts',
+        'Adapts content based on industry and business model type',
+        'Includes quality standards and content requirements',
+        'Covers all essential business plan components',
+        'Balances thoroughness with practical usability'
+      ],
+      hints: [
+        'Complex prompts need clear phases to prevent overwhelm',
+        'Industry-specific adaptations show you understand different business needs',
+        'Specific requirements (page counts, data sources) ensure professional quality',
+        'Quality standards prevent generic or superficial output'
+      ],
+      tips: [
+        'Structured architecture handles complex multi-part tasks effectively',
+        'Adaptive sections customize output for specific business types',
+        'Quality standards ensure professional-grade deliverables',
+        'Comprehensive frameworks reduce the need for multiple revisions'
+      ],
+      resources: [
+        {
+          title: 'Business Plan Template Library',
+          type: 'tool',
+          url: 'https://example.com/business-plan-templates',
+          description: 'Industry-specific business plan templates and examples'
+        },
+        {
+          title: 'Financial Modeling for Startups',
+          type: 'article',
+          url: 'https://example.com/financial-modeling',
+          description: 'How to create realistic financial projections and assumptions'
+        }
+      ],
+      examples: {
+        good: `<architecture>Phase 1: Foundation\nPhase 2: Market Analysis\nPhase 3: Strategy</architecture>\n<adaptive>For SaaS: technical architecture\nFor retail: inventory management</adaptive>`,
+        bad: `Write a business plan with all the important sections.`,
+        explanation: 'The good example provides clear structure and industry adaptations, while the bad example lacks specificity and guidance.'
+      }
+    }
+  ],
+  intermediate: [
+    {
+      id: 'chain-of-thought',
+      title: 'Chain-of-Thought Reasoning',
+      description: 'Master systematic thinking processes for complex analytical tasks',
+      difficulty: 'intermediate',
+      category: 'Advanced Techniques',
+      type: 'analysis',
+      estimatedTime: '25 min',
+      prompt: 'Design a prompt that guides AI through complex problem-solving using structured reasoning chains.',
+      solution: `<role>You are a strategic problem-solving consultant</role> who specializes in breaking down complex challenges into manageable, logical steps.
+
+<reasoning-framework>
+For this problem: [PROBLEM_STATEMENT]
+
+Use this systematic reasoning approach:
+
+**Step 1: Problem Decomposition**
+- What exactly is being asked?
+- What are the key components or sub-problems?
+- What information do I have, and what's missing?
+- What assumptions might I need to make?
+
+**Step 2: Analysis Framework**
+- What analytical approach is most appropriate? (cause-effect, cost-benefit, risk-reward, etc.)
+- What factors should I consider and prioritize?
+- How do these factors interact with each other?
+- What are the potential consequences of different approaches?
+
+**Step 3: Solution Development**
+- Generate 3-5 potential solutions
+- For each solution, consider: feasibility, resources needed, timeline, risks
+- What are the pros and cons of each approach?
+- How would I test or validate each solution?
+
+**Step 4: Decision Logic**
+- What criteria should guide the final decision?
+- How do the solutions perform against these criteria?
+- What are the implementation steps for the chosen solution?
+- What could go wrong, and how would I mitigate those risks?
+
+**Step 5: Validation & Refinement**
+- Does this solution address the original problem completely?
+- Have I considered all stakeholders and their perspectives?
+- What would need to happen for this solution to succeed?
+- How would I measure success and adjust if needed?
+</reasoning-framework>
+
+Show your reasoning process step-by-step, making your thinking transparent at each stage.`,
+      criteria: [
+        'Provides systematic step-by-step reasoning framework',
+        'Requires explicit thinking at each stage',
+        'Includes validation and verification steps',
+        'Addresses complex multi-faceted problems',
+        'Demonstrates transparent logical progression'
+      ],
+      hints: [
+        'Break complex problems into smaller, manageable components',
+        'Make your reasoning process explicit and transparent',
+        'Consider multiple solutions before settling on one',
+        'Always validate your conclusion against the original problem'
+      ],
+      tips: [
+        'Structured reasoning prevents overlooking important factors',
+        'Step-by-step thinking improves solution quality',
+        'Transparent processes allow for better verification',
+        'Multiple solution consideration leads to better outcomes'
+      ],
+      resources: [
+        {
+          title: 'Systems Thinking Guide',
+          type: 'article',
+          url: 'https://example.com/systems-thinking',
+          description: 'Framework for analyzing complex, interconnected problems'
         }
       ]
     }
   ],
-  intermediate: [],
-  advanced: []
+  advanced: [
+    {
+      id: 'rag-system-design',
+      title: 'RAG System Architecture',
+      description: 'Design comprehensive retrieval-augmented generation systems for production use',
+      difficulty: 'advanced',
+      category: 'System Design',
+      type: 'hands-on',
+      estimatedTime: '45 min',
+      prompt: 'Architect a complete RAG system with optimization strategies for a specific domain.',
+      solution: `<role>You are a senior ML systems architect</role> with expertise in designing enterprise-scale RAG implementations for production environments.
+
+<system-requirements>
+Domain: [SPECIFIC_DOMAIN]
+Scale: [DOCUMENT_COUNT/USER_COUNT]
+Performance targets: [LATENCY/ACCURACY_REQUIREMENTS]
+Budget constraints: [INFRASTRUCTURE_BUDGET]
+</system-requirements>
+
+<comprehensive-architecture>
+
+**1. Data Ingestion Pipeline**
+- Document processing: [PARSERS, CLEANING, CHUNKING_STRATEGY]
+- Embedding generation: [MODEL_CHOICE, BATCH_PROCESSING, VERSIONING]
+- Quality control: [VALIDATION_RULES, ERROR_HANDLING, MONITORING]
+
+**2. Vector Database Design**
+- Storage strategy: [DATABASE_CHOICE, INDEXING, PARTITIONING]
+- Search optimization: [SIMILARITY_METRICS, FILTERING, PERFORMANCE_TUNING]
+- Scalability: [SHARDING, REPLICATION, BACKUP_STRATEGY]
+
+**3. Retrieval Engine**
+- Query processing: [INTENT_CLASSIFICATION, QUERY_EXPANSION, MULTI_VECTOR_SEARCH]
+- Ranking & fusion: [RELEVANCE_SCORING, RESULT_FUSION, DIVERSITY_PROMOTION]
+- Context selection: [WINDOW_SIZING, OVERLAP_HANDLING, SOURCE_ATTRIBUTION]
+
+**4. Generation Pipeline**
+- Prompt engineering: [SYSTEM_PROMPTS, CONTEXT_INTEGRATION, OUTPUT_FORMATTING]
+- LLM integration: [MODEL_SELECTION, PARAMETER_TUNING, FALLBACK_STRATEGIES]
+- Quality assurance: [EVALUATION_METRICS, MONITORING, HUMAN_FEEDBACK]
+
+</comprehensive-architecture>
+
+Design this system for: [SPECIFIC_USE_CASE]
+Requirements: [TECHNICAL_REQUIREMENTS]
+Constraints: [BUSINESS_CONSTRAINTS]`,
+      criteria: [
+        'Addresses complete system architecture end-to-end',
+        'Includes specific technical implementation details',
+        'Considers scalability and production requirements',
+        'Incorporates quality assurance and monitoring',
+        'Handles real-world constraints and optimization'
+      ],
+      hints: [
+        'Consider the entire pipeline from data ingestion to user response',
+        'Think about scalability and performance optimization',
+        'Include monitoring and quality assurance at every stage',
+        'Address real-world constraints like budget and latency'
+      ],
+      tips: [
+        'Production RAG systems require comprehensive architecture',
+        'Quality monitoring is essential for maintaining performance',
+        'Scalability planning prevents future bottlenecks',
+        'Cost optimization balances performance with budget constraints'
+      ],
+      resources: [
+        {
+          title: 'RAG System Design Patterns',
+          type: 'article',
+          url: 'https://example.com/rag-patterns',
+          description: 'Proven architectures for production RAG systems'
+        }
+      ]
+    }
+  ]
 };
