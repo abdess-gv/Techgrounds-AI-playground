@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +8,7 @@ import { BookOpen, Brain, Code, Database, ExternalLink, GraduationCap, Users, Za
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EnhancedPromptDatabase from "@/components/PromptEngineering/EnhancedPromptDatabase";
-import ComprehensiveExercisePlayer from "@/components/PromptEngineering/ComprehensiveExercisePlayer";
+import AccessibleExerciseHub from "@/components/PromptEngineering/AccessibleExerciseHub";
 import FrameworkLibrary from "@/components/PromptEngineering/FrameworkLibrary";
 import LearningPath from "@/components/PromptEngineering/LearningPath";
 
@@ -26,60 +25,92 @@ const PromptEngineering = () => {
       <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Hero Section */}
+        {/* Enhanced Hero Section */}
         <div className="text-center mb-12">
-          <div className="flex justify-center items-center space-x-2 mb-4">
-            <Brain className="h-12 w-12 text-purple-600" />
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+          <div className="flex justify-center items-center space-x-2 mb-6">
+            <Brain className="h-16 w-16 text-purple-600" />
+            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Prompt Engineering Academy
             </h1>
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Master the art and science of AI prompting, RAG systems, and LLM fine-tuning with hands-on exercises, color-coded prompts, and real-world applications.
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-8 leading-relaxed">
+            Master the art and science of AI prompting with comprehensive learning paths, interactive exercises, 
+            color-coded prompts, and production-ready frameworks. From beginner basics to advanced RAG systems.
           </p>
           
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <Badge variant="secondary" className="px-4 py-2 bg-purple-100 text-purple-800">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 max-w-4xl mx-auto">
+            <Badge variant="secondary" className="px-4 py-3 bg-purple-100 text-purple-800 text-sm">
               <Users className="h-4 w-4 mr-2" />
-              Beginner to Expert
+              All Skill Levels
             </Badge>
-            <Badge variant="secondary" className="px-4 py-2 bg-blue-100 text-blue-800">
+            <Badge variant="secondary" className="px-4 py-3 bg-blue-100 text-blue-800 text-sm">
               <Code className="h-4 w-4 mr-2" />
-              Interactive Exercises
+              Interactive Learning
             </Badge>
-            <Badge variant="secondary" className="px-4 py-2 bg-green-100 text-green-800">
+            <Badge variant="secondary" className="px-4 py-3 bg-green-100 text-green-800 text-sm">
               <Database className="h-4 w-4 mr-2" />
               Color-Coded Prompts
             </Badge>
-            <Badge variant="secondary" className="px-4 py-2 bg-orange-100 text-orange-800">
+            <Badge variant="secondary" className="px-4 py-3 bg-orange-100 text-orange-800 text-sm">
               <GraduationCap className="h-4 w-4 mr-2" />
-              Certification Ready
+              Industry Ready
             </Badge>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-8 py-3 text-lg">
+              <Zap className="h-5 w-5 mr-2" />
+              Start Learning Now
+            </Button>
+            <Button variant="outline" size="lg" className="px-8 py-3 text-lg">
+              <BookOpen className="h-5 w-5 mr-2" />
+              Explore Resources
+            </Button>
           </div>
         </div>
 
-        {/* Main Content Tabs */}
+        {/* Enhanced Main Content Tabs */}
         <Tabs defaultValue="learning" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8 bg-white shadow-sm">
-            <TabsTrigger value="learning" className="flex items-center space-x-2 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-800">
+          <TabsList className="grid w-full grid-cols-5 mb-8 bg-white shadow-sm border">
+            <TabsTrigger 
+              value="learning" 
+              className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-100 data-[state=active]:to-purple-200 data-[state=active]:text-purple-800"
+            >
               <GraduationCap className="h-4 w-4" />
-              <span>Learning Paths</span>
+              <span className="hidden sm:inline">Learning Paths</span>
+              <span className="sm:hidden">Learn</span>
             </TabsTrigger>
-            <TabsTrigger value="exercises" className="flex items-center space-x-2 data-[state=active]:bg-blue-100 data-[state=active]:text-blue-800">
+            <TabsTrigger 
+              value="exercises" 
+              className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-100 data-[state=active]:to-blue-200 data-[state=active]:text-blue-800"
+            >
               <Zap className="h-4 w-4" />
-              <span>Exercises</span>
+              <span className="hidden sm:inline">Exercises</span>
+              <span className="sm:hidden">Practice</span>
             </TabsTrigger>
-            <TabsTrigger value="database" className="flex items-center space-x-2 data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+            <TabsTrigger 
+              value="database" 
+              className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-100 data-[state=active]:to-green-200 data-[state=active]:text-green-800"
+            >
               <Database className="h-4 w-4" />
-              <span>Prompt Database</span>
+              <span className="hidden sm:inline">Prompt Database</span>
+              <span className="sm:hidden">Database</span>
             </TabsTrigger>
-            <TabsTrigger value="frameworks" className="flex items-center space-x-2 data-[state=active]:bg-orange-100 data-[state=active]:text-orange-800">
+            <TabsTrigger 
+              value="frameworks" 
+              className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-100 data-[state=active]:to-orange-200 data-[state=active]:text-orange-800"
+            >
               <BookOpen className="h-4 w-4" />
-              <span>Frameworks</span>
+              <span className="hidden sm:inline">Frameworks</span>
+              <span className="sm:hidden">Guides</span>
             </TabsTrigger>
-            <TabsTrigger value="resources" className="flex items-center space-x-2 data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-800">
+            <TabsTrigger 
+              value="resources" 
+              className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-100 data-[state=active]:to-indigo-200 data-[state=active]:text-indigo-800"
+            >
               <ExternalLink className="h-4 w-4" />
-              <span>Resources</span>
+              <span className="hidden sm:inline">Resources</span>
+              <span className="sm:hidden">More</span>
             </TabsTrigger>
           </TabsList>
 
@@ -88,7 +119,7 @@ const PromptEngineering = () => {
           </TabsContent>
 
           <TabsContent value="exercises">
-            <ComprehensiveExercisePlayer level={selectedLevel} />
+            <AccessibleExerciseHub level={selectedLevel} />
           </TabsContent>
 
           <TabsContent value="database">
