@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Brain, Code, Database, ExternalLink, GraduationCap, Users, Zap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import PromptDatabase from "@/components/PromptEngineering/PromptDatabase";
-import ExercisePlayer from "@/components/PromptEngineering/ExercisePlayer";
+import EnhancedPromptDatabase from "@/components/PromptEngineering/EnhancedPromptDatabase";
+import ComprehensiveExercisePlayer from "@/components/PromptEngineering/ComprehensiveExercisePlayer";
 import FrameworkLibrary from "@/components/PromptEngineering/FrameworkLibrary";
 import LearningPath from "@/components/PromptEngineering/LearningPath";
 
@@ -35,23 +35,23 @@ const PromptEngineering = () => {
             </h1>
           </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Master the art and science of AI prompting, RAG systems, and LLM fine-tuning with hands-on exercises, frameworks, and real-world applications.
+            Master the art and science of AI prompting, RAG systems, and LLM fine-tuning with hands-on exercises, color-coded prompts, and real-world applications.
           </p>
           
           <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <Badge variant="secondary" className="px-4 py-2">
+            <Badge variant="secondary" className="px-4 py-2 bg-purple-100 text-purple-800">
               <Users className="h-4 w-4 mr-2" />
               Beginner to Expert
             </Badge>
-            <Badge variant="secondary" className="px-4 py-2">
+            <Badge variant="secondary" className="px-4 py-2 bg-blue-100 text-blue-800">
               <Code className="h-4 w-4 mr-2" />
               Interactive Exercises
             </Badge>
-            <Badge variant="secondary" className="px-4 py-2">
+            <Badge variant="secondary" className="px-4 py-2 bg-green-100 text-green-800">
               <Database className="h-4 w-4 mr-2" />
-              1000+ Prompts
+              Color-Coded Prompts
             </Badge>
-            <Badge variant="secondary" className="px-4 py-2">
+            <Badge variant="secondary" className="px-4 py-2 bg-orange-100 text-orange-800">
               <GraduationCap className="h-4 w-4 mr-2" />
               Certification Ready
             </Badge>
@@ -60,24 +60,24 @@ const PromptEngineering = () => {
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="learning" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8">
-            <TabsTrigger value="learning" className="flex items-center space-x-2">
+          <TabsList className="grid w-full grid-cols-5 mb-8 bg-white shadow-sm">
+            <TabsTrigger value="learning" className="flex items-center space-x-2 data-[state=active]:bg-purple-100 data-[state=active]:text-purple-800">
               <GraduationCap className="h-4 w-4" />
               <span>Learning Paths</span>
             </TabsTrigger>
-            <TabsTrigger value="exercises" className="flex items-center space-x-2">
+            <TabsTrigger value="exercises" className="flex items-center space-x-2 data-[state=active]:bg-blue-100 data-[state=active]:text-blue-800">
               <Zap className="h-4 w-4" />
               <span>Exercises</span>
             </TabsTrigger>
-            <TabsTrigger value="database" className="flex items-center space-x-2">
+            <TabsTrigger value="database" className="flex items-center space-x-2 data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
               <Database className="h-4 w-4" />
               <span>Prompt Database</span>
             </TabsTrigger>
-            <TabsTrigger value="frameworks" className="flex items-center space-x-2">
+            <TabsTrigger value="frameworks" className="flex items-center space-x-2 data-[state=active]:bg-orange-100 data-[state=active]:text-orange-800">
               <BookOpen className="h-4 w-4" />
               <span>Frameworks</span>
             </TabsTrigger>
-            <TabsTrigger value="resources" className="flex items-center space-x-2">
+            <TabsTrigger value="resources" className="flex items-center space-x-2 data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-800">
               <ExternalLink className="h-4 w-4" />
               <span>Resources</span>
             </TabsTrigger>
@@ -88,11 +88,11 @@ const PromptEngineering = () => {
           </TabsContent>
 
           <TabsContent value="exercises">
-            <ExercisePlayer level={selectedLevel} />
+            <ComprehensiveExercisePlayer level={selectedLevel} />
           </TabsContent>
 
           <TabsContent value="database">
-            <PromptDatabase />
+            <EnhancedPromptDatabase />
           </TabsContent>
 
           <TabsContent value="frameworks">
