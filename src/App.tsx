@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import PromptEngineering from "./pages/PromptEngineering";
 import PromptEngineeringNL from "./pages/PromptEngineeringNL";
 import ExerciseEmbed from "./pages/ExerciseEmbed";
+import ExerciseEmbedNL from "./pages/ExerciseEmbedNL";
 import PromptDatabaseEmbed from "./pages/PromptDatabaseEmbed";
 
 const queryClient = new QueryClient();
