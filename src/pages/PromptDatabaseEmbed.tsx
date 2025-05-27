@@ -1,36 +1,130 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Copy, Heart, Star, Filter, Tag, ExternalLink, Download } from "lucide-react";
-import { toast } from "sonner";
+import { Search, Copy, Heart, Star, Filter, Tag, Eye, Download, ExternalLink } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import PromptHighlighter from "@/components/PromptEngineering/PromptHighlighter";
 import PromptLegend from "@/components/PromptEngineering/PromptLegend";
 import SEO from "@/components/SEO";
 
 const PromptDatabaseEmbed = () => {
   const [searchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState("all");
+  const [showLegend, setShowLegend] = useState(true);
+  const { toast } = useToast();
+
   const compact = searchParams.get('compact') === 'true';
   const showHeader = searchParams.get('header') !== 'false';
-  const showLegend = searchParams.get('legend') !== 'false';
-  const showSearch = searchParams.get('search') !== 'false';
-  const category = searchParams.get('category') || 'all';
-  const difficulty = searchParams.get('difficulty') || 'all';
+  const showFilters = searchParams.get('filters') !== 'false';
+  const language = searchParams.get('lang') || 'en';
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(category);
-  const [selectedDifficulty, setSelectedDifficulty] = useState(difficulty);
+  // Check if accessed from Dutch page or has Dutch language parameter
+  const isDutch = language === 'nl' || window.location.pathname.includes('/nl');
+
+  // Dutch translations
+  const t = (key: string) => {
+    const translations: { [key: string]: { [key: string]: string } } = {
+      en: {
+        'database.title': 'Enhanced Prompt Database',
+        'database.subtitle': 'Discover color-coded, professional prompts with visual highlighting',
+        'show.legend': 'Show Color Legend',
+        'hide.legend': 'Hide Color Legend',
+        'search.prompts': 'Search prompts...',
+        'category': 'Category',
+        'difficulty': 'Difficulty',
+        'more.filters': 'More Filters',
+        'prompts.found': 'Prompts Found',
+        'categories': 'Categories',
+        'avg.rating': 'Avg Rating',
+        'total.downloads': 'Total Downloads',
+        'copy': 'Copy',
+        'download': 'Download',
+        'like': 'Like',
+        'load.more': 'Load More Prompts',
+        'copied.clipboard': 'Copied to clipboard',
+        'prompt.copied': 'The prompt has been copied to your clipboard.',
+        'powered.by': 'Powered by Prompt Engineering Learning Platform',
+        'view.full': 'View Full Platform',
+        'all.categories': 'All Categories',
+        'all.levels': 'All Levels',
+        'content.creation': 'Content Creation',
+        'development': 'Development',
+        'education': 'Education',
+        'business': 'Business',
+        'ai.systems': 'AI Systems',
+        'beginner': 'Beginner',
+        'intermediate': 'Intermediate',
+        'advanced': 'Advanced'
+      },
+      nl: {
+        'database.title': 'Uitgebreide Prompt Database',
+        'database.subtitle': 'Ontdek kleurgecodeerde, professionele prompts met visuele markering',
+        'show.legend': 'Toon Kleur Legenda',
+        'hide.legend': 'Verberg Kleur Legenda',
+        'search.prompts': 'Zoek prompts...',
+        'category': 'Categorie',
+        'difficulty': 'Moeilijkheidsgraad',
+        'more.filters': 'Meer Filters',
+        'prompts.found': 'Prompts Gevonden',
+        'categories': 'Categorieën',
+        'avg.rating': 'Gem. Beoordeling',
+        'total.downloads': 'Totaal Downloads',
+        'copy': 'Kopiëren',
+        'download': 'Downloaden',
+        'like': 'Vind ik leuk',
+        'load.more': 'Meer Prompts Laden',
+        'copied.clipboard': 'Gekopieerd naar klembord',
+        'prompt.copied': 'De prompt is gekopieerd naar uw klembord.',
+        'powered.by': 'Aangedreven door Prompt Engineering Leerplatform',
+        'view.full': 'Bekijk Volledig Platform',
+        'all.categories': 'Alle Categorieën',
+        'all.levels': 'Alle Niveaus',
+        'content.creation': 'Content Creatie',
+        'development': 'Ontwikkeling',
+        'education': 'Onderwijs',
+        'business': 'Zakelijk',
+        'ai.systems': 'AI Systemen',
+        'beginner': 'Beginner',
+        'intermediate': 'Gemiddeld',
+        'advanced': 'Gevorderd'
+      }
+    };
+    
+    const lang = isDutch ? 'nl' : 'en';
+    return translations[lang]?.[key] || translations.en[key] || key;
+  };
 
   const prompts = [
     {
       id: 1,
-      title: "Content Creation Assistant",
-      description: "Generate engaging blog posts with SEO optimization",
-      prompt: `Act as an expert content creator and SEO specialist.
+      title: isDutch ? "Content Creatie Assistent" : "Content Creation Assistant",
+      description: isDutch ? "Genereer boeiende blogposts met SEO optimalisatie" : "Generate engaging blog posts with SEO optimization",
+      prompt: isDutch ? `Fungeer als expert content creator en SEO specialist.
+
+Context: Je moet overtuigende content schrijven die goed rankt in zoekmachines.
+
+Jouw taak:
+1. Trek lezers met een boeiende introductie
+2. Geef waardevolle, uitvoerbare inzichten
+3. Gebruik relevante zoekwoorden natuurlijk
+4. Gebruik duidelijke koppen en structuur
+5. Eindig met een sterke call-to-action
+
+Formaat: Blogpost met H2/H3 koppen, bullet points en boeiende paragrafen.
+
+Onderwerp: [ONDERWERP]
+Doelgroep: [DOELGROEP]
+Toon: [TOON]
+Woordaantal: [WOORDAANTAL]
+
+Voorbeeld: Voor een onderwerp over "duurzaam tuinieren," focus op praktische tips, milieu voordelen, en uitvoerbare stappen voor beginners.` : `Act as an expert content creator and SEO specialist.
 
 Context: You need to write compelling content that ranks well in search engines.
 
@@ -41,102 +135,95 @@ Your task:
 4. Use clear headings and structure
 5. End with a strong call-to-action
 
+Format: Blog post with H2/H3 headings, bullet points, and engaging paragraphs.
+
 Topic: [TOPIC]
 Target audience: [AUDIENCE]
 Tone: [TONE]
-Word count: [WORD_COUNT]`,
+Word count: [WORD_COUNT]
+
+Example: For a topic about "sustainable gardening," focus on practical tips, environmental benefits, and actionable steps beginners can take.`,
       category: "content",
       difficulty: "beginner",
-      tags: ["blogging", "seo", "marketing"],
+      tags: isDutch ? ["bloggen", "seo", "marketing"] : ["blogging", "seo", "marketing"],
       likes: 245,
-      rating: 4.8
+      rating: 4.8,
+      downloads: 1200
     },
     {
       id: 2,
-      title: "Code Review Assistant",
-      description: "Comprehensive code analysis and improvement suggestions",
-      prompt: `As an experienced software engineer, review this code:
+      title: isDutch ? "Stap-voor-Stap Wiskundige Problemen" : "Chain-of-Thought Math Solver",
+      description: isDutch ? "Stap-voor-stap wiskundige probleemoplossing met redenering" : "Step-by-step mathematical problem solving with reasoning",
+      prompt: isDutch ? `Je bent een wiskundetuteur gespecialiseerd in duidelijke, stap-voor-stap probleemoplossing.
 
-\`\`\`[LANGUAGE]
-[CODE]
-\`\`\`
+Context: Studenten moeten niet alleen het antwoord begrijpen, maar ook het redeneringsproces.
 
-Provide feedback on:
-1. Code quality and readability
-2. Performance optimizations
-3. Security considerations
-4. Best practices adherence
-5. Potential bugs or issues
-6. Suggested improvements with examples
+Aanpak voor het oplossen van: [PROBLEEM]
 
-Be constructive and educational in your feedback.`,
-      category: "development",
-      difficulty: "intermediate",
-      tags: ["code-review", "programming", "debugging"],
-      likes: 189,
-      rating: 4.9
-    },
-    {
-      id: 3,
-      title: "Chain-of-Thought Math Solver",
-      description: "Step-by-step mathematical problem solving",
-      prompt: `Solve this mathematical problem using chain-of-thought reasoning:
+1. **Begrijpen**: Identificeer wat gegeven is en wat gevonden moet worden
+   - Gegeven informatie: [LIJST_GEGEVEN]
+   - Onbekende variabelen: [LIJST_ONBEKENDEN]
 
-[PROBLEM]
+2. **Plannen**: Bepaal benodigde wiskundige concepten en formules
+   - Relevante formules: [FORMULES]
+   - Oplossingsstrategie: [STRATEGIE]
 
-Approach:
+3. **Uitvoeren**: Werk door de oplossing stap-voor-stap
+   Stap 1: [EERSTE_STAP]
+   Stap 2: [TWEEDE_STAP]
+   Ga door tot oplossing...
+
+4. **Verifiëren**: Controleer of het antwoord logisch is
+   - Eenhedenanalyse: [EENHEDEN_CHECK]
+   - Redelijkheid: [LOGICA_CHECK]
+
+Toon je werk duidelijk bij elke stap en leg je redenering uit.` : `You are a mathematics tutor specializing in clear, step-by-step problem solving.
+
+Context: Students need to understand not just the answer, but the reasoning process.
+
+Approach for solving: [PROBLEM]
+
 1. **Understand**: Identify what's given and what needs to be found
-2. **Plan**: Determine the mathematical concepts and formulas needed
+   - Given information: [LIST_GIVEN]
+   - Unknown variables: [LIST_UNKNOWNS]
+
+2. **Plan**: Determine mathematical concepts and formulas needed
+   - Relevant formulas: [FORMULAS]
+   - Solution strategy: [STRATEGY]
+
 3. **Execute**: Work through the solution step-by-step
-4. **Verify**: Check the answer makes sense
+   Step 1: [FIRST_STEP]
+   Step 2: [SECOND_STEP]
+   Continue until solution...
+
+4. **Verify**: Check if the answer makes sense
+   - Unit analysis: [UNITS_CHECK]
+   - Reasonableness: [LOGIC_CHECK]
 
 Show your work clearly at each step and explain your reasoning.`,
       category: "education",
       difficulty: "intermediate",
-      tags: ["math", "chain-of-thought", "problem-solving"],
-      likes: 156,
-      rating: 4.7
-    },
-    {
-      id: 4,
-      title: "RAG Query Optimizer",
-      description: "Optimize queries for retrieval-augmented generation",
-      prompt: `Given the user query: '[USER_QUERY]'
-
-Generate optimized search queries for RAG retrieval:
-
-1. **Primary Query**: Direct semantic match
-2. **Expanded Query**: Include synonyms and related terms
-3. **Contextual Query**: Add domain-specific context
-4. **Fallback Query**: Broader terms if specific search fails
-
-For each retrieved document, synthesize information while:
-- Maintaining factual accuracy
-- Citing sources
-- Indicating confidence levels
-- Noting any conflicting information`,
-      category: "ai-systems",
-      difficulty: "advanced",
-      tags: ["rag", "retrieval", "query-optimization"],
-      likes: 203,
-      rating: 4.9
+      tags: isDutch ? ["wiskunde", "stap-voor-stap", "tutoring"] : ["math", "chain-of-thought", "tutoring"],
+      likes: 189,
+      rating: 4.9,
+      downloads: 850
     }
   ];
 
   const categories = [
-    { value: "all", label: "All Categories" },
-    { value: "content", label: "Content Creation" },
-    { value: "development", label: "Development" },
-    { value: "education", label: "Education" },
-    { value: "business", label: "Business" },
-    { value: "ai-systems", label: "AI Systems" }
+    { value: "all", label: t('all.categories') },
+    { value: "content", label: t('content.creation') },
+    { value: "development", label: t('development') },
+    { value: "education", label: t('education') },
+    { value: "business", label: t('business') },
+    { value: "ai-systems", label: t('ai.systems') }
   ];
 
   const difficulties = [
-    { value: "all", label: "All Levels" },
-    { value: "beginner", label: "Beginner" },
-    { value: "intermediate", label: "Intermediate" },
-    { value: "advanced", label: "Advanced" }
+    { value: "all", label: t('all.levels') },
+    { value: "beginner", label: t('beginner') },
+    { value: "intermediate", label: t('intermediate') },
+    { value: "advanced", label: t('advanced') }
   ];
 
   const filteredPrompts = prompts.filter(prompt => {
@@ -151,14 +238,28 @@ For each retrieved document, synthesize information while:
 
   const copyPrompt = (prompt: string) => {
     navigator.clipboard.writeText(prompt);
-    toast.success("Prompt copied to clipboard!");
+    toast({
+      title: t('copied.clipboard'),
+      description: t('prompt.copied'),
+    });
+  };
+
+  const downloadPrompt = (prompt: any) => {
+    const content = `# ${prompt.title}\n\n${prompt.description}\n\n## Prompt\n\n${prompt.prompt}`;
+    const blob = new Blob([content], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${prompt.title.replace(/\s+/g, '_')}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
     <>
       <SEO 
-        title="Prompt Database - Interactive Collection"
-        description="Browse and copy professional AI prompts for various use cases. Color-coded and optimized for different scenarios."
+        title={t('database.title')}
+        description={t('database.subtitle')}
         noindex={true}
       />
       <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 ${
@@ -168,41 +269,44 @@ For each retrieved document, synthesize information while:
           
           {/* Header */}
           {showHeader && (
-            <Card className="border-2 border-purple-200">
-              <CardHeader className={`bg-gradient-to-r from-purple-50 to-blue-50 ${compact ? 'p-4' : ''}`}>
-                <CardTitle className={`text-purple-900 ${compact ? 'text-lg' : 'text-2xl'}`}>
-                  🗄️ Prompt Database
-                </CardTitle>
-                {!compact && (
-                  <CardDescription className="text-purple-700">
-                    Discover, customize, and use professional AI prompts for every scenario
-                  </CardDescription>
-                )}
-              </CardHeader>
-            </Card>
+            <div className="text-center">
+              <h2 className={`${compact ? 'text-xl' : 'text-3xl'} font-bold mb-2`}>{t('database.title')}</h2>
+              <p className="text-gray-600 mb-4">
+                {t('database.subtitle')}
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => setShowLegend(!showLegend)}
+                size={compact ? "sm" : "default"}
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                {showLegend ? t('hide.legend') : t('show.legend')}
+              </Button>
+            </div>
           )}
 
           {/* Legend */}
-          {showLegend && !compact && <PromptLegend />}
+          {showLegend && <PromptLegend />}
 
-          {/* Search and Filters */}
-          {showSearch && (
+          {/* Filters */}
+          {showFilters && (
             <Card>
               <CardContent className={compact ? "p-4" : "p-6"}>
-                <div className={`grid gap-4 ${compact ? 'grid-cols-1 md:grid-cols-3' : 'md:grid-cols-4'}`}>
+                <div className={`grid ${compact ? 'md:grid-cols-3' : 'md:grid-cols-4'} gap-4`}>
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
-                      placeholder="Search prompts..."
+                      placeholder={t('search.prompts')}
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
+                      size={compact ? "sm" : "default"}
                     />
                   </div>
                   
                   <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Category" />
+                    <SelectTrigger size={compact ? "sm" : "default"}>
+                      <SelectValue placeholder={t('category')} />
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map(category => (
@@ -214,8 +318,8 @@ For each retrieved document, synthesize information while:
                   </Select>
 
                   <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Difficulty" />
+                    <SelectTrigger size={compact ? "sm" : "default"}>
+                      <SelectValue placeholder={t('difficulty')} />
                     </SelectTrigger>
                     <SelectContent>
                       {difficulties.map(difficulty => (
@@ -229,7 +333,7 @@ For each retrieved document, synthesize information while:
                   {!compact && (
                     <Button variant="outline">
                       <Filter className="h-4 w-4 mr-2" />
-                      Filters
+                      {t('more.filters')}
                     </Button>
                   )}
                 </div>
@@ -238,48 +342,44 @@ For each retrieved document, synthesize information while:
           )}
 
           {/* Stats */}
-          <div className={`grid gap-4 ${compact ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-4'}`}>
-            <div className="text-center p-3 bg-white rounded-lg border">
-              <div className="text-xl font-bold text-blue-600">{filteredPrompts.length}</div>
-              <div className="text-xs text-gray-600">Prompts</div>
+          {!compact && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-white rounded-lg border">
+                <div className="text-2xl font-bold text-blue-600">{filteredPrompts.length}</div>
+                <div className="text-sm text-gray-600">{t('prompts.found')}</div>
+              </div>
+              <div className="text-center p-4 bg-white rounded-lg border">
+                <div className="text-2xl font-bold text-green-600">{categories.length - 1}</div>
+                <div className="text-sm text-gray-600">{t('categories')}</div>
+              </div>
+              <div className="text-center p-4 bg-white rounded-lg border">
+                <div className="text-2xl font-bold text-purple-600">4.8</div>
+                <div className="text-sm text-gray-600">{t('avg.rating')}</div>
+              </div>
+              <div className="text-center p-4 bg-white rounded-lg border">
+                <div className="text-2xl font-bold text-orange-600">3.1k</div>
+                <div className="text-sm text-gray-600">{t('total.downloads')}</div>
+              </div>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border">
-              <div className="text-xl font-bold text-green-600">{categories.length - 1}</div>
-              <div className="text-xs text-gray-600">Categories</div>
-            </div>
-            {!compact && (
-              <>
-                <div className="text-center p-3 bg-white rounded-lg border">
-                  <div className="text-xl font-bold text-purple-600">4.8</div>
-                  <div className="text-xs text-gray-600">Avg Rating</div>
-                </div>
-                <div className="text-center p-3 bg-white rounded-lg border">
-                  <div className="text-xl font-bold text-orange-600">993</div>
-                  <div className="text-xs text-gray-600">Total Likes</div>
-                </div>
-              </>
-            )}
-          </div>
+          )}
 
           {/* Prompts Grid */}
-          <div className="space-y-4">
+          <div className="grid gap-6">
             {filteredPrompts.map(prompt => (
               <Card key={prompt.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader className={compact ? "p-4" : ""}>
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
-                      <CardTitle className={`flex items-center space-x-2 ${compact ? 'text-base' : ''}`}>
+                      <CardTitle className={`flex items-center space-x-2 ${compact ? 'text-lg' : ''}`}>
                         <span>{prompt.title}</span>
                         <Badge 
                           variant={prompt.difficulty === "beginner" ? "default" : prompt.difficulty === "intermediate" ? "secondary" : "destructive"}
                           className="text-xs"
                         >
-                          {prompt.difficulty}
+                          {t(prompt.difficulty)}
                         </Badge>
                       </CardTitle>
-                      <CardDescription className={`mt-2 ${compact ? 'text-sm' : ''}`}>
-                        {prompt.description}
-                      </CardDescription>
+                      <p className={`text-gray-600 mt-2 ${compact ? 'text-sm' : ''}`}>{prompt.description}</p>
                     </div>
                     
                     {!compact && (
@@ -292,21 +392,25 @@ For each retrieved document, synthesize information while:
                           <Star className="h-4 w-4 text-yellow-500" />
                           <span>{prompt.rating}</span>
                         </div>
+                        <div className="flex items-center space-x-1">
+                          <Download className="h-4 w-4" />
+                          <span>{prompt.downloads}</span>
+                        </div>
                       </div>
                     )}
                   </div>
                 </CardHeader>
                 
                 <CardContent className={`space-y-4 ${compact ? 'p-4 pt-0' : ''}`}>
-                  <div className="bg-gray-50 p-3 rounded-lg border max-h-48 overflow-y-auto">
+                  <div className={`bg-gray-50 p-4 rounded-lg border ${compact ? 'max-h-40 overflow-y-auto' : ''}`}>
                     <PromptHighlighter text={prompt.prompt} className={compact ? "text-xs" : "text-sm"} />
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap gap-1">
-                      {prompt.tags.slice(0, compact ? 2 : 3).map(tag => (
+                    <div className="flex flex-wrap gap-2">
+                      {prompt.tags.map(tag => (
                         <Badge key={tag} variant="outline" className="text-xs">
-                          <Tag className="h-2 w-2 mr-1" />
+                          <Tag className="h-3 w-3 mr-1" />
                           {tag}
                         </Badge>
                       ))}
@@ -315,17 +419,27 @@ For each retrieved document, synthesize information while:
                     <div className="flex space-x-2">
                       <Button
                         variant="outline"
-                        size="sm"
+                        size={compact ? "sm" : "sm"}
                         onClick={() => copyPrompt(prompt.prompt)}
                       >
-                        <Copy className="h-3 w-3 mr-1" />
-                        Copy
+                        <Copy className="h-4 w-4 mr-2" />
+                        {t('copy')}
                       </Button>
                       {!compact && (
-                        <Button variant="outline" size="sm">
-                          <Heart className="h-3 w-3 mr-1" />
-                          Like
-                        </Button>
+                        <>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => downloadPrompt(prompt)}
+                          >
+                            <Download className="h-4 w-4 mr-2" />
+                            {t('download')}
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            <Heart className="h-4 w-4 mr-2" />
+                            {t('like')}
+                          </Button>
+                        </>
                       )}
                     </div>
                   </div>
@@ -334,13 +448,22 @@ For each retrieved document, synthesize information while:
             ))}
           </div>
 
+          {/* Load More */}
+          {!compact && (
+            <div className="text-center">
+              <Button variant="outline" size="lg">
+                {t('load.more')}
+              </Button>
+            </div>
+          )}
+
           {/* Embed Info */}
-          <div className="text-center text-xs text-gray-500 border-t pt-4">
-            <span>Powered by Prompt Engineering Learning Platform</span>
+          <div className="text-center text-xs text-gray-500 border-t pt-2">
+            <span>{t('powered.by')}</span>
             <Button variant="link" className="p-0 h-auto ml-2 text-xs" asChild>
-              <a href="/prompt-engineering" target="_blank" rel="noopener noreferrer">
+              <a href={isDutch ? "/prompt-engineering/nl" : "/prompt-engineering"} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-3 w-3 mr-1" />
-                View Full Platform
+                {t('view.full')}
               </a>
             </Button>
           </div>

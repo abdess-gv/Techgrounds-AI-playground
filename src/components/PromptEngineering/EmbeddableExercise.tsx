@@ -17,6 +17,7 @@ interface EmbeddableExerciseProps {
   compact?: boolean;
   onComplete?: (score: number) => void;
   className?: string;
+  language?: 'en' | 'nl';
 }
 
 const EmbeddableExercise = ({ 
@@ -25,13 +26,56 @@ const EmbeddableExercise = ({
   showLegend = true,
   compact = false,
   onComplete,
-  className = ""
+  className = "",
+  language = 'en'
 }: EmbeddableExerciseProps) => {
   const [userPrompt, setUserPrompt] = useState("");
   const [showHints, setShowHints] = useState(false);
   const [currentHint, setCurrentHint] = useState(0);
   const [evaluation, setEvaluation] = useState<{ [key: string]: boolean }>({});
   const [isEvaluated, setIsEvaluated] = useState(false);
+
+  // Dutch translations
+  const t = (key: string) => {
+    const translations: { [key: string]: { [key: string]: string } } = {
+      en: {
+        'exercise.prompt': 'Exercise Prompt:',
+        'your.solution': 'Your Solution',
+        'evaluate': 'Evaluate',
+        'reset': 'Reset',
+        'show.hints': 'Show Hints',
+        'hide.hints': 'Hide Hints',
+        'hints': 'Hints',
+        'results': 'Results',
+        'criteria.evaluation': 'Evaluation Criteria:',
+        'sample.solution': 'Sample Solution:',
+        'prompt.placeholder': 'Write your prompt here...',
+        'criteria.met': 'criteria met',
+        'hint.of': 'of',
+        'powered.by': 'Powered by Prompt Engineering Learning Platform',
+        'view.full': 'View Full Platform'
+      },
+      nl: {
+        'exercise.prompt': 'Oefening Opdracht:',
+        'your.solution': 'Jouw Oplossing',
+        'evaluate': 'Evalueren',
+        'reset': 'Reset',
+        'show.hints': 'Toon Hints',
+        'hide.hints': 'Verberg Hints',
+        'hints': 'Hints',
+        'results': 'Resultaten',
+        'criteria.evaluation': 'Evaluatiecriteria:',
+        'sample.solution': 'Voorbeeldoplossing:',
+        'prompt.placeholder': 'Schrijf hier je prompt...',
+        'criteria.met': 'criteria behaald',
+        'hint.of': 'van',
+        'powered.by': 'Aangedreven door Prompt Engineering Leerplatform',
+        'view.full': 'Bekijk Volledig Platform'
+      }
+    };
+    
+    return translations[language]?.[key] || translations.en[key] || key;
+  };
 
   const evaluatePrompt = () => {
     const newEvaluation: { [key: string]: boolean } = {};
@@ -72,6 +116,19 @@ const EmbeddableExercise = ({
     advanced: 'bg-red-100 text-red-800'
   };
 
+  const difficultyLabels = {
+    en: {
+      beginner: 'beginner',
+      intermediate: 'intermediate', 
+      advanced: 'advanced'
+    },
+    nl: {
+      beginner: 'beginner',
+      intermediate: 'gemiddeld',
+      advanced: 'gevorderd'
+    }
+  };
+
   return (
     <div className={`embeddable-exercise space-y-4 ${className}`}>
       {showLegend && !compact && <PromptLegend />}
@@ -91,7 +148,7 @@ const EmbeddableExercise = ({
               </div>
               <div className="flex items-center space-x-2">
                 <Badge className={difficultyColor[exercise.difficulty]}>
-                  {exercise.difficulty}
+                  {difficultyLabels[language][exercise.difficulty]}
                 </Badge>
                 <Badge variant="outline">{exercise.category}</Badge>
               </div>
@@ -100,7 +157,7 @@ const EmbeddableExercise = ({
           {!compact && (
             <CardContent className="pt-6">
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <h4 className="font-semibold text-blue-900 mb-2">📋 Exercise Prompt:</h4>
+                <h4 className="font-semibold text-blue-900 mb-2">📋 {t('exercise.prompt')}</h4>
                 <p className="text-blue-800">{exercise.prompt}</p>
               </div>
             </CardContent>
@@ -113,12 +170,12 @@ const EmbeddableExercise = ({
         <Card className="border border-green-200">
           <CardHeader className={`bg-green-50 ${compact ? 'p-4' : ''}`}>
             <CardTitle className={`text-green-900 ${compact ? 'text-base' : ''}`}>
-              🚀 Your Solution
+              🚀 {t('your.solution')}
             </CardTitle>
           </CardHeader>
           <CardContent className={`space-y-4 ${compact ? 'p-4' : 'pt-6'}`}>
             <Textarea
-              placeholder="Write your prompt here..."
+              placeholder={t('prompt.placeholder')}
               value={userPrompt}
               onChange={(e) => setUserPrompt(e.target.value)}
               className={`font-mono text-sm border-2 border-gray-200 focus:border-green-400 ${
@@ -134,7 +191,7 @@ const EmbeddableExercise = ({
                   className="bg-green-600 hover:bg-green-700"
                   size={compact ? "sm" : "default"}
                 >
-                  Evaluate
+                  {t('evaluate')}
                 </Button>
                 <Button 
                   variant="outline" 
@@ -142,7 +199,7 @@ const EmbeddableExercise = ({
                   size={compact ? "sm" : "default"}
                 >
                   <RotateCcw className="h-4 w-4 mr-1" />
-                  Reset
+                  {t('reset')}
                 </Button>
               </div>
               
@@ -153,7 +210,7 @@ const EmbeddableExercise = ({
                 size={compact ? "sm" : "default"}
               >
                 <Lightbulb className="h-4 w-4 mr-1" />
-                {showHints ? 'Hide' : 'Show'} Hints
+                {showHints ? t('hide.hints') : t('show.hints')}
               </Button>
             </div>
 
@@ -162,7 +219,7 @@ const EmbeddableExercise = ({
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-semibold text-yellow-900 text-sm">
-                      💡 Hint {currentHint + 1} of {exercise.hints.length}
+                      💡 {t('hints')} {currentHint + 1} {t('hint.of')} {exercise.hints.length}
                     </h4>
                     <div className="flex space-x-1">
                       {currentHint > 0 && (
@@ -196,7 +253,7 @@ const EmbeddableExercise = ({
         <Card className="border border-orange-200">
           <CardHeader className={`bg-orange-50 ${compact ? 'p-4' : ''}`}>
             <CardTitle className={`text-orange-900 ${compact ? 'text-base' : ''}`}>
-              📊 Results
+              📊 {t('results')}
             </CardTitle>
           </CardHeader>
           <CardContent className={`space-y-4 ${compact ? 'p-4' : 'pt-6'}`}>
@@ -209,14 +266,14 @@ const EmbeddableExercise = ({
                   {Math.round(score)}%
                 </div>
                 <div className="text-sm text-gray-600">
-                  {completedCriteria} of {totalCriteria} criteria met
+                  {completedCriteria} {t('hint.of')} {totalCriteria} {t('criteria.met')}
                 </div>
                 <Progress value={score} className="h-2 mt-2" />
               </div>
             )}
 
             <div className="space-y-2">
-              <h4 className="font-semibold text-sm">Evaluation Criteria:</h4>
+              <h4 className="font-semibold text-sm">{t('criteria.evaluation')}</h4>
               {exercise.criteria.map((criterion, index) => (
                 <div key={index} className="flex items-start space-x-2 p-2 rounded border text-sm">
                   {isEvaluated ? (
@@ -243,7 +300,7 @@ const EmbeddableExercise = ({
 
             {isEvaluated && !compact && (
               <div className="bg-gray-50 p-3 rounded border mt-4">
-                <h4 className="font-semibold mb-2 text-sm">✨ Sample Solution:</h4>
+                <h4 className="font-semibold mb-2 text-sm">✨ {t('sample.solution')}</h4>
                 <div className="bg-white p-3 rounded border max-h-40 overflow-y-auto">
                   <PromptHighlighter text={exercise.solution} className="text-xs leading-relaxed" />
                 </div>
@@ -255,11 +312,11 @@ const EmbeddableExercise = ({
 
       {/* Embed Info */}
       <div className="text-center text-xs text-gray-500 border-t pt-2">
-        <span>Powered by Prompt Engineering Learning Platform</span>
+        <span>{t('powered.by')}</span>
         <Button variant="link" className="p-0 h-auto ml-2 text-xs" asChild>
-          <a href="/prompt-engineering" target="_blank" rel="noopener noreferrer">
+          <a href={language === 'nl' ? "/prompt-engineering/nl" : "/prompt-engineering"} target="_blank" rel="noopener noreferrer">
             <ExternalLink className="h-3 w-3 mr-1" />
-            View Full Platform
+            {t('view.full')}
           </a>
         </Button>
       </div>
