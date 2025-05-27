@@ -1,4 +1,3 @@
-
 export interface Exercise {
   id: string;
   title: string;
@@ -637,7 +636,7 @@ Market: [TARGET_CUSTOMER_PROFILE]`,
       ],
       tips: [
         'Creative constraints often produce more innovative solutions than complete freedom',
-        'Specific limitations force unique approaches that competitors can\'t easily copy',
+        'Specific limitations force unique approaches that competitors can't easily copy',
         'Time-boxed brainstorming prevents overthinking and encourages rapid ideation',
         'Constraint-advantage thinking reveals hidden opportunities in apparent limitations'
       ],
@@ -1108,6 +1107,204 @@ Show your reasoning process step-by-step, making your thinking transparent at ea
           description: 'Framework for analyzing complex, interconnected problems'
         }
       ]
+    },
+    {
+      id: "intermediate_4",
+      title: "Content Marketing Strategie",
+      description: "Ontwikkel een uitgebreide content marketing strategie met SEO optimalisatie",
+      category: "marketing",
+      difficulty: "intermediate" as const,
+      prompt: `Fungeer als senior content marketing strategist.
+
+CONTEXT: Je moet een complete content marketing strategie ontwikkelen voor [BEDRIJF/MERK].
+
+DOELSTELLINGEN:
+• Merkbekendheid verhogen met 40%
+• Organisch verkeer verdubbelen
+• Lead generatie met 60% verbeteren
+
+OPDRACHT - Creëer een 3-maanden content plan:
+
+1. DOELGROEP ANALYSE
+   - Primaire persona: [BESCHRIJF IDEALE KLANT]
+   - Pain points en behoeften
+   - Content consumptie gewoonten
+
+2. CONTENT PIJLERS (4 hoofdthema's)
+   - Thema 1: [EDUCATIEF CONTENT]
+   - Thema 2: [INSPIRATIE/TRENDS]
+   - Thema 3: [BEDRIJFSCULTUUR]
+   - Thema 4: [PRODUCT/DIENST FOCUS]
+
+3. CONTENT KALENDER
+   - Week 1-4: Focus op [THEMA]
+   - Week 5-8: Focus op [THEMA]
+   - Week 9-12: Focus op [THEMA]
+
+4. DISTRIBUTIE STRATEGIE
+   - Platform keuze en redenen
+   - Posting frequentie per platform
+   - Cross-promotion tactieken
+
+5. SEO INTEGRATIE
+   - Keyword research aanpak
+   - On-page optimalisatie
+   - Link building strategie
+
+6. METRIEKEN & KPI'S
+   - Awareness metrics
+   - Engagement metrics
+   - Conversion metrics
+   - ROI tracking
+
+Gebruik data-gedreven argumenten en concrete voorbeelden.`,
+      hints: [
+        {
+          type: "strategy",
+          content: "Begin met grondige marktonderzoek en concurrentieanalyse"
+        },
+        {
+          type: "execution",
+          content: "Gebruik de 70-20-10 regel: 70% educatief, 20% inspiratie, 10% promotie"
+        },
+        {
+          type: "optimization",
+          content: "Integreer long-tail keywords natuurlijk in je content"
+        }
+      ],
+      solution: "Een complete strategie met duidelijke doelstellingen, target persona's, content pijlers, distributieplan en meetbare KPI's. Focus op waarde-creatie en lange-termijn relaties."
+    },
+    {
+      id: "intermediate_5",
+      title: "Data Analyse Prompt Engineering",
+      description: "Maak complexe data-analyse prompts voor verschillende zakelijke scenarios",
+      category: "analytics",
+      difficulty: "intermediate" as const,
+      prompt: `Je bent een senior data analyst en business intelligence specialist.
+
+CONTEXT: Je moet data insights genereren voor [BEDRIJFSTYPE] met [DATASOURCES].
+
+ANALYSE FRAMEWORK:
+
+1. DATA VOORBEREIDING
+   - Identificeer relevante metrics: [LIJST METRICS]
+   - Data cleaning approach: [METHODIEK]
+   - Tijdsperiode voor analyse: [PERIODE]
+
+2. BESCHRIJVENDE ANALYSE
+   - Wat is er gebeurd?
+   - Key performance indicators
+   - Trends en patronen
+   - Seizoensgebonden variaties
+
+3. DIAGNOSTISCHE ANALYSE  
+   - Waarom is het gebeurd?
+   - Correlatie analyses
+   - Root cause analysis
+   - Anomalie detectie
+
+4. VOORSPELLENDE ANALYSE
+   - Wat gaat er gebeuren?
+   - Trend extrapolatie
+   - Scenario planning
+   - Risk assessment
+
+5. PRESCRIPTIEVE ANALYSE
+   - Wat moeten we doen?
+   - Actie aanbevelingen
+   - Resource allocatie
+   - Implementation roadmap
+
+OUTPUT VEREISTEN:
+• Executive summary (2 minuten leestijd)
+• Visuele dashboards beschrijving
+• Concrete action items met prioriteit
+• ROI projecties voor aanbevelingen
+• Risk mitigation strategies
+
+Gebruik statistische significantie en confidence intervals waar relevant.`,
+      hints: [
+        {
+          type: "technical",
+          content: "Start altijd met data quality assessment en missing value analysis"
+        },
+        {
+          type: "business",
+          content: "Vertaal technische findings naar business impact en ROI"
+        },
+        {
+          type: "presentation",
+          content: "Gebruik storytelling principes om data inzichten te communiceren"
+        }
+      ],
+      solution: "Een systematische data-analyse aanpak die van descriptive naar prescriptive analytics gaat, met concrete business aanbevelingen en implementatie roadmap."
+    },
+    {
+      id: "intermediate_6",
+      title: "Crisis Communicatie Plan",
+      description: "Ontwikkel een crisis communicatie strategie voor verschillende scenario's",
+      category: "communications",
+      difficulty: "intermediate" as const,
+      prompt: `Je bent een crisis communicatie expert en PR strategist.
+
+CRISIS SCENARIO: [BESCHRIJF CRISIS SITUATIE]
+
+CRISIS COMMUNICATIE FRAMEWORK:
+
+1. SITUATIE ASSESSMENT (Eerste 30 minuten)
+   - Crisis severity level (1-5 schaal)
+   - Stakeholder impact analyse
+   - Media attention probability
+   - Legal implications check
+   - Reputatie damage assessment
+
+2. CRISIS TEAM ACTIVATIE
+   - Team samenstelling en rollen
+   - Decision making hierarchy
+   - Communication channels
+   - External expert needs (legal, technical)
+
+3. BOODSCHAP ONTWIKKELING
+   - Key messages voor elke stakeholder groep
+   - Tone of voice guidelines
+   - Facts vs. speculation guidelines
+   - Empathy en accountability balance
+
+4. COMMUNICATIE KANALEN
+   - Internal communications (employees)
+   - External communications (media, customers)
+   - Social media response strategy
+   - Website crisis page
+   - Direct stakeholder outreach
+
+5. TIJDLIJN EN FASERING
+   - Immediate response (binnen 2 uur)
+   - Short-term follow-up (24-48 uur)
+   - Medium-term updates (week 1-2)
+   - Long-term reputation recovery
+
+6. MONITORING EN AANPASSING
+   - Media sentiment tracking
+   - Social media monitoring
+   - Stakeholder feedback loops
+   - Message effectiveness measurement
+
+Zorg voor transparantie, empathie en proactieve communicatie.`,
+      hints: [
+        {
+          type: "timing",
+          content: "Snelheid is cruciaal - zwijgen wordt vaak als schuld geïnterpreteerd"
+        },
+        {
+          type: "messaging",
+          content: "Gebruik de 3 C's: Care, Commitment, Control van de situatie"
+        },
+        {
+          type: "channels",
+          content: "Kies communicatiekanalen op basis van je doelgroep voorkeur"
+        }
+      ],
+      solution: "Een gestructureerd crisis communicatieplan met snelle response procedures, heldere boodschappen en stakeholder-specifieke benaderingen."
     }
   ],
   advanced: [
@@ -1183,6 +1380,363 @@ Constraints: [BUSINESS_CONSTRAINTS]`,
           description: 'Proven architectures for production RAG systems'
         }
       ]
+    },
+    {
+      id: "advanced_3",
+      title: "AI Ethiek & Bias Assessment",
+      description: "Ontwikkel een framework voor ethische AI evaluatie en bias detectie",
+      category: "ai-ethics",
+      difficulty: "advanced" as const,
+      prompt: `Je bent een AI ethiek specialist en responsible AI consultant.
+
+CONTEXT: Ontwikkel een uitgebreid ethiek framework voor AI systeem evaluatie.
+
+ETHIEK ASSESSMENT FRAMEWORK:
+
+1. BIAS DETECTIE & MITIGATIE
+   Analyseer potentiële bias bronnen:
+   - Training data bias (historical, sampling, representation)
+   - Algorithmic bias (feature selection, model architecture)
+   - Deployment bias (user interaction, feedback loops)
+   
+   Voor elk bias type:
+   • Detection methoden
+   • Quantitative metrics
+   • Mitigation strategies
+   • Monitoring procedures
+
+2. FAIRNESS CRITERIA EVALUATIE
+   Implementeer multiple fairness definitions:
+   - Individual fairness (similar individuals, similar outcomes)
+   - Group fairness (demographic parity)
+   - Equalized odds (true positive rate equality)
+   - Calibration (prediction accuracy across groups)
+   
+   Trade-off analyse tussen verschillende fairness criteria.
+
+3. TRANSPARANTIE & EXPLAINABILITY
+   - Model interpretability requirements
+   - Feature importance explanation
+   - Decision pathway visualization
+   - Stakeholder-specific explanation levels
+
+4. PRIVACY & DATA PROTECTION
+   - Differential privacy implementation
+   - Data minimization principles
+   - Consent mechanism design
+   - Right to explanation compliance
+
+5. ACCOUNTABILITY FRAMEWORK
+   - Human oversight requirements
+   - Audit trail mechanisms
+   - Responsibility assignment matrix
+   - Remediation procedures
+
+6. STAKEHOLDER IMPACT ASSESSMENT
+   - Multi-stakeholder analysis
+   - Benefit-risk evaluation
+   - Vulnerable group protection
+   - Long-term societal impact
+
+Ontwikkel concrete implementatie guidelines en governance structuren.`,
+      hints: [
+        {
+          type: "technical",
+          content: "Gebruik meerdere fairness metrics - geen enkele is perfect voor alle situaties"
+        },
+        {
+          type: "governance",
+          content: "Betrek diverse stakeholders in het ontwikkelingsproces vanaf het begin"
+        },
+        {
+          type: "implementation",
+          content: "Maak ethiek een continue proces, niet een eenmalige check"
+        }
+      ],
+      solution: "Een holistisch AI ethiek framework dat technische, juridische en sociale aspecten integreert met concrete implementatie procedures en governance structuren."
+    },
+    {
+      id: "advanced_4",
+      title: "Enterprise Digital Transformation",
+      description: "Ontwerp een complete digitale transformatie strategie voor grote organisaties",
+      category: "strategy",
+      difficulty: "advanced" as const,
+      prompt: `Je bent een senior digital transformation consultant voor enterprise organisaties.
+
+TRANSFORMATIE CONTEXT: [ORGANISATIE TYPE, SIZE, INDUSTRY, CURRENT STATE]
+
+DIGITAL TRANSFORMATION BLUEPRINT:
+
+1. CURRENT STATE ASSESSMENT
+   Digitale Maturity Evaluatie:
+   - Technology infrastructure audit
+   - Process digitization level
+   - Data capabilities assessment
+   - Cultural readiness evaluation
+   - Skills gap analysis
+   - Competitive positioning
+
+2. FUTURE STATE VISION
+   Definieer transformatie doelen:
+   - Customer experience transformation
+   - Operational excellence targets
+   - New business model opportunities
+   - Innovation ecosystem development
+   - Sustainability integration
+
+3. TRANSFORMATION ROADMAP
+   3-Horizon Planning:
+   
+   HORIZON 1 (0-18 maanden): Core Optimization
+   - Legacy system modernization
+   - Process automation quick wins
+   - Data foundation establishment
+   - Employee digital literacy
+
+   HORIZON 2 (18-36 maanden): Capability Building
+   - Advanced analytics implementation
+   - Customer experience platforms
+   - Agile organization transition
+   - Partnership ecosystem development
+
+   HORIZON 3 (3-5 jaar): Innovation Leadership
+   - Emerging technology adoption (AI/ML, IoT, Blockchain)
+   - New business model launches
+   - Industry ecosystem leadership
+   - Continuous innovation culture
+
+4. CHANGE MANAGEMENT STRATEGY
+   - Leadership alignment en commitment
+   - Communication en engagement plan
+   - Training en skill development
+   - Resistance management
+   - Culture transformation initiatives
+
+5. TECHNOLOGY ARCHITECTURE
+   - Cloud-first infrastructure strategy
+   - API-first integration approach
+   - Data lake/warehouse architecture
+   - Security en compliance framework
+   - Scalability en flexibility requirements
+
+6. GOVERNANCE & MEASUREMENT
+   - Digital transformation office setup
+   - KPI dashboard development
+   - ROI tracking methodology
+   - Risk management framework
+   - Continuous improvement processes
+
+Zorg voor balance tussen speed, risk en sustainable growth.`,
+      hints: [
+        {
+          type: "strategy",
+          content: "Start met customer value - technologie is een enabler, niet het doel"
+        },
+        {
+          type: "execution",
+          content: "Gebruik een portfolio aanpak - combineer quick wins met lange termijn investeringen"
+        },
+        {
+          type: "change",
+          content: "Investeer 40% van je effort in change management - technologie is vaak het makkelijke deel"
+        }
+      ],
+      solution: "Een geïntegreerde transformatie strategie die technologie, mensen en processen aligneert met een duidelijke roadmap en governance structuur."
+    },
+    {
+      id: "advanced_5",
+      title: "Quantum Computing Business Strategy",
+      description: "Ontwikkel een strategische roadmap voor quantum computing adoptie in enterprise",
+      category: "emerging-tech",
+      difficulty: "advanced" as const,
+      prompt: `Je bent een quantum computing strategist en emerging technology consultant.
+
+QUANTUM STRATEGY CONTEXT: [INDUSTRIE, ORGANISATIE SIZE, CURRENT TECH CAPABILITIES]
+
+QUANTUM COMPUTING ADOPTION FRAMEWORK:
+
+1. QUANTUM READINESS ASSESSMENT
+   Technical Infrastructure Evaluation:
+   - Current computational bottlenecks identification
+   - Problem complexity analysis (NP, QMA problems)
+   - Data requirements en quality assessment
+   - Integration capability with classical systems
+   - Security implications evaluation
+
+2. USE CASE PRIORITIZATION MATRIX
+   Evalueer quantum advantage potentieel:
+   
+   HIGH IMPACT AREAS:
+   - Optimization problems (supply chain, portfolio, scheduling)
+   - Cryptography en security (post-quantum cryptography)
+   - Machine learning acceleration (quantum ML algorithms)
+   - Scientific simulation (materials, pharmaceuticals, chemicals)
+   - Financial modeling (risk analysis, derivatives pricing)
+
+   Voor elke use case:
+   • Quantum advantage timeline (NISQ vs. fault-tolerant era)
+   • Business value quantification
+   • Technical feasibility assessment
+   • Resource requirements estimation
+
+3. QUANTUM TECHNOLOGY ROADMAP
+   3-Phase Implementation Strategy:
+   
+   PHASE 1: FOUNDATION BUILDING (1-2 jaar)
+   - Quantum literacy development
+   - Partner ecosystem establishment
+   - Hybrid classical-quantum architectures
+   - Proof-of-concept development
+
+   PHASE 2: NISQ ERA EXPLOITATION (2-5 jaar)
+   - Variational quantum algorithms implementation
+   - Quantum advantage demonstration
+   - Competitive differentiation through quantum
+   - Quantum software stack development
+
+   PHASE 3: FAULT-TOLERANT ADOPTION (5-10 jaar)
+   - Large-scale quantum applications
+   - Quantum-native business models
+   - Industry ecosystem leadership
+   - Quantum workforce development
+
+4. PARTNERSHIP & ECOSYSTEM STRATEGY
+   - Quantum hardware vendor relationships
+   - Cloud quantum service integration
+   - Academic research collaborations
+   - Industry consortium participation
+   - Quantum startup investment opportunities
+
+5. TALENT & CAPABILITY DEVELOPMENT
+   - Quantum physicist recruitment
+   - Classical developer upskilling
+   - Quantum-classical hybrid teams
+   - External expertise acquisition
+   - Knowledge management systems
+
+6. RISK MANAGEMENT & ETHICS
+   - Quantum security threat assessment
+   - Intellectual property protection
+   - Ethical quantum computing principles
+   - Regulatory compliance preparation
+   - Technology dependency risks
+
+Ontwikkel concrete implementatie timelines en investment cases.`,
+      hints: [
+        {
+          type: "technical",
+          content: "Focus op hybrid quantum-classical algorithms voor NISQ era applications"
+        },
+        {
+          type: "business",
+          content: "Start met optimization use cases - ze hebben vaak de duidelijkste ROI"
+        },
+        {
+          type: "timing",
+          content: "Bereid je voor op quantum security threats - de transitie naar post-quantum cryptografie duurt jaren"
+        }
+      ],
+      solution: "Een forward-looking quantum strategie die realistische timelines combineert met concrete business value en een gefaseerde implementatie aanpak."
+    },
+    {
+      id: "advanced_6",
+      title: "Sustainable Finance ESG Framework",
+      description: "Creëer een geïntegreerd ESG investment en reporting framework",
+      category: "finance",
+      difficulty: "advanced" as const,
+      prompt: `Je bent een sustainable finance expert en ESG strategist.
+
+ESG INTEGRATION CONTEXT: [FINANCIAL INSTITUTION TYPE, AUM, REGULATORY JURISDICTION]
+
+COMPREHENSIVE ESG FRAMEWORK:
+
+1. ESG DATA ARCHITECTURE
+   Data Source Integration:
+   - Company disclosed ESG metrics
+   - Third-party ESG rating providers
+   - Alternative data sources (satellite, social media, news)
+   - Regulatory filing analysis
+   - Supply chain transparency data
+
+   Data Quality Framework:
+   • Materiality assessment criteria
+   • Data verification procedures
+   • Standardization methodology
+   • Gap analysis en estimation techniques
+   • Real-time monitoring systems
+
+2. ESG SCORING & RATING METHODOLOGY
+   Multi-dimensional Scoring:
+   
+   ENVIRONMENTAL (30-40% weight):
+   - Carbon footprint en climate risk
+   - Resource efficiency (water, energy, materials)
+   - Biodiversity impact assessment
+   - Circular economy integration
+   - Transition pathway alignment
+
+   SOCIAL (25-35% weight):
+   - Human rights en labor practices
+   - Diversity, equity & inclusion
+   - Community impact en stakeholder engagement
+   - Product safety en quality
+   - Customer satisfaction en trust
+
+   GOVERNANCE (25-35% weight):
+   - Board composition en independence
+   - Executive compensation alignment
+   - Anti-corruption en compliance
+   - Cybersecurity en data privacy
+   - Strategic oversight en risk management
+
+3. INVESTMENT INTEGRATION STRATEGIES
+   Portfolio Construction Approaches:
+   - ESG screening (negative, positive, thematic)
+   - Integration analysis (fundamental, quantitative)
+   - Engagement en stewardship programs
+   - Impact investing frameworks
+   - Sustainable index development
+
+4. RISK MANAGEMENT INTEGRATION
+   ESG Risk Assessment:
+   - Physical climate risk modeling
+   - Transition risk scenario analysis
+   - Social risk impact evaluation
+   - Governance risk quantification
+   - Stranded asset identification
+
+5. IMPACT MEASUREMENT & REPORTING
+   Stakeholder Reporting Framework:
+   - Regulatory compliance (SFDR, TCFD, SASB)
+   - Investor performance reporting
+   - Client impact communication
+   - Public transparency initiatives
+   - Continuous improvement tracking
+
+6. ENGAGEMENT & STEWARDSHIP
+   Active Ownership Strategy:
+   - Proxy voting policy development
+   - Company engagement priorities
+   - Collaborative engagement initiatives
+   - Escalation procedures
+   - Impact measurement methodology
+
+Zorg voor balans tussen financial performance en sustainability impact.`,
+      hints: [
+        {
+          type: "data",
+          content: "Gebruik meerdere ESG data providers - geen enkele heeft volledige coverage"
+        },
+        {
+          type: "integration",
+          content: "Start met materiality assessment - niet alle ESG factoren zijn even relevant voor elke sector"
+        },
+        {
+          type: "reporting",
+          content: "Bereid je voor op toenemende regulatory requirements - bouw flexibiliteit in je framework"
+        }
+      ],
+      solution: "Een geïntegreerd ESG framework dat data, analytics, investment processen en reporting combineert met sterke governance en stakeholder engagement."
     }
   ]
 };
