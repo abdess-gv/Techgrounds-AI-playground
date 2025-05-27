@@ -6,6 +6,7 @@ import ModulePlayer from "@/components/PromptEngineering/ModulePlayer";
 import PromptDatabase from "@/components/PromptEngineering/PromptDatabase";
 import FrameworkLibrary from "@/components/PromptEngineering/FrameworkLibrary";
 import PromptLegend from "@/components/PromptEngineering/PromptLegend";
+import ExerciseEmbedGenerator from "@/components/PromptEngineering/ExerciseEmbedGenerator";
 
 const PromptEngineering = () => {
   return (
@@ -15,7 +16,7 @@ const PromptEngineering = () => {
         <PromptLegend />
         
         <Tabs defaultValue="modules" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-4 mb-8">
             <TabsTrigger value="modules" className="text-sm font-medium">
               📚 Learning Modules
             </TabsTrigger>
@@ -24,6 +25,9 @@ const PromptEngineering = () => {
             </TabsTrigger>
             <TabsTrigger value="frameworks" className="text-sm font-medium">
               🧠 Frameworks
+            </TabsTrigger>
+            <TabsTrigger value="embed" className="text-sm font-medium">
+              🔗 Embed Exercises
             </TabsTrigger>
           </TabsList>
 
@@ -37,6 +41,10 @@ const PromptEngineering = () => {
 
           <TabsContent value="frameworks">
             <FrameworkLibrary />
+          </TabsContent>
+
+          <TabsContent value="embed">
+            <ExerciseEmbedGenerator />
           </TabsContent>
         </Tabs>
 
@@ -52,6 +60,7 @@ const PromptEngineering = () => {
                   <li>• Color-coded prompt components for easy understanding</li>
                   <li>• Interactive exercises with immediate feedback</li>
                   <li>• Multiple learning formats (hands-on, analysis, creative)</li>
+                  <li>• Embeddable exercises for external integration</li>
                 </ul>
               </div>
               <div>
@@ -61,6 +70,7 @@ const PromptEngineering = () => {
                   <li>• Personalized learning recommendations</li>
                   <li>• Community features and shared prompts</li>
                   <li>• Advanced analytics and learning insights</li>
+                  <li>• Exercise completion tracking</li>
                 </ul>
               </div>
             </div>
