@@ -477,7 +477,7 @@ For each identified weakness:
 <enhanced-prompt-template>
 Based on analysis, generate an improved version using this structure:
 
-```
+\`\`\`
 <role>[Optimized role definition]</role>
 
 <context>[Enhanced context and background]</context>
@@ -491,7 +491,7 @@ Based on analysis, generate an improved version using this structure:
 <quality-criteria>[Success metrics and standards]</quality-criteria>
 
 <examples>[Concrete examples of desired output]</examples>
-```
+\`\`\`
 </enhanced-prompt-template>
 
 <validation-process>
