@@ -1,3 +1,4 @@
+
 export interface Exercise {
   id: string;
   title: string;
@@ -98,7 +99,9 @@ Research article: [INSERT_ARTICLE_TEXT]
         }
       ],
       examples: {
-        good: `<role>Act as a research analyst</role>\\n<task>Summarize in exactly 3 sentences</task>\\n<structure>1. Main finding 2. Evidence 3. Implications</structure>`,
+        good: `<role>Act as a research analyst</role>
+<task>Summarize in exactly 3 sentences</task>
+<structure>1. Main finding 2. Evidence 3. Implications</structure>`,
         bad: `Please summarize this article for me in a few sentences.`,
         explanation: 'The good example provides structure, specific requirements, and context, while the bad example is vague and gives no guidance.'
       }
@@ -187,2354 +190,359 @@ Now help this user with their fitness question: [USER_QUESTION]`,
         }
       ],
       examples: {
-        good: `<persona>You are Dr. Martinez, a pediatrician with 15 years experience</persona>\n<personality>Warm, patient, uses simple analogies</personality>\n<style>Always reassure parents first, then educate</style>`,
+        good: `<persona>You are Dr. Martinez, a pediatrician with 15 years experience</persona>
+<personality>Warm, patient, uses simple analogies</personality>
+<style>Always reassure parents first, then educate</style>`,
         bad: `You are a helpful doctor who gives medical advice.`,
         explanation: 'The good example creates a specific, credible character with defined traits, while the bad example is generic and forgettable.'
       }
     },
     {
-      id: 'output-formatting',
-      title: 'Advanced Output Formatting',
-      description: 'Master the techniques for getting perfectly structured, visually appealing responses',
-      difficulty: 'beginner',
-      category: 'Foundation',
-      type: 'hands-on',
-      estimatedTime: '18 min',
-      prompt: 'Create a prompt that generates a comprehensive product comparison in a structured, easy-to-scan format for busy shoppers.',
-      solution: `<role>You are a professional product reviewer</role> for Consumer Reports, known for thorough, unbiased comparisons that help people make informed decisions quickly.
-
-<task>Compare these products and present the analysis in the exact format below</task>
-
-<output-format>
-# 🏆 Winner: [PRODUCT_NAME] - [BRIEF_REASON]
-
-## 📊 Quick Comparison
-
-| Feature | [Product A] | [Product B] | [Product C] |
-|---------|-------------|-------------|-------------|
-| **Price** | $X | $Y | $Z |
-| **Rating** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **Best For** | [Use case] | [Use case] | [Use case] |
-
-## 🔍 Detailed Analysis
-
-### [Product A Name]
-**✅ Pros:**
-- [Strength 1]: [Brief explanation]
-- [Strength 2]: [Brief explanation]
-- [Strength 3]: [Brief explanation]
-
-**❌ Cons:**
-- [Weakness 1]: [Brief explanation]
-- [Weakness 2]: [Brief explanation]
-
-**💰 Value Score: [X/10]**
-**🎯 Best For:** [Specific user type/scenario]
-
-### [Product B Name]
-[Same format as above]
-
-### [Product C Name]
-[Same format as above]
-
-## 🛒 Purchase Recommendations
-
-**🥇 Best Overall:** [Product] - [Why]
-**💸 Best Value:** [Product] - [Why] 
-**🚀 Best Premium:** [Product] - [Why]
-
-## ❓ Decision Helper
-Choose [Product A] if: [Specific criteria]
-Choose [Product B] if: [Specific criteria]
-Choose [Product C] if: [Specific criteria]
-</output-format>
-
-<quality-guidelines>
-- Keep pros/cons to 3 items max for scannability
-- Use specific numbers and data when possible
-- Focus on practical benefits that matter to users
-- Maintain consistent rating criteria across all products
-- Include price-performance analysis in recommendations
-</quality-guidelines>
-
-Products to compare: [PRODUCT_LIST]`,
-      criteria: [
-        'Uses clear visual formatting with headers and emojis',
-        'Includes structured comparison table for quick scanning',
-        'Provides consistent format for each product analysis',
-        'Offers specific purchase recommendations for different needs',
-        'Includes decision-making framework for users'
-      ],
-      hints: [
-        'Use emojis and visual elements to make content more scannable',
-        'Create tables for quick comparison of key features',
-        'Keep pros/cons lists short - 3 items maximum for readability',
-        'Always include specific recommendations for different user types'
-      ],
-      tips: [
-        'Visual formatting dramatically improves content usability',
-        'Consistent structure helps users find information quickly',
-        'Decision frameworks reduce choice paralysis',
-        'Specific recommendations are more helpful than generic advice'
-      ],
-      resources: [
-        {
-          title: 'Markdown Mastery Guide',
-          type: 'tool',
-          url: 'https://example.com/markdown-guide',
-          description: 'Complete reference for formatting text beautifully'
-        },
-        {
-          title: 'UX Writing for AI',
-          type: 'article',
-          url: 'https://example.com/ux-ai-writing',
-          description: 'How to structure AI outputs for maximum usability'
-        }
-      ],
-      examples: {
-        good: `<format># Winner: Product A\n## Comparison Table\n| Feature | A | B |\n**Best For:** [specific use]</format>`,
-        bad: `Compare these products and tell me which is better.`,
-        explanation: 'The good example provides exact formatting structure with visual elements, while the bad example gives no guidance on presentation.'
-      }
-    },
-    {
-      id: 'context-setting',
-      title: 'Strategic Context Setting',
-      description: 'Learn to provide rich context that dramatically improves AI understanding and output quality',
-      difficulty: 'beginner',
-      category: 'Foundation',
-      type: 'analysis',
-      estimatedTime: '22 min',
-      prompt: 'Create a context-rich prompt for generating a professional email that addresses a complex workplace situation.',
-      solution: `<scenario-analysis>
-Workplace situation: [DESCRIBE_SITUATION]
-Stakeholders involved: [LIST_KEY_PEOPLE_AND_ROLES]
-Desired outcome: [SPECIFIC_GOAL]
-Potential sensitivities: [ISSUES_TO_NAVIGATE]
-Company culture: [FORMAL/CASUAL/COLLABORATIVE/HIERARCHICAL]
-</scenario-analysis>
-
-<role>You are an experienced corporate communications specialist</role> who has successfully navigated similar workplace challenges for Fortune 500 companies.
-
-<context>
-This email is critical for:
-- Maintaining professional relationships
-- Achieving a specific business outcome
-- Navigating organizational politics diplomatically
-- Setting precedent for future similar situations
-</context>
-
-<email-framework>
-**Subject Line Strategy:**
-- Clear, specific, and action-oriented
-- Avoid inflammatory or accusatory language
-- Include timeline if urgent
-
-**Opening:**
-- Acknowledge the recipient's perspective/constraints
-- Reference shared goals or previous positive interactions
-- Set collaborative tone from the start
-
-**Body Structure:**
-1. **Situation Summary:** Neutral, fact-based description
-2. **Impact Analysis:** How this affects shared objectives
-3. **Proposed Solution:** Specific, actionable steps
-4. **Mutual Benefits:** What's in it for all parties
-5. **Next Steps:** Clear timeline and expectations
-
-**Closing:**
-- Reaffirm commitment to shared success
-- Offer to discuss further if needed
-- Professional but warm sign-off
-</email-framework>
-
-<tone-guidelines>
-- Professional yet approachable
-- Solution-focused rather than problem-focused
-- Collaborative language ("we," "our," "together")
-- Acknowledge constraints and challenges
-- Emphasize shared objectives and mutual benefits
-</tone-guidelines>
-
-<red-flags-to-avoid>
-- Blame language or accusatory tone
-- Ultimatums or threats
-- Overwhelming detail in first communication
-- Emotional language or personal comments
-- One-sided demands without considering other perspectives
-</red-flags-to-avoid>
-
-Generate email for this situation:
-Situation details: [SPECIFIC_WORKPLACE_SCENARIO]
-Recipient: [PERSON_AND_RELATIONSHIP]
-Objective: [DESIRED_OUTCOME]`,
-      criteria: [
-        'Provides comprehensive situational analysis framework',
-        'Includes specific guidance for email structure and tone',
-        'Addresses potential sensitivities and workplace dynamics',
-        'Offers clear guidelines for what to avoid',
-        'Considers multiple stakeholder perspectives'
-      ],
-      hints: [
-        'Always analyze the full situation before writing - who\'s involved, what\'s at stake?',
-        'Professional emails need structure - opening, body, closing with specific purposes',
-        'Consider workplace culture and hierarchy in your tone and approach',
-        'Focus on solutions and mutual benefits rather than problems and blame'
-      ],
-      tips: [
-        'Comprehensive context leads to much more appropriate responses',
-        'Email frameworks prevent important elements from being missed',
-        'Stakeholder analysis helps navigate complex workplace dynamics',
-        'Solution-focused language builds bridges rather than walls'
-      ],
-      resources: [
-        {
-          title: 'Corporate Communication Strategies',
-          type: 'article',
-          url: 'https://example.com/corp-communication',
-          description: 'Best practices for professional workplace communication'
-        },
-        {
-          title: 'Difficult Conversations Toolkit',
-          type: 'tool',
-          url: 'https://example.com/difficult-conversations',
-          description: 'Templates and strategies for challenging workplace discussions'
-        }
-      ],
-      examples: {
-        good: `<context>Situation: Budget dispute\nStakeholders: Manager, Finance, Team\nGoal: Secure resources\nSensitivities: Company layoffs</context>`,
-        bad: `Write an email about the budget problem.`,
-        explanation: 'The good example provides rich context about situation, people, and dynamics, while the bad example lacks any situational awareness.'
-      }
-    },
-    {
-      id: 'example-driven',
-      title: 'Example-Powered Prompting',
-      description: 'Harness the power of examples to train AI exactly how you want it to respond',
+      id: 'constraint-creativity',
+      title: 'Creative Constraint Mastery',
+      description: 'Learn how strategic limitations can unlock unprecedented creative potential',
       difficulty: 'beginner',
       category: 'Foundation',
       type: 'creative',
       estimatedTime: '25 min',
-      prompt: 'Design a prompt system that uses multiple examples to teach AI how to write engaging social media content for different platforms.',
-      solution: `<role>You are a viral content strategist</role> who has generated millions of views across social platforms and understands the unique requirements of each platform.
+      prompt: 'Design a prompt system that uses creative constraints to generate innovative business solutions.',
+      solution: `<role>You are a strategic innovation consultant</role> who specializes in breakthrough thinking through creative constraints.
 
-<platform-analysis>
-Platform: [INSTAGRAM/LINKEDIN/TWITTER/TIKTOK]
-Content type: [POST_TYPE]
-Target audience: [DEMOGRAPHIC_DESCRIPTION]
-Goal: [ENGAGEMENT/AWARENESS/CONVERSION]
-</platform-analysis>
-
-<example-library>
-
-**Example 1: Behind-the-Scenes Content (Instagram)**
-📸 Post: Messy desk with coffee and planning notes
-📝 Caption: "Monday morning reality check ☕️ 
-
-My 'organized chaos' productivity system is in full swing today. Some people have pristine desks... I have creative tornadoes 🌪️
-
-What does YOUR workspace look like right now? Drop a 📸 below - let's normalize the beautiful mess of getting things done! 
-
-No judgment zone here 👇
-
-#MondayMotivation #WorkspaceReality #CreativeProcess #ProductivityTips"
-
-**Analysis:** Hook (reality check), relatability (messy desk), community building (photo request), hashtag strategy
-
-**Example 2: Educational Content (LinkedIn)**
-📊 Post: Industry insights infographic
-📝 Caption: "3 data-driven insights that changed how I approach client retention:
-
-→ 89% of customers leave due to poor communication, not product issues
-→ A 5% increase in retention can boost profits by 25-95%
-→ Existing customers spend 67% more than new acquisitions
-
-The takeaway? Invest in relationships, not just acquisition.
-
-What's your most effective retention strategy? Share below 👇
-
-#CustomerRetention #BusinessGrowth #DataDriven"
-
-**Analysis:** Numbered insights, specific data, professional tone, networking question
-
-**Example 3: Trend Commentary (Twitter)**
-🐦 Tweet: "That moment when AI writes better code comments than most senior developers... 
-
-We're living in interesting times 🤖
-
-What's the weirdest thing AI has done better than you expected?"
-
-**Analysis:** Relatable observation, emoji for personality, engaging question, trending topic
-
-</example-library>
-
-<content-formula>
-1. **Hook** (first 5-7 words that stop the scroll)
-2. **Value/Story** (educate, entertain, or inspire)
-3. **Personal Touch** (authentic detail or vulnerability)
-4. **Community Element** (question or call-to-action)
-5. **Platform Optimization** (hashtags, mentions, format)
-</content-formula>
-
-<voice-guidelines>
-- Authentic and conversational (write like you talk)
-- Value-first approach (what's in it for them?)
-- Emotionally intelligent (acknowledge feelings/struggles)
-- Action-oriented (give people something to do)
-- Platform-native (respect each platform's culture)
-</voice-guidelines>
-
-Now create content for:
-Platform: [SPECIFIC_PLATFORM]
-Topic: [CONTENT_TOPIC]
-Audience: [TARGET_AUDIENCE]
-Goal: [SPECIFIC_OBJECTIVE]`,
-      criteria: [
-        'Provides multiple high-quality examples across different platforms',
-        'Analyzes what makes each example effective',
-        'Includes a clear formula that can be applied consistently',
-        'Addresses platform-specific requirements and culture',
-        'Balances strategy with authenticity and engagement'
-      ],
-      hints: [
-        'Examples are worth more than explanations - show exactly what good looks like',
-        'Break down why each example works to reinforce learning patterns',
-        'Include variety to show how principles adapt to different situations',
-        'Provide formulas that can be repeatedly applied for consistency'
-      ],
-      tips: [
-        'Multiple examples teach patterns better than single instances',
-        'Platform-specific examples show cultural awareness',
-        'Analysis helps AI understand underlying principles',
-        'Formulas provide structure while maintaining creativity'
-      ],
-      resources: [
-        {
-          title: 'Platform-Specific Content Guide',
-          type: 'article',
-          url: 'https://example.com/platform-content',
-          description: 'Best practices for content creation across all major platforms'
-        },
-        {
-          title: 'Viral Content Formula Database',
-          type: 'example',
-          url: 'https://example.com/viral-formulas',
-          description: '50+ proven content templates that drive engagement'
-        }
-      ],
-      examples: {
-        good: `**Example 1:** [specific post]\n**Analysis:** Hook + value + CTA\n**Example 2:** [different approach]\n**Formula:** 1. Hook 2. Value 3. Action`,
-        bad: `Write engaging social media posts that get likes and shares.`,
-        explanation: 'The good example provides specific templates with analysis, while the bad example is vague and gives no concrete guidance.'
-      }
-    },
-    {
-      id: 'constraint-mastery',
-      title: 'Creative Constraint Design',
-      description: 'Learn how smart constraints unlock creativity and produce consistently excellent results',
-      difficulty: 'beginner',
-      category: 'Foundation',
-      type: 'hands-on',
-      estimatedTime: '20 min',
-      prompt: 'Create a constraint-based prompt for generating innovative business ideas within specific parameters.',
-      solution: `<creative-constraints-framework>
-You are an innovation consultant who specializes in breakthrough thinking within real-world limitations.
-</creative-constraints-framework>
-
-<constraint-categories>
+<constraint-framework>
+Choose 3 random constraints from different categories below to force innovative thinking:
 
 **Resource Constraints:**
-- Budget limit: [SPECIFIC_AMOUNT]
-- Time to launch: [TIMEFRAME]
-- Team size: [NUMBER_OF_PEOPLE]
-- Required skills: [EXPERTISE_AVAILABLE]
+- Budget limit: $500 maximum
+- Time limit: Must launch in 30 days
+- Team size: Maximum 2 people
+- Technology: Use only free tools
+- Space: Must work from home office
 
-**Market Constraints:**
-- Target market: [SPECIFIC_DEMOGRAPHIC]
-- Geographic focus: [LOCATION_LIMITS]
-- Competition level: [HIGH/MEDIUM/LOW]
-- Regulatory requirements: [COMPLIANCE_NEEDS]
+**Creative Constraints:**
+- Target audience: People over 65 only
+- Communication: No written words allowed
+- Format: Everything must fit on business card
+- Style: Must use 1990s technology only
+- Delivery: Must work without internet
 
-**Innovation Constraints:**
-- Technology requirements: [MUST_USE/CANNOT_USE]
-- Sustainability requirements: [ENVIRONMENTAL_GOALS]
-- Social impact goals: [COMMUNITY_BENEFITS]
-- Scalability needs: [GROWTH_EXPECTATIONS]
+**Business Constraints:**
+- Revenue model: Must be subscription-based
+- Market: Serve only rural communities
+- Partnership: Must collaborate with competitor
+- Sustainability: Zero waste production
+- Scale: Must work in 10+ countries
+</constraint-framework>
 
-</constraint-categories>
+<innovation-process>
+1. **Constraint Selection**: Randomly pick 3 constraints from different categories
+2. **Assumption Challenge**: List what these constraints make "impossible"
+3. **Constraint Reframing**: Turn each limitation into an advantage
+4. **Solution Ideation**: Generate 10 ideas that embrace all constraints
+5. **Feasibility Filter**: Select top 3 most viable concepts
+6. **Constraint Leverage**: Explain how each constraint creates competitive advantage
+</innovation-process>
 
-<ideation-process>
+<example-application>
+**Selected Constraints:**
+- Budget: $500 maximum
+- Audience: People over 65 only  
+- Format: Everything fits on business card
 
-**Phase 1: Constraint Analysis (5 minutes)**
-- List all constraints as creative opportunities
-- Identify which constraints are flexible vs. fixed
-- Find unexpected connections between different constraints
+**Reframed Advantages:**
+- Low budget forces simple, essential solutions
+- Elderly focus means less tech complexity, more human connection
+- Business card size ensures memorable, portable value
 
-**Phase 2: Focused Brainstorming (15 minutes)**
-Generate exactly 10 business ideas that:
-✅ Work within ALL specified constraints
-✅ Turn at least one constraint into a competitive advantage
-✅ Address a real problem for the target market
-✅ Can be validated within 30 days
+**Breakthrough Solution:**
+"Neighborhood Helper Cards" - Simple business cards with tear-off tabs connecting seniors with local helpers for specific tasks. No app needed, just phone numbers and clear service descriptions.
+</example-application>
 
-**Phase 3: Constraint Optimization (10 minutes)**
-For the top 3 ideas, show how constraints actually:
-- Reduce competition by creating unique positioning
-- Lower costs through focused approach  
-- Accelerate development by limiting scope
-- Increase customer appeal through specialization
-
-</ideation-process>
-
-<output-format>
-## 🎯 Constraint-Driven Business Ideas
-
-**Constraints Summary:**
-[Bullet list of key limitations]
-
-**Top 10 Ideas:**
-
-### 1. [Business Idea Name]
-**Problem Solved:** [Specific customer pain point]
-**Constraint Advantage:** [How limitation becomes strength]
-**30-Day Validation:** [Specific test you can run]
-**Revenue Model:** [How money flows in]
-
-[Repeat for ideas 2-10]
-
-**🏆 Top 3 Deep Dive:**
-[Detailed analysis of how constraints create advantages]
-
-**🚀 Next Steps:**
-[Specific actions to validate top idea within constraints]
-</output-format>
-
-<quality-standards>
-- Each idea must be immediately actionable
-- Show clear path from constraint to competitive advantage
-- Include specific validation methods
-- Focus on problems people will pay to solve
-- Demonstrate understanding of target market
-</quality-standards>
-
-Generate ideas for:
-Industry: [SPECIFIC_INDUSTRY]
-Constraints: [DETAILED_LIMITATIONS]
-Market: [TARGET_CUSTOMER_PROFILE]`,
+Now apply this framework to: [BUSINESS_CHALLENGE]`,
       criteria: [
-        'Transforms constraints into creative opportunities',
-        'Provides systematic ideation process with time limits',
-        'Requires specific number of ideas for comprehensive exploration',
-        'Shows how constraints become competitive advantages',
-        'Includes validation framework for practical next steps'
+        'Provides systematic constraint selection process',
+        'Includes framework for turning limitations into advantages',
+        'Offers step-by-step innovation methodology',
+        'Demonstrates with concrete example',
+        'Addresses multiple types of business constraints'
       ],
       hints: [
-        'Constraints focus creativity rather than limiting it - embrace them as features',
-        'Set specific numbers (10 ideas) to push beyond obvious solutions',
-        'Show how limitations can become your unique selling proposition',
-        'Always include validation steps to test ideas quickly and cheaply'
+        'Random constraint selection prevents defaulting to familiar solutions',
+        'Reframing constraints as advantages unlocks breakthrough thinking',
+        'Multiple constraint types force multi-dimensional innovation',
+        'Concrete examples help understand the reframing process'
       ],
       tips: [
         'Creative constraints often produce more innovative solutions than complete freedom',
-        'Specific limitations force unique approaches that competitors can't easily copy',
+        'Specific limitations force unique approaches that competitors cannot easily copy',
         'Time-boxed brainstorming prevents overthinking and encourages rapid ideation',
         'Constraint-advantage thinking reveals hidden opportunities in apparent limitations'
       ],
       resources: [
         {
-          title: 'Creative Constraints in Innovation',
+          title: 'The Innovation Paradox',
           type: 'article',
-          url: 'https://example.com/creative-constraints',
-          description: 'How limitations drive breakthrough thinking in business'
+          url: 'https://example.com/innovation-constraints',
+          description: 'Research on how limitations drive breakthrough thinking'
         },
         {
-          title: 'Rapid Business Validation Toolkit',
+          title: 'Constraint-Based Design Toolkit',
           type: 'tool',
-          url: 'https://example.com/validation-toolkit',
-          description: 'Methods for testing business ideas quickly and affordably'
+          url: 'https://example.com/constraint-toolkit',
+          description: 'Interactive framework for applying creative constraints'
         }
       ],
       examples: {
-        good: `<constraints>Budget: $5K, Time: 3 months, Must be digital</constraints>\n<process>10 ideas in 15 min, show advantage</process>\n<validation>30-day test plan</validation>`,
-        bad: `Come up with some good business ideas.`,
-        explanation: 'The good example provides specific limitations and structured process, while the bad example has no boundaries or framework.'
-      }
-    },
-    {
-      id: 'feedback-systems',
-      title: 'Feedback-Driven Improvement',
-      description: 'Design prompts that create continuous improvement loops for iterative excellence',
-      difficulty: 'beginner',
-      category: 'Foundation',
-      type: 'analysis',
-      estimatedTime: '28 min',
-      prompt: 'Create a comprehensive feedback and iteration system for improving marketing campaigns.',
-      solution: `<role>You are a data-driven marketing strategist</role> who believes in continuous testing and optimization based on real customer feedback and performance metrics.
-
-<campaign-analysis-framework>
-
-**Current Campaign Assessment:**
-Campaign: [CAMPAIGN_NAME]
-Objective: [PRIMARY_GOAL]
-Target audience: [DEMOGRAPHIC_PROFILE]
-Budget: [TOTAL_SPEND]
-Duration: [TIME_PERIOD]
-Channels: [MARKETING_CHANNELS]
-
-**Performance Metrics:**
-- Reach: [IMPRESSIONS/VIEWS]
-- Engagement: [CLICKS/INTERACTIONS]
-- Conversion: [SALES/SIGNUPS]
-- Cost efficiency: [CPA/ROAS]
-- Audience feedback: [COMMENTS/REVIEWS]
-
-</campaign-analysis-framework>
-
-<systematic-improvement-process>
-
-**Phase 1: Data Collection & Analysis**
-Gather feedback from 5 sources:
-1. **Quantitative Metrics:** CTR, conversion rates, engagement rates
-2. **Customer Surveys:** Direct feedback from target audience (min 100 responses)
-3. **Social Listening:** Comments, mentions, sentiment analysis
-4. **Competitor Analysis:** What's working in your space
-5. **Team Insights:** Internal observations and ideas
-
-**Phase 2: Problem Identification**
-Rank issues by impact and difficulty:
-- 🔴 High Impact, Easy Fix (do immediately)
-- 🟡 High Impact, Hard Fix (plan carefully)
-- 🟢 Low Impact, Easy Fix (quick wins)
-- ⚫ Low Impact, Hard Fix (ignore for now)
-
-**Phase 3: Hypothesis-Driven Testing**
-For each improvement, create:
-- **Hypothesis:** "If we change [X], then [Y] will improve because [Z]"
-- **Test Design:** A/B test with clear variables
-- **Success Metrics:** Specific numbers that indicate improvement
-- **Timeline:** Duration needed to gather significant data
-
-**Phase 4: Implementation & Monitoring**
-- Test one variable at a time for clear results
-- Monitor daily for first week, then weekly
-- Set automatic alerts for significant changes
-- Document everything for future reference
-
-</systematic-improvement-process>
-
-<optimization-framework>
-
-**Creative Optimization:**
-- Headlines: Test 3 variations focusing on different benefits
-- Visuals: Test 3 different styles (lifestyle, product, data)
-- Copy: Test 3 emotional approaches (fear, desire, logic)
-- CTA: Test 3 action words and 3 colors
-
-**Targeting Optimization:**
-- Audience segments: Test broader vs. narrower targeting
-- Demographics: Test different age ranges and interests
-- Behaviors: Test different purchase behavior patterns
-- Custom audiences: Test lookalikes vs. retargeting
-
-**Channel Optimization:**
-- Platform performance: Reallocate budget to best performers
-- Content format: Test video vs. image vs. text
-- Posting times: Test different days and hours
-- Frequency: Test different exposure levels
-
-</optimization-framework>
-
-<feedback-integration-system>
-
-**Weekly Review Process:**
-1. **Performance Dashboard:** Review all key metrics
-2. **Feedback Analysis:** Categorize and prioritize customer input
-3. **Test Results:** Analyze completed A/B tests
-4. **Strategic Adjustments:** Update campaign based on learnings
-5. **Next Week Planning:** Set new tests and improvements
-
-**Monthly Strategic Review:**
-- Overall campaign effectiveness vs. goals
-- Budget reallocation recommendations
-- Long-term trend analysis
-- Competitive positioning updates
-- Next month's innovation priorities
-
-**Quarterly Campaign Evolution:**
-- Complete campaign refresh based on learnings
-- New creative concepts incorporating feedback
-- Audience strategy refinement
-- Channel mix optimization
-- Goal setting for next quarter
-
-</feedback-integration-system>
-
-Analyze and optimize this campaign:
-Campaign details: [SPECIFIC_CAMPAIGN_INFO]
-Current performance: [METRICS_DATA]
-Available budget for testing: [OPTIMIZATION_BUDGET]`,
-      criteria: [
-        'Creates systematic data collection from multiple sources',
-        'Provides framework for prioritizing improvements by impact',
-        'Includes hypothesis-driven testing methodology',
-        'Establishes regular review and optimization cycles',
-        'Integrates feedback into strategic decision-making'
-      ],
-      hints: [
-        'Collect feedback from multiple sources - data alone isn\'t enough',
-        'Prioritize improvements by impact vs. effort to maximize results',
-        'Test one variable at a time to get clear, actionable insights',
-        'Create regular review cycles to ensure continuous improvement'
-      ],
-      tips: [
-        'Systematic feedback collection reveals insights missed by data alone',
-        'Hypothesis-driven testing produces faster, more reliable improvements',
-        'Regular optimization cycles prevent campaigns from becoming stale',
-        'Multiple feedback sources provide comprehensive understanding'
-      ],
-      resources: [
-        {
-          title: 'Marketing Analytics Mastery',
-          type: 'article',
-          url: 'https://example.com/marketing-analytics',
-          description: 'Complete guide to data-driven marketing optimization'
-        },
-        {
-          title: 'A/B Testing Toolkit',
-          type: 'tool',
-          url: 'https://example.com/ab-testing',
-          description: 'Templates and calculators for marketing experiments'
-        }
-      ],
-      examples: {
-        good: `**Hypothesis:** If we change headline to benefit-focused, CTR will increase 15% because audience wants outcomes\n**Test:** A/B test 3 headlines\n**Metrics:** CTR, conversion, cost per lead`,
-        bad: `Look at the data and make the campaign better.`,
-        explanation: 'The good example provides specific hypothesis, test design, and success metrics, while the bad example offers no structure or methodology.'
-      }
-    },
-    {
-      id: 'advanced-structuring',
-      title: 'Advanced Response Structuring',
-      description: 'Master complex prompt architectures that handle multi-faceted tasks with precision',
-      difficulty: 'beginner',
-      category: 'Foundation',
-      type: 'hands-on',
-      estimatedTime: '30 min',
-      prompt: 'Design a comprehensive prompt system for creating a complete business plan that adapts to different industries and business models.',
-      solution: `<role>You are a senior business consultant</role> with 20+ years of experience helping entrepreneurs and corporations develop successful business strategies across diverse industries.
-
-<business-plan-architecture>
-
-**Phase 1: Business Foundation Analysis**
-<foundation>
-Industry: [SPECIFIC_INDUSTRY]
-Business model: [B2B/B2C/MARKETPLACE/SAAS/PRODUCT/SERVICE]
-Stage: [STARTUP/GROWTH/EXPANSION/PIVOT]
-Target market: [DEMOGRAPHIC_GEOGRAPHIC_PSYCHOGRAPHIC]
-Unique value proposition: [CORE_DIFFERENTIATOR]
-</foundation>
-
-**Phase 2: Market & Competitive Intelligence**
-<market-analysis>
-Market size: [TAM/SAM/SOM analysis]
-Growth trends: [5-year market trajectory]
-Customer segments: [3-5 distinct user groups]
-Competitive landscape: [Direct/indirect competitors]
-Market gaps: [Unmet needs and opportunities]
-</market-analysis>
-
-**Phase 3: Strategic Framework Development**
-<strategy>
-Vision: [Long-term aspirational goal]
-Mission: [Purpose and core function]
-Values: [Operating principles]
-Objectives: [3-year measurable goals]
-Key strategies: [How objectives will be achieved]
-</strategy>
-
-</business-plan-architecture>
-
-<adaptive-sections>
-
-**For Product-Based Businesses:**
-- Product development roadmap
-- Manufacturing and supply chain
-- Inventory management strategy
-- Quality control processes
-
-**For Service-Based Businesses:**
-- Service delivery methodology
-- Client onboarding process
-- Quality assurance framework
-- Scalability planning
-
-**For Technology Businesses:**
-- Technical architecture overview
-- Development timeline and milestones
-- Data security and privacy measures
-- Intellectual property strategy
-
-**For Marketplace Businesses:**
-- Two-sided market development
-- Network effects strategy
-- Platform governance model
-- Revenue sharing framework
-
-</adaptive-sections>
-
-<comprehensive-business-plan-structure>
-
-## Executive Summary (2 pages)
-- Business concept and opportunity
-- Market analysis highlight
-- Competitive advantage
-- Financial projections summary
-- Funding requirements
-
-## Company Description (3 pages)
-- Mission, vision, and values
-- Company history and ownership
-- Legal structure and location
-- Products/services overview
-
-## Market Analysis (5 pages)
-- Industry overview and trends
-- Target market definition
-- Customer analysis and personas
-- Competitive analysis
-- Market size and growth projections
-
-## Organization & Management (2 pages)
-- Organizational structure
-- Management team profiles
-- Personnel plan and hiring strategy
-- Advisory board and key partnerships
-
-## Products/Services (4 pages)
-- Detailed product/service descriptions
-- Development status and roadmap
-- Intellectual property and legal considerations
-- Quality control and customer service
-
-## Marketing & Sales Strategy (4 pages)
-- Market positioning and branding
-- Pricing strategy and revenue model
-- Sales process and customer acquisition
-- Marketing channels and tactics
-- Customer retention strategy
-
-## Operations Plan (3 pages)
-- Production/service delivery process
-- Technology and equipment requirements
-- Supplier relationships and partnerships
-- Quality control measures
-
-## Financial Projections (5 pages)
-- Revenue and expense forecasts (3-5 years)
-- Cash flow projections
-- Break-even analysis
-- Funding requirements and use of funds
-- Financial controls and reporting
-
-## Risk Analysis (2 pages)
-- Market and competitive risks
-- Operational and financial risks
-- Mitigation strategies
-- Contingency planning
-
-## Implementation Timeline (1 page)
-- Key milestones and deadlines
-- Critical path activities
-- Resource allocation schedule
-- Success metrics and KPIs
-
-</comprehensive-business-plan-structure>
-
-<quality-standards>
-
-**Content Requirements:**
-- All financial projections must include assumptions
-- Market data must be from credible sources (last 2 years)
-- Competitive analysis must cover at least 5 competitors
-- Customer personas must be based on research, not assumptions
-- Implementation timeline must be realistic and detailed
-
-**Presentation Standards:**
-- Professional formatting with consistent headers
-- Charts and graphs for all numerical data
-- Executive summary must stand alone as complete overview
-- Each section must have clear takeaways and next steps
-- Document must be 25-35 pages total length
-
-</quality-standards>
-
-<customization-prompts>
-
-**Industry-Specific Deep Dives:**
-- Manufacturing: Include detailed production costs and supply chain analysis
-- Retail: Focus on inventory management and customer experience
-- Technology: Emphasize scalability and technical requirements
-- Service: Highlight human capital and delivery methodology
-- Healthcare: Address regulatory compliance and patient outcomes
-
-**Business Model Adaptations:**
-- Subscription: Lifetime value calculations and churn analysis
-- Marketplace: Network effects and user acquisition costs
-- Franchise: Territory analysis and franchisee support
-- E-commerce: Digital marketing and fulfillment strategy
-
-</customization-prompts>
-
-Create a comprehensive business plan for:
-Business concept: [DETAILED_DESCRIPTION]
-Industry: [SPECIFIC_INDUSTRY]
-Target market: [CUSTOMER_PROFILE]
-Business model: [REVENUE_APPROACH]
-Funding needs: [CAPITAL_REQUIREMENTS]`,
-      criteria: [
-        'Provides comprehensive business plan structure with specific page counts',
-        'Adapts content based on industry and business model type',
-        'Includes quality standards and content requirements',
-        'Covers all essential business plan components',
-        'Balances thoroughness with practical usability'
-      ],
-      hints: [
-        'Complex prompts need clear phases to prevent overwhelm',
-        'Industry-specific adaptations show you understand different business needs',
-        'Specific requirements (page counts, data sources) ensure professional quality',
-        'Quality standards prevent generic or superficial output'
-      ],
-      tips: [
-        'Structured architecture handles complex multi-part tasks effectively',
-        'Adaptive sections customize output for specific business types',
-        'Quality standards ensure professional-grade deliverables',
-        'Comprehensive frameworks reduce the need for multiple revisions'
-      ],
-      resources: [
-        {
-          title: 'Business Plan Template Library',
-          type: 'tool',
-          url: 'https://example.com/business-plan-templates',
-          description: 'Industry-specific business plan templates and examples'
-        },
-        {
-          title: 'Financial Modeling for Startups',
-          type: 'article',
-          url: 'https://example.com/financial-modeling',
-          description: 'How to create realistic financial projections and assumptions'
-        }
-      ],
-      examples: {
-        good: `<architecture>Phase 1: Foundation\nPhase 2: Market Analysis\nPhase 3: Strategy</architecture>\n<adaptive>For SaaS: technical architecture\nFor retail: inventory management</adaptive>`,
-        bad: `Write a business plan with all the important sections.`,
-        explanation: 'The good example provides clear structure and industry adaptations, while the bad example lacks specificity and guidance.'
+        good: `<constraints>Budget: $100, Audience: Children, No digital tools</constraints>
+<reframe>Low budget = Focus on core value, Kids = Simple fun, No digital = Human connection</reframe>`,
+        bad: `Come up with creative business ideas.`,
+        explanation: 'The good example provides specific constraints that force innovative thinking, while the bad example offers no creative pressure.'
       }
     }
   ],
   intermediate: [
     {
-      id: 'chain-of-thought',
-      title: 'Chain-of-Thought Reasoning',
-      description: 'Guide AI through complex reasoning processes step-by-step for better accuracy',
+      id: 'multi-step-reasoning',
+      title: 'Multi-Step Reasoning Chains',
+      description: 'Build complex reasoning chains that guide AI through sophisticated problem-solving processes',
       difficulty: 'intermediate',
-      category: 'Reasoning',
+      category: 'Advanced Techniques',
       type: 'analysis',
       estimatedTime: '30 min',
-      prompt: 'Create a chain-of-thought prompt for solving complex business strategy problems.',
-      solution: `<role>You are a senior strategy consultant</role> from McKinsey & Company with 15 years of experience helping Fortune 500 companies navigate complex strategic decisions.
+      prompt: 'Create a prompt that guides AI through complex financial analysis with multiple reasoning steps.',
+      solution: `<role>You are a senior financial analyst</role> with 15+ years experience in corporate finance and investment analysis.
 
-<methodology>Chain-of-Thought Strategic Analysis</methodology>
+<reasoning-chain>
+Follow this exact sequence for comprehensive financial analysis:
 
-<thinking-process>
-Before providing recommendations, walk through your reasoning step-by-step:
+**Step 1: Data Validation**
+- Verify all financial figures for consistency
+- Check calculation accuracy across statements
+- Identify any unusual or missing data points
+- Flag potential red flags or anomalies
 
-**Step 1: Problem Definition**
-- What is the core strategic challenge?
-- What are the underlying assumptions?
-- What constraints must we consider?
+**Step 2: Trend Analysis**
+- Calculate 3-year growth rates for key metrics
+- Identify seasonal patterns or cyclical trends
+- Compare performance to industry benchmarks
+- Highlight significant changes or inflection points
 
-**Step 2: Stakeholder Analysis**
-- Who are the key stakeholders affected?
-- What are their motivations and concerns?
-- How do their interests align or conflict?
+**Step 3: Ratio Analysis**
+- Liquidity ratios (current, quick, cash)
+- Profitability ratios (gross, operating, net margins)
+- Efficiency ratios (inventory turnover, receivables)
+- Leverage ratios (debt-to-equity, interest coverage)
 
-**Step 3: Option Generation**
-- What are 3-5 potential strategic approaches?
-- What are the pros and cons of each?
-- What resources would each option require?
+**Step 4: Competitive Positioning**
+- Market share analysis and trends
+- Competitive advantages and moats
+- Threat assessment from new entrants
+- Pricing power and customer loyalty
 
-**Step 4: Risk Assessment**
-- What could go wrong with each option?
-- What are the potential unintended consequences?
-- How can risks be mitigated?
+**Step 5: Risk Assessment**
+- Operational risks and dependencies
+- Financial risks and debt obligations
+- Market risks and external factors
+- Management and governance considerations
 
-**Step 5: Decision Framework**
-- What criteria should be used to evaluate options?
-- How should options be weighted against business objectives?
-- What timeline and success metrics apply?
-</thinking-process>
+**Step 6: Valuation Framework**
+- Determine appropriate valuation methods
+- Calculate intrinsic value using multiple approaches
+- Assess margin of safety for investment
+- Provide target price range with confidence intervals
+</reasoning-chain>
 
-<output-format>
-# Strategic Analysis: [PROBLEM_TITLE]
+<output-structure>
+For each step, provide:
+1. **Key Findings**: 3-4 most important insights
+2. **Supporting Data**: Specific numbers and calculations
+3. **Risk Factors**: Potential concerns or limitations
+4. **Impact on Valuation**: How this affects investment thesis
+</output-structure>
 
-## 🔍 My Thinking Process
+<quality-checks>
+Before finalizing analysis:
+- Do conclusions logically follow from data?
+- Are assumptions clearly stated and reasonable?
+- Have alternative scenarios been considered?
+- Is the investment recommendation well-supported?
+</quality-checks>
 
-**Problem Understanding:**
-[Walk through your analysis of the core challenge]
-
-**Stakeholder Mapping:**
-[Explain who's involved and their motivations]
-
-**Strategic Options:**
-[Detail 3-5 approaches with reasoning]
-
-**Risk Analysis:**
-[Identify and assess potential pitfalls]
-
-**Decision Logic:**
-[Explain how you're weighing trade-offs]
-
-## 📋 Recommendations
-
-### Primary Recommendation: [OPTION]
-**Why this approach:**
-- [Reasoning point 1]
-- [Reasoning point 2]
-- [Reasoning point 3]
-
-**Implementation Steps:**
-1. [Immediate actions]
-2. [Short-term initiatives]
-3. [Long-term strategic moves]
-
-**Success Metrics:**
-- [Quantifiable measure 1]
-- [Quantifiable measure 2]
-- [Quantifiable measure 3]
-
-**Risk Mitigation:**
-- [Key risk]: [Mitigation strategy]
-- [Key risk]: [Mitigation strategy]
-
-### Alternative Options:
-**Option B:** [Brief description and when to consider]
-**Option C:** [Brief description and when to consider]
-</output-format>
-
-Business challenge: [DESCRIBE_STRATEGIC_PROBLEM]`,
+Analyze this company: [FINANCIAL_DATA]`,
       criteria: [
-        'Demonstrates explicit step-by-step reasoning process',
-        'Shows consideration of multiple stakeholders and perspectives',
-        'Evaluates multiple strategic options with trade-offs',
-        'Includes risk assessment and mitigation strategies',
-        'Provides clear implementation roadmap with metrics'
+        'Establishes clear sequential reasoning steps',
+        'Includes validation and quality control processes',
+        'Provides specific output structure for each step',
+        'Incorporates multiple analytical frameworks',
+        'Ensures logical flow between analysis components'
       ],
       hints: [
-        'Make AI show its work - explicit reasoning leads to better decisions',
-        'Force consideration of multiple options before settling on one',
-        'Always include stakeholder analysis in strategic problems',
-        'Risk assessment should be integrated throughout the process'
+        'Break complex analysis into discrete, logical steps',
+        'Include validation steps to catch errors early',
+        'Specify exactly what should be included in each step',
+        'Build in quality checks to ensure reasoning consistency'
       ],
       tips: [
-        'Chain-of-thought dramatically improves reasoning quality',
-        'Explicit process steps prevent important considerations from being missed',
-        'Multiple option evaluation reduces confirmation bias',
-        'Stakeholder analysis reveals hidden complexity in business problems'
+        'Sequential reasoning prevents AI from jumping to conclusions',
+        'Explicit validation steps improve accuracy significantly',
+        'Structured outputs make complex analysis more digestible',
+        'Quality checks help maintain analytical rigor'
       ],
       resources: [
         {
-          title: 'Strategic Thinking Frameworks',
+          title: 'Financial Analysis Fundamentals',
           type: 'article',
-          url: 'https://example.com/strategy-frameworks',
-          description: 'Comprehensive guide to structured strategic analysis'
-        }
-      ]
-    },
-    {
-      id: "intermediate_4",
-      title: "Content Marketing Strategie",
-      description: "Ontwikkel een uitgebreide content marketing strategie met SEO optimalisatie",
-      category: "marketing",
-      difficulty: "intermediate" as const,
-      prompt: `Fungeer als senior content marketing strategist.
-
-CONTEXT: Je moet een complete content marketing strategie ontwikkelen voor [BEDRIJF/MERK].
-
-DOELSTELLINGEN:
-• Merkbekendheid verhogen met 40%
-• Organisch verkeer verdubbelen
-• Lead generatie met 60% verbeteren
-
-OPDRACHT - Creëer een 3-maanden content plan:
-
-1. DOELGROEP ANALYSE
-   - Primaire persona: [BESCHRIJF IDEALE KLANT]
-   - Pain points en behoeften
-   - Content consumptie gewoonten
-
-2. CONTENT PIJLERS (4 hoofdthema's)
-   - Thema 1: [EDUCATIEF CONTENT]
-   - Thema 2: [INSPIRATIE/TRENDS]
-   - Thema 3: [BEDRIJFSCULTUUR]
-   - Thema 4: [PRODUCT/DIENST FOCUS]
-
-3. CONTENT KALENDER
-   - Week 1-4: Focus op [THEMA]
-   - Week 5-8: Focus op [THEMA]
-   - Week 9-12: Focus op [THEMA]
-
-4. DISTRIBUTIE STRATEGIE
-   - Platform keuze en redenen
-   - Posting frequentie per platform
-   - Cross-promotion tactieken
-
-5. SEO INTEGRATIE
-   - Keyword research aanpak
-   - On-page optimalisatie
-   - Link building strategie
-
-6. METRIEKEN & KPI'S
-   - Awareness metrics
-   - Engagement metrics
-   - Conversion metrics
-   - ROI tracking
-
-Gebruik data-gedreven argumenten en concrete voorbeelden.`,
-      hints: [
-        {
-          type: "strategy",
-          content: "Begin met grondige marktonderzoek en concurrentieanalyse"
+          url: 'https://example.com/financial-analysis',
+          description: 'Comprehensive guide to professional financial analysis'
         },
         {
-          type: "execution",
-          content: "Gebruik de 70-20-10 regel: 70% educatief, 20% inspiratie, 10% promotie"
-        },
-        {
-          type: "optimization",
-          content: "Integreer long-tail keywords natuurlijk in je content"
-        }
-      ],
-      solution: "Een complete strategie met duidelijke doelstellingen, target persona's, content pijlers, distributieplan en meetbare KPI's. Focus op waarde-creatie en lange-termijn relaties."
-    },
-    {
-      id: "intermediate_5",
-      title: "Data Analyse Prompt Engineering",
-      description: "Maak complexe data-analyse prompts voor verschillende zakelijke scenarios",
-      category: "analytics",
-      difficulty: "intermediate" as const,
-      prompt: `Je bent een senior data analyst en business intelligence specialist.
-
-CONTEXT: Je moet data insights genereren voor [BEDRIJFSTYPE] met [DATASOURCES].
-
-ANALYSE FRAMEWORK:
-
-1. DATA VOORBEREIDING
-   - Identificeer relevante metrics: [LIJST METRICS]
-   - Data cleaning approach: [METHODIEK]
-   - Tijdsperiode voor analyse: [PERIODE]
-
-2. BESCHRIJDENDE ANALYSE
-   - Wat is er gebeurd?
-   - Key performance indicators
-   - Trends en patronen
-   - Seizoensgebonden variaties
-
-3. DIAGNOSTISCHE ANALYSE  
-   - Waarom is het gebeurd?
-   - Correlatie analyses
-   - Root cause analysis
-   - Anomalie detectie
-
-4. VOORSPELLENDE ANALYSE
-   - Wat gaat er gebeuren?
-   - Trend extrapolatie
-   - Scenario planning
-   - Risk assessment
-
-5. PRESCRIPTIEVE ANALYSE
-   - Wat moeten we doen?
-   - Actie aanbevelingen
-   - Resource allocatie
-   - Implementation roadmap
-
-OUTPUT VEREISTEN:
-• Executive summary (2 minuten leestijd)
-• Visuele dashboards beschrijving
-• Concrete action items met prioriteit
-• ROI projecties voor aanbevelingen
-• Risk mitigation strategies
-
-Gebruik statistische significantie en confidence intervals waar relevant.`,
-      hints: [
-        {
-          type: "technical",
-          content: "Start altijd met data quality assessment en missing value analysis"
-        },
-        {
-          type: "business",
-          content: "Vertaal technische findings naar business impact en ROI"
-        },
-        {
-          type: "presentation",
-          content: "Gebruik storytelling principes om data inzichten te communiceren"
-        }
-      ],
-      solution: "Een systematische data-analyse aanpak die van descriptive naar prescriptive analytics gaat, met concrete business aanbevelingen en implementatie roadmap."
-    },
-    {
-      id: "intermediate_6",
-      title: "Crisis Communicatie Plan",
-      description: "Ontwikkel een crisis communicatie strategie voor verschillende scenario's",
-      category: "communications",
-      difficulty: "intermediate" as const,
-      prompt: `Je bent een crisis communicatie expert en PR strategist.
-
-CRISIS SCENARIO: [BESCHRIJF CRISIS SITUATIE]
-
-CRISIS COMMUNICATIE FRAMEWORK:
-
-1. SITUATIE ASSESSMENT (Eerste 30 minuten)
-   - Crisis severity level (1-5 schaal)
-   - Stakeholder impact analyse
-   - Media attention probability
-   - Legal implications check
-   - Reputatie damage assessment
-
-2. CRISIS TEAM ACTIVATIE
-   - Team samenstelling en rollen
-   - Decision making hierarchy
-   - Communication channels
-   - External expert needs (legal, technical)
-
-3. BOODSCHAP ONTWIKKELING
-   - Key messages voor elke stakeholder groep
-   - Tone of voice guidelines
-   - Facts vs. speculation guidelines
-   - Empathy en accountability balance
-
-4. COMMUNICATIE KANALEN
-   - Internal communications (employees)
-   - External communications (media, customers)
-   - Social media response strategy
-   - Website crisis page
-   - Direct stakeholder outreach
-
-5. TIJDLIJN EN FASERING
-   - Immediate response (binnen 2 uur)
-   - Short-term follow-up (24-48 uur)
-   - Medium-term updates (week 1-2)
-   - Long-term reputation recovery
-
-6. MONITORING EN AANPASSING
-   - Media sentiment tracking
-   - Social media monitoring
-   - Stakeholder feedback loops
-   - Message effectiveness measurement
-
-Zorg voor transparantie, empathie en proactieve communicatie.`,
-      hints: [
-        {
-          type: "timing",
-          content: "Snelheid is cruciaal - zwijgen wordt vaak als schuld geïnterpreteerd"
-        },
-        {
-          type: "messaging",
-          content: "Gebruik de 3 C's: Care, Commitment, Control van de situatie"
-        },
-        {
-          type: "channels",
-          content: "Kies communicatiekanalen op basis van je doelgroep voorkeur"
-        }
-      ],
-      solution: "Een gestructureerd crisis communicatieplan met snelle response procedures, heldere boodschappen en stakeholder-specifieke benaderingen."
-    },
-    {
-      id: 'advanced-social-media',
-      title: 'Gevanceerde Social Media Strategie',
-      description: 'Ontwikkel een uitgebreide social media strategie voor verschillende platforms',
-      difficulty: 'intermediate',
-      category: 'Marketing',
-      type: 'creative',
-      estimatedTime: '35 min',
-      prompt: 'Creëer een complete social media strategie voor een Nederlandse tech startup die internationale groei nastreeft.',
-      solution: `<rol>Je bent een senior social media strategist</rol> met ervaring in internationale marktexpansie voor tech bedrijven.
-
-<context>Nederlandse tech startup wil internationale aanwezigheid opbouwen via social media</context>
-
-<strategie-framework>
-
-Platform Selectie & Positionering:
-LinkedIn: B2B networking en thought leadership
-Twitter: Real-time updates en industry conversations  
-Instagram: Behind-the-scenes en company culture
-YouTube: Product demos en educational content
-TikTok: Viral marketing en Gen Z engagement
-
-Content Pijlers (70-20-10 regel):
-70% Educational: Tech trends, tutorials, insights
-20% Inspirational: Success stories, team highlights
-10% Promotional: Product updates, company news
-
-Internationale Aanpak:
-- Engels als primaire taal voor global reach
-- Nederlandse content voor lokale community
-- Platform-specifieke content aanpassing
-- Tijdzone-optimalisatie voor posting
-
-Engagement Strategie:
-- Community building via LinkedIn Groups
-- Twitter chats en hashtag campaigns
-- Instagram Stories voor real-time engagement
-- YouTube comment interaction
-- Cross-platform content syndication
-
-</strategie-framework>
-
-Implementeer deze strategie voor: [BEDRIJF_BESCHRIJVING]`,
-      criteria: [
-        'Bevat platform-specifieke strategieën',
-        'Adresseert internationale groei doelstellingen',
-        'Integreert Nederlandse en internationale elementen',
-        'Gebruikt data-gedreven content verdeling',
-        'Includeert concrete implementatie stappen'
-      ],
-      hints: [
-        'Elke platform heeft zijn eigen audience en content stijl',
-        'Nederlandse bedrijven moeten balanceren tussen lokaal en globaal',
-        'Content planning moet verschillende tijdzones overwegen',
-        'Community building is belangrijker dan follower aantallen'
-      ],
-      tips: [
-        'Platform-native content presteert beter dan cross-posts',
-        'Internationale groei vereist culturele sensitiviteit',
-        'Consistentie in posting is cruciaal voor algoritme performance',
-        'Employee advocacy kan organische reach significant verhogen'
-      ],
-      resources: [
-        {
-          title: 'International Social Media Guide',
-          type: 'article',
-          url: 'https://example.com/international-social',
-          description: 'Best practices voor internationale social media expansie'
-        },
-        {
-          title: 'Tech Company Social Strategy',
-          type: 'example',
-          url: 'https://example.com/tech-social-examples',
-          description: 'Voorbeelden van succesvolle tech startup social strategies'
-        }
-      ]
-    },
-    {
-      id: 'customer-journey-optimization',
-      title: 'Customer Journey Optimalisatie',
-      description: 'Ontwerp een data-gedreven customer journey optimalisatie strategie',
-      difficulty: 'intermediate',
-      category: 'Customer Experience',
-      type: 'analysis',
-      estimatedTime: '40 min',
-      prompt: 'Ontwikkel een systematische aanpak voor het optimaliseren van de customer journey met behulp van data analytics.',
-      solution: `<rol>Je bent een customer experience analist</rol> gespecialiseerd in journey mapping en conversion optimalisatie.
-
-<journey-optimalisatie-framework>
-
-Stap 1: Journey Mapping & Data Verzameling
-- Touchpoint identificatie (online en offline)
-- Customer feedback verzameling (surveys, interviews)
-- Behavioral analytics (heatmaps, session recordings)
-- Conversion funnel analyse
-- Pain point detectie
-
-Stap 2: Segmentatie & Persona Ontwikkeling
-- Demographic segmentatie
-- Behavioral patterns analyse
-- Needs-based clustering
-- Journey variaties per segment
-- Personalization opportunities
-
-Stap 3: Moment of Truth Identificatie
-- Critical decision points
-- Emotion mapping
-- Friction analysis
-- Abandonment causes
-- Success factors
-
-Stap 4: Optimalisatie Strategieën
-- A/B testing framework
-- Personalization implementation
-- Content optimization
-- UX/UI improvements
-- Process streamlining
-
-Stap 5: Measurement & Iteration
-- KPI definitie (NPS, CSAT, conversion rates)
-- Attribution modeling
-- Cohort analysis
-- ROI tracking
-- Continuous improvement cycles
-
-</journey-optimalisatie-framework>
-
-Analyseer journey voor: [BUSINESS_TYPE]
-Focus gebieden: [IMPROVEMENT_AREAS]`,
-      criteria: [
-        'Integreert kwantitatieve en kwalitatieve data',
-        'Bevat concrete optimalisatie tactieken',
-        'Includeert meetbare KPIs en success metrics',
-        'Adresseert verschillende customer segments',
-        'Gebruikt systematische testing methodologie'
-      ],
-      hints: [
-        'Customer journey optimalisatie is een iteratief proces',
-        'Emotionele aspecten zijn net zo belangrijk als functionele',
-        'Cross-channel consistency is cruciaal voor customer experience',
-        'Kleine verbeteringen kunnen grote impact hebben op conversie'
-      ],
-      tips: [
-        'Gebruik mixed-methods research voor complete insights',
-        'Prioriteer optimalisaties op basis van impact en effort',
-        'Test wijzigingen systematisch om causaliteit te bewijzen',
-        'Betrek verschillende stakeholders in journey mapping'
-      ],
-      resources: [
-        {
-          title: 'Customer Journey Analytics',
+          title: 'Reasoning Chain Templates',
           type: 'tool',
-          url: 'https://example.com/journey-analytics',
-          description: 'Tools voor customer journey data analyse'
-        },
-        {
-          title: 'CX Optimization Playbook',
-          type: 'article',
-          url: 'https://example.com/cx-optimization',
-          description: 'Praktische gids voor customer experience verbetering'
+          url: 'https://example.com/reasoning-templates',
+          description: 'Ready-to-use templates for complex reasoning tasks'
         }
-      ]
-    },
-    {
-      id: 'content-personalization',
-      title: 'AI-Gedreven Content Personalisatie',
-      description: 'Implementeer geavanceerde content personalisatie strategieën',
-      difficulty: 'intermediate',
-      category: 'Content Strategy',
-      type: 'hands-on',
-      estimatedTime: '45 min',
-      prompt: 'Ontwerp een AI-gedreven content personalisatie systeem dat schaalt voor duizenden gebruikers.',
-      solution: `<rol>Je bent een content personalisatie specialist</rol> met expertise in machine learning en marketing automation.
-
-<personalisatie-systeem-architectuur>
-
-Data Foundation:
-- User behavior tracking (page views, time spent, interactions)
-- Preference indicators (explicit en implicit)
-- Demographic en firmographic data  
-- Content engagement metrics
-- Purchase history en conversion data
-
-Segmentatie & Clustering:
-- RFM analysis (Recency, Frequency, Monetary)
-- Behavioral clustering algoritmes
-- Lookalike audience development
-- Propensity modeling
-- Lifecycle stage classification
-
-Content Categorisatie:
-- Topic taxonomy development
-- Content difficulty scoring
-- Format preference mapping
-- Channel suitability assessment
-- Performance benchmarking
-
-Personalisatie Engine:
-- Collaborative filtering
-- Content-based recommendations
-- Hybrid recommendation systems
-- Real-time personalization
-- A/B testing infrastructure
-
-Implementation Roadmap:
-Fase 1: Basic rule-based personalization
-Fase 2: Machine learning model deployment  
-Fase 3: Real-time personalization
-Fase 4: Predictive content creation
-Fase 5: Omnichannel personalization
-
-Performance Monitoring:
-- Engagement rate improvements
-- Conversion lift measurement
-- Customer lifetime value impact
-- Content performance analytics
-- Model accuracy tracking
-
-</personalisatie-systeem-architectuur>
-
-Implementeer voor: [PLATFORM_TYPE]
-Doelgroep: [TARGET_AUDIENCE]
-Content volume: [SCALE_REQUIREMENTS]`,
-      criteria: [
-        'Bevat technische implementatie details',
-        'Adresseert schaalbaarheid uitdagingen',
-        'Includeert concrete machine learning benaderingen',
-        'Definieert meetbare success metrics',
-        'Biedt gefaseerde implementatie strategie'
       ],
-      hints: [
-        'Start simpel met rule-based personalisatie voordat je ML implementeert',
-        'Data kwaliteit is belangrijker dan complexe algoritmes',
-        'Real-time personalisatie vereist robuuste technische infrastructuur',
-        'Privacy en consent management zijn essentieel voor personalisatie'
-      ],
-      tips: [
-        'Hybrid recommendation systems presteren vaak beter dan pure approaches',
-        'Cold start probleem oplossen is cruciaal voor nieuwe gebruikers',
-        'Content diversiteit voorkomt filter bubbles',
-        'Continuous learning systemen adapteren aan veranderende voorkeuren'
-      ],
-      resources: [
-        {
-          title: 'ML Personalization Guide',
-          type: 'article',
-          url: 'https://example.com/ml-personalization',
-          description: 'Technische gids voor machine learning personalisatie'
-        },
-        {
-          title: 'Recommendation Systems Toolkit',
-          type: 'tool',
-          url: 'https://example.com/recommendation-tools',
-          description: 'Open source tools voor recommendation engine development'
-        }
-      ]
+      examples: {
+        good: `<reasoning>Step 1: Validate data → Step 2: Trend analysis → Step 3: Ratio analysis</reasoning>
+<quality-check>Does each step logically follow from the previous?</quality-check>`,
+        bad: `Analyze this company's financial performance.`,
+        explanation: 'The good example provides clear reasoning steps and validation, while the bad example lacks structure and guidance.'
+      }
     }
   ],
   advanced: [
     {
-      id: 'rag-system-design',
-      title: 'RAG System Architecture',
-      description: 'Design comprehensive retrieval-augmented generation systems for production use',
-      difficulty: 'advanced',
-      category: 'System Design',
-      type: 'hands-on',
-      estimatedTime: '45 min',
-      prompt: 'Architect a complete RAG system with optimization strategies for a specific domain.',
-      solution: `<role>You are a senior ML systems architect</role> with expertise in designing enterprise-scale RAG implementations for production environments.
-
-<system-requirements>
-Domain: [SPECIFIC_DOMAIN]
-Scale: [DOCUMENT_COUNT/USER_COUNT]
-Performance targets: [LATENCY/ACCURACY_REQUIREMENTS]
-Budget constraints: [INFRASTRUCTURE_BUDGET]
-</system-requirements>
-
-<comprehensive-architecture>
-
-**1. Data Ingestion Pipeline**
-- Document processing: [PARSERS, CLEANING, CHUNKING_STRATEGY]
-- Embedding generation: [MODEL_CHOICE, BATCH_PROCESSING, VERSIONING]
-- Quality control: [VALIDATION_RULES, ERROR_HANDLING, MONITORING]
-
-**2. Vector Database Design**
-- Storage strategy: [DATABASE_CHOICE, INDEXING, PARTITIONING]
-- Search optimization: [SIMILARITY_METRICS, FILTERING, PERFORMANCE_TUNING]
-- Scalability: [SHARDING, REPLICATION, BACKUP_STRATEGY]
-
-**3. Retrieval Engine**
-- Query processing: [INTENT_CLASSIFICATION, QUERY_EXPANSION, MULTI_VECTOR_SEARCH]
-- Ranking & fusion: [RELEVANCE_SCORING, RESULT_FUSION, DIVERSITY_PROMOTION]
-- Context selection: [WINDOW_SIZING, OVERLAP_HANDLING, SOURCE_ATTRIBUTION]
-
-**4. Generation Pipeline**
-- Prompt engineering: [SYSTEM_PROMPTS, CONTEXT_INTEGRATION, OUTPUT_FORMATTING]
-- LLM integration: [MODEL_SELECTION, PARAMETER_TUNING, FALLBACK_STRATEGIES]
-- Quality assurance: [EVALUATION_METRICS, MONITORING, HUMAN_FEEDBACK]
-
-</comprehensive-architecture>
-
-Design this system for: [SPECIFIC_USE_CASE]
-Requirements: [TECHNICAL_REQUIREMENTS]
-Constraints: [BUSINESS_CONSTRAINTS]`,
-      criteria: [
-        'Addresses complete system architecture end-to-end',
-        'Includes specific technical implementation details',
-        'Considers scalability and production requirements',
-        'Incorporates quality assurance and monitoring',
-        'Handles real-world constraints and optimization'
-      ],
-      hints: [
-        'Consider the entire pipeline from data ingestion to user response',
-        'Think about scalability and performance optimization',
-        'Include monitoring and quality assurance at every stage',
-        'Address real-world constraints like budget and latency'
-      ],
-      tips: [
-        'Production RAG systems require comprehensive architecture',
-        'Quality monitoring is essential for maintaining performance',
-        'Scalability planning prevents future bottlenecks',
-        'Cost optimization balances performance with budget constraints'
-      ],
-      resources: [
-        {
-          title: 'RAG System Design Patterns',
-          type: 'article',
-          url: 'https://example.com/rag-patterns',
-          description: 'Proven architectures for production RAG systems'
-        }
-      ]
-    },
-    {
-      id: "advanced_3",
-      title: "AI Ethiek & Bias Assessment",
-      description: "Ontwikkel een framework voor ethische AI evaluatie en bias detectie",
-      category: "ai-ethics",
-      difficulty: "advanced" as const,
-      prompt: `Je bent een AI ethiek specialist en responsible AI consultant.
-
-CONTEXT: Ontwikkel een uitgebreid ethiek framework voor AI systeem evaluatie.
-
-ETHIEK ASSESSMENT FRAMEWORK:
-
-1. BIAS DETECTIE & MITIGATIE
-   Analyseer potentiële bias bronnen:
-   - Training data bias (historical, sampling, representation)
-   - Algorithmic bias (feature selection, model architecture)
-   - Deployment bias (user interaction, feedback loops)
-   
-   Voor elk bias type:
-   • Detection methoden
-   • Quantitative metrics
-   • Mitigation strategies
-   • Monitoring procedures
-
-2. FAIRNESS CRITERIA EVALUATIE
-   Implementeer multiple fairness definitions:
-   - Individual fairness (similar individuals, similar outcomes)
-   - Group fairness (demographic parity)
-   - Equalized odds (true positive rate equality)
-   - Calibration (prediction accuracy across groups)
-   
-   Trade-off analyse tussen verschillende fairness criteria.
-
-3. TRANSPARANTIE & EXPLAINABILITY
-   - Model interpretability requirements
-   - Feature importance explanation
-   - Decision pathway visualization
-   - Stakeholder-specific explanation levels
-
-4. PRIVACY & DATA PROTECTION
-   - Differential privacy implementation
-   - Data minimization principles
-   - Consent mechanism design
-   - Right to explanation compliance
-
-5. ACCOUNTABILITY FRAMEWORK
-   - Human oversight requirements
-   - Audit trail mechanisms
-   - Responsibility assignment matrix
-   - Remediation procedures
-
-6. STAKEHOLDER IMPACT ASSESSMENT
-   - Multi-stakeholder analysis
-   - Benefit-risk evaluation
-   - Vulnerable group protection
-   - Long-term societal impact
-
-Ontwikkel concrete implementatie guidelines en governance structuren.`,
-      hints: [
-        {
-          type: "technical",
-          content: "Gebruik meerdere fairness metrics - geen enkele is perfect voor alle situaties"
-        },
-        {
-          type: "governance",
-          content: "Betrek diverse stakeholders in het ontwikkelingsproces vanaf het begin"
-        },
-        {
-          type: "implementation",
-          content: "Maak ethiek een continue proces, niet een eenmalige check"
-        }
-      ],
-      solution: "Een holistisch AI ethiek framework dat technische, juridische en sociale aspecten integreert met concrete implementatie procedures en governance structuren."
-    },
-    {
-      id: "advanced_4",
-      title: "Enterprise Digital Transformation",
-      description: "Ontwerp een complete digitale transformatie strategie voor grote organisaties",
-      category: "strategy",
-      difficulty: "advanced" as const,
-      prompt: `Je bent een senior digital transformation consultant voor enterprise organisaties.
-
-TRANSFORMATIE CONTEXT: [ORGANISATIE TYPE, SIZE, INDUSTRY, CURRENT STATE]
-
-DIGITAL TRANSFORMATION BLUEPRINT:
-
-1. CURRENT STATE ASSESSMENT
-   Digitale Maturity Evaluatie:
-   - Technology infrastructure audit
-   - Process digitization level
-   - Data capabilities assessment
-   - Cultural readiness evaluation
-   - Skills gap analysis
-   - Competitive positioning
-
-2. FUTURE STATE VISION
-   Definieer transformatie doelen:
-   - Customer experience transformation
-   - Operational excellence targets
-   - New business model opportunities
-   - Innovation ecosystem development
-   - Sustainability integration
-
-3. TRANSFORMATION ROADMAP
-   3-Horizon Planning:
-   
-   HORIZON 1 (0-18 maanden): Core Optimization
-   - Legacy system modernization
-   - Process automation quick wins
-   - Data foundation establishment
-   - Employee digital literacy
-
-   HORIZON 2 (18-36 maanden): Capability Building
-   - Advanced analytics implementation
-   - Customer experience platforms
-   - Agile organization transition
-   - Partnership ecosystem development
-
-   HORIZON 3 (3-5 jaar): Innovation Leadership
-   - Emerging technology adoption (AI/ML, IoT, Blockchain)
-   - New business model launches
-   - Industry ecosystem leadership
-   - Continuous innovation culture
-
-4. CHANGE MANAGEMENT STRATEGY
-   - Leadership alignment en commitment
-   - Communication en engagement plan
-   - Training en skill development
-   - Resistance management
-   - Culture transformation initiatives
-
-5. TECHNOLOGY ARCHITECTURE
-   - Cloud-first infrastructure strategy
-   - API-first integration approach
-   - Data lake/warehouse architecture
-   - Security en compliance framework
-   - Scalability en flexibility requirements
-
-6. GOVERNANCE & MEASUREMENT
-   - Digital transformation office setup
-   - KPI dashboard development
-   - ROI tracking methodology
-   - Risk management framework
-   - Continuous improvement processes
-
-Zorg voor balance tussen speed, risk en sustainable growth.`,
-      hints: [
-        {
-          type: "strategy",
-          content: "Start met customer value - technologie is een enabler, niet het doel"
-        },
-        {
-          type: "execution",
-          content: "Gebruik een portfolio aanpak - combineer quick wins met lange termijn investeringen"
-        },
-        {
-          type: "change",
-          content: "Investeer 40% van je effort in change management - technologie is vaak het makkelijke deel"
-        }
-      ],
-      solution: "Een geïntegreerde transformatie strategie die technologie, mensen en processen aligneert met een duidelijke roadmap en governance structuur."
-    },
-    {
-      id: "advanced_5",
-      title: "Quantum Computing Business Strategy",
-      description: "Ontwikkel een strategische roadmap voor quantum computing adoptie in enterprise",
-      category: "emerging-tech",
-      difficulty: "advanced" as const,
-      prompt: `Je bent een quantum computing strategist en emerging technology consultant.
-
-QUANTUM STRATEGY CONTEXT: [INDUSTRIE, ORGANISATIE SIZE, CURRENT TECH CAPABILITIES]
-
-QUANTUM COMPUTING ADOPTION FRAMEWORK:
-
-1. QUANTUM READINESS ASSESSMENT
-   Technical Infrastructure Evaluation:
-   - Current computational bottlenecks identification
-   - Problem complexity analysis (NP, QMA problems)
-   - Data requirements en quality assessment
-   - Integration capability with classical systems
-   - Security implications evaluation
-
-2. USE CASE PRIORITIZATION MATRIX
-   Evalueer quantum advantage potentieel:
-   
-   HIGH IMPACT AREAS:
-   - Optimization problems (supply chain, portfolio, scheduling)
-   - Cryptography en security (post-quantum cryptography)
-   - Machine learning acceleration (quantum ML algorithms)
-   - Scientific simulation (materials, pharmaceuticals, chemicals)
-   - Financial modeling (risk analysis, derivatives pricing)
-
-   Voor elke use case:
-   • Quantum advantage timeline (NISQ vs. fault-tolerant era)
-   • Business value quantification
-   • Technical feasibility assessment
-   • Resource requirements estimation
-
-3. QUANTUM TECHNOLOGY ROADMAP
-   3-Phase Implementation Strategy:
-   
-   PHASE 1: FOUNDATION BUILDING (1-2 jaar)
-   - Quantum literacy development
-   - Partner ecosystem establishment
-   - Hybrid classical-quantum architectures
-   - Proof-of-concept development
-
-   PHASE 2: NISQ ERA EXPLOITATION (2-5 jaar)
-   - Variational quantum algorithms implementation
-   - Quantum advantage demonstration
-   - Competitive differentiation through quantum
-   - Quantum software stack development
-
-   PHASE 3: FAULT-TOLERANT ADOPTION (5-10 jaar)
-   - Large-scale quantum applications
-   - Quantum-native business models
-   - Industry ecosystem leadership
-   - Quantum workforce development
-
-4. PARTNERSHIP & ECOSYSTEM STRATEGY
-   - Quantum hardware vendor relationships
-   - Cloud quantum service integration
-   - Academic research collaborations
-   - Industry consortium participation
-   - Quantum startup investment opportunities
-
-5. TALENT & CAPABILITY DEVELOPMENT
-   - Quantum physicist recruitment
-   - Classical developer upskilling
-   - Quantum-classical hybrid teams
-   - External expertise acquisition
-   - Knowledge management systems
-
-6. RISK MANAGEMENT & ETHICS
-   - Quantum security threat assessment
-   - Intellectual property protection
-   - Ethical quantum computing principles
-   - Regulatory compliance preparation
-   - Technology dependency risks
-
-Ontwikkel concrete implementatie timelines en investment cases.`,
-      hints: [
-        {
-          type: "technical",
-          content: "Focus op hybrid quantum-classical algorithms voor NISQ era applications"
-        },
-        {
-          type: "business",
-          content: "Start met optimization use cases - ze hebben vaak de duidelijkste ROI"
-        },
-        {
-          type: "timing",
-          content: "Bereid je voor op quantum security threats - de transitie naar post-quantum cryptografie duurt jaren"
-        }
-      ],
-      solution: "Een forward-looking quantum strategie die realistische timelines combineert met concrete business value en een gefaseerde implementatie aanpak."
-    },
-    {
-      id: "advanced_6",
-      title: "Sustainable Finance ESG Framework",
-      description: "Creëer een geïntegreerd ESG investment en reporting framework",
-      category: "finance",
-      difficulty: "advanced" as const,
-      prompt: `Je bent een sustainable finance expert en ESG strategist.
-
-ESG INTEGRATION CONTEXT: [FINANCIAL INSTITUTION TYPE, AUM, REGULATORY JURISDICTION]
-
-COMPREHENSIVE ESG FRAMEWORK:
-
-1. ESG DATA ARCHITECTURE
-   Data Source Integration:
-   - Company disclosed ESG metrics
-   - Third-party ESG rating providers
-   - Alternative data sources (satellite, social media, news)
-   - Regulatory filing analysis
-   - Supply chain transparency data
-
-   Data Quality Framework:
-   • Materiality assessment criteria
-   • Data verification procedures
-   • Standardization methodology
-   • Gap analysis en estimation techniques
-   • Real-time monitoring systems
-
-2. ESG SCORING & RATING METHODOLOGY
-   Multi-dimensional Scoring:
-   
-   ENVIRONMENTAL (30-40% weight):
-   - Carbon footprint en climate risk
-   - Resource efficiency (water, energy, materials)
-   - Biodiversity impact assessment
-   - Circular economy integration
-   - Transition pathway alignment
-
-   SOCIAL (25-35% weight):
-   - Human rights en labor practices
-   - Diversity, equity & inclusion
-   - Community impact en stakeholder engagement
-   - Product safety en quality
-   - Customer satisfaction en trust
-
-   GOVERNANCE (25-35% weight):
-   - Board composition en independence
-   - Executive compensation alignment
-   - Anti-corruption en compliance
-   - Cybersecurity en data privacy
-   - Strategic oversight en risk management
-
-3. INVESTMENT INTEGRATION STRATEGIES
-   Portfolio Construction Approaches:
-   - ESG screening (negative, positive, thematic)
-   - Integration analysis (fundamental, quantitative)
-   - Engagement en stewardship programs
-   - Impact investing frameworks
-   - Sustainable index development
-
-4. RISK MANAGEMENT INTEGRATION
-   ESG Risk Assessment:
-   - Physical climate risk modeling
-   - Transition risk scenario analysis
-   - Social risk impact evaluation
-   - Governance risk quantification
-   - Stranded asset identification
-
-5. IMPACT MEASUREMENT & REPORTING
-   Stakeholder Reporting Framework:
-   - Regulatory compliance (SFDR, TCFD, SASB)
-   - Investor performance reporting
-   - Client impact communication
-   - Public transparency initiatives
-   - Continuous improvement tracking
-
-6. ENGAGEMENT & STEWARDSHIP
-   Active Ownership Strategy:
-   - Proxy voting policy development
-   - Company engagement priorities
-   - Collaborative engagement initiatives
-   - Escalation procedures
-   - Impact measurement methodology
-
-Zorg voor balans tussen financial performance en sustainability impact.`,
-      hints: [
-        {
-          type: "data",
-          content: "Gebruik meerdere ESG data providers - geen enkele heeft volledige coverage"
-        },
-        {
-          type: "integration",
-          content: "Start met materiality assessment - niet alle ESG factoren zijn even relevant voor elke sector"
-        },
-        {
-          type: "reporting",
-          content: "Bereid je voor op toenemende regulatory requirements - bouw flexibiliteit in je framework"
-        }
-      ],
-      solution: "Een geïntegreerd ESG framework dat data, analytics, investment processen en reporting combineert met sterke governance en stakeholder engagement."
-    },
-    {
-      id: 'enterprise-ai-governance',
-      title: 'Enterprise AI Governance Framework',
-      description: 'Ontwikkel een uitgebreid AI governance framework voor grote organisaties',
-      difficulty: 'advanced',
-      category: 'AI Strategy',
-      type: 'hands-on',
-      estimatedTime: '60 min',
-      prompt: 'Creëer een volledig AI governance framework dat ethics, compliance, en business value integreert voor enterprise deployment.',
-      solution: `<rol>Je bent een Chief AI Officer</rol> verantwoordelijk voor enterprise-wide AI governance en responsible AI implementation.
-
-<ai-governance-framework>
-
-Governance Structuur:
-- AI Steering Committee (C-level leadership)
-- AI Ethics Board (diverse stakeholder representation)
-- AI Center of Excellence (technical expertise)
-- Business Unit AI Champions (domain knowledge)
-- Legal & Compliance Integration (regulatory oversight)
-
-Policy Framework:
-1. AI Ethics Charter
-   - Fairness en bias mitigation
-   - Transparency en explainability requirements
-   - Privacy en data protection
-   - Human oversight en control
-   - Social impact assessment
-
-2. Risk Management Protocol
-   - AI risk assessment matrix
-   - Model validation procedures
-   - Ongoing monitoring requirements
-   - Incident response procedures
-   - Audit en compliance tracking
-
-3. Data Governance Integration
-   - Data quality standards
-   - Consent en privacy management
-   - Cross-border data transfer protocols
-   - Data lineage tracking
-   - Retention en deletion policies
-
-Implementation Roadmap:
-
-Fase 1: Foundation (0-6 maanden)
-- Governance structure establishment
-- Policy development en approval
-- Initial team training
-- Pilot project selection
-- Basic monitoring setup
-
-Fase 2: Scaling (6-18 maanden)
-- Framework rollout across business units
-- Advanced monitoring implementation
-- Risk assessment automation
-- Stakeholder training programs
-- External partnership development
-
-Fase 3: Optimization (18+ maanden)
-- Predictive governance capabilities
-- Industry leadership positioning
-- Innovation acceleration
-- Ecosystem collaboration
-- Continuous improvement culture
-
-Technology Infrastructure:
-- Model lifecycle management platforms
-- Automated bias detection tools
-- Explainability dashboards
-- Compliance reporting systems
-- Risk monitoring alerts
-
-Measurement & KPIs:
-- Ethical AI compliance score
-- Model performance metrics
-- Risk mitigation effectiveness
-- Business value generation
-- Stakeholder satisfaction indices
-
-</ai-governance-framework>
-
-Implementeer voor organisatie: [COMPANY_PROFILE]
-Regulatory environment: [JURISDICTION]
-AI maturity level: [CURRENT_STATE]`,
-      criteria: [
-        'Integreert technische, ethische en business aspecten',
-        'Bevat concrete implementation roadmap',
-        'Adresseert regulatory compliance requirements',
-        'Includeert measurable governance metrics',
-        'Biedt scalable framework architectuur'
-      ],
-      hints: [
-        'AI governance moet business enablement en risk management balanceren',
-        'Cross-functionele collaboration is essentieel voor success',
-        'Regulatory landscape evolueert snel - build in flexibility',
-        'Culture change is vaak de grootste uitdaging'
-      ],
-      tips: [
-        'Start met pilot projects om governance framework te testen',
-        'Invest heavily in stakeholder education en buy-in',
-        'Automated governance tools verhogen compliance en efficiency',
-        'Industry partnerships accelereren best practice adoption'
-      ],
-      resources: [
-        {
-          title: 'AI Governance Best Practices',
-          type: 'article',
-          url: 'https://example.com/ai-governance',
-          description: 'Enterprise AI governance implementation guide'
-        },
-        {
-          title: 'Responsible AI Toolkit',
-          type: 'tool',
-          url: 'https://example.com/responsible-ai-tools',
-          description: 'Tools voor responsible AI implementation'
-        }
-      ]
-    },
-    {
-      id: 'quantum-computing-strategy',
-      title: 'Quantum Computing Business Strategie',
-      description: 'Ontwikkel een strategische roadmap voor quantum computing adoptie',
-      difficulty: 'advanced',
-      category: 'Emerging Technology',
-      type: 'analysis',
-      estimatedTime: '55 min',
-      prompt: 'Ontwerp een uitgebreide quantum computing adoptie strategie voor een enterprise organisatie.',
-      solution: `<rol>Je bent een quantum computing strategist</rol> en emerging technology consultant met deep expertise in quantum business applications.
-
-<quantum-adoptie-strategie>
-
-Quantum Readiness Assessment:
-1. Technical Infrastructure Evaluation
-   - Current computational bottlenecks
-   - Problem complexity analysis (optimization, simulation)
-   - Integration capabilities met classical systems
-   - Security infrastructure assessment
-   - Data requirements en quality evaluation
-
-2. Use Case Prioritization Matrix
-   High-Impact Quantum Applications:
-   - Supply chain optimization (logistics, routing)
-   - Financial portfolio optimization
-   - Drug discovery en molecular simulation  
-   - Cryptography en security (post-quantum crypto)
-   - Machine learning acceleration
-   - Risk modeling en scenario analysis
-
-3. Quantum Technology Roadmap
-   
-   NISQ Era (2024-2030):
-   - Hybrid quantum-classical algorithms
-   - Variational quantum eigensolvers
-   - Quantum approximate optimization
-   - Proof-of-concept development
-   - Partnership ecosystem building
-
-   Fault-Tolerant Era (2030+):
-   - Large-scale quantum applications
-   - Quantum advantage demonstration
-   - Industry ecosystem leadership
-   - Quantum-native business models
-
-Strategic Implementation Plan:
-
-Fase 1: Foundation Building (Year 1-2)
-- Quantum literacy development programs
-- Academic en vendor partnerships
-- Hybrid infrastructure development
-- Initial use case exploration
-- Talent acquisition strategy
-
-Fase 2: Competitive Advantage (Year 2-5)
-- Quantum algorithm development
-- Industry consortium participation
-- Intellectual property building
-- Customer value demonstration
-- Quantum software stack creation
-
-Fase 3: Market Leadership (Year 5+)
-- Quantum ecosystem orchestration
-- New revenue stream development
-- Industry standard contribution
-- Next-generation talent pipeline
-- Quantum computing services offering
-
-Risk Management Framework:
-- Technology dependency risks
-- Talent scarcity mitigation
-- Intellectual property protection
-- Quantum security threat preparation
-- Investment timeline uncertainty
-
-Investment Strategy:
-- R&D budget allocation (20% voor quantum initiatives)
-- Partnership en acquisition opportunities
-- Quantum startup investment portfolio
-- Academic research collaboration funding
-- Infrastructure development planning
-
-</quantum-adoptie-strategie>
-
-Ontwikkel strategie voor: [INDUSTRY_SECTOR]
-Organisatie grootte: [COMPANY_SIZE]
-Current tech capabilities: [TECH_MATURITY]`,
-      criteria: [
-        'Bevat realistic timeline expectations voor quantum development',
-        'Integreert business value met technical feasibility',
-        'Adresseert beide NISQ en fault-tolerant eras',
-        'Includeert concrete investment en partnership strategies',
-        'Biedt comprehensive risk assessment'
-      ],
-      hints: [
-        'Quantum computing is nog in early stages - focus op learning en experimentation',
-        'Hybrid quantum-classical approaches zijn de key voor near-term value',
-        'Talent development is critical - quantum expertise is scarce',
-        'Partnership strategy is essential - few organizations can go alone'
-      ],
-      tips: [
-        'Start met optimization problems - they show clearest quantum advantage',
-        'Build quantum literacy across organization, not just technical teams',
-        'Monitor quantum computing developments closely - field evolves rapidly',
-        'Prepare for post-quantum cryptography transition - it takes years'
-      ],
-      resources: [
-        {
-          title: 'Quantum Business Applications',
-          type: 'article',
-          url: 'https://example.com/quantum-business',
-          description: 'Business use cases voor quantum computing'
-        },
-        {
-          title: 'Quantum Computing Roadmap',
-          type: 'tool',
-          url: 'https://example.com/quantum-roadmap',
-          description: 'Interactive quantum technology timeline'
-        }
-      ]
-    },
-    {
-      id: 'sustainable-digital-transformation',
-      title: 'Duurzame Digitale Transformatie',
-      description: 'Integreer sustainability in enterprise digital transformation strategieën',
-      difficulty: 'advanced',
-      category: 'Sustainability',
-      type: 'creative',
-      estimatedTime: '50 min',
-      prompt: 'Ontwerp een digital transformation strategie die sustainability en business growth combineert.',
-      solution: `<rol>Je bent een sustainable digital transformation consultant</rol> gespecialiseerd in ESG-aligned technology strategies.
-
-<sustainable-transformation-framework>
-
-ESG-Technology Integration:
-
-Environmental Impact Optimization:
-1. Green IT Infrastructure
-   - Cloud migration naar renewable energy providers
-   - Edge computing voor reduced data transmission
-   - AI-optimized resource allocation
-   - Circular economy principles in hardware lifecycle
-   - Carbon footprint tracking en reporting automation
-
-2. Operational Efficiency Programs
-   - IoT-enabled smart building management
-   - Predictive maintenance reducing waste
-   - Supply chain optimization algorithms
-   - Remote work technology reducing commuting
-   - Digital document workflows eliminating paper
-
-Social Impact Enhancement:
-1. Digital Inclusion Initiatives
-   - Accessibility-first design principles
-   - Digital skills training programs
-   - Inclusive AI algorithm development
-   - Community technology access programs
-   - Diverse supplier technology partnerships
-
-2. Employee Wellbeing Technology
-   - Mental health monitoring dashboards
-   - Work-life balance optimization tools
-   - Career development AI recommendations
-   - Collaborative technology reducing isolation
-   - Health en safety IoT implementations
-
-Governance & Ethics Integration:
-1. Transparent Decision Making
-   - Explainable AI implementations
-   - Automated compliance monitoring
-   - Stakeholder engagement platforms
-   - Real-time ESG reporting dashboards
-   - Ethical AI governance frameworks
-
-Implementation Roadmap:
-
-Jaar 1: Foundation & Assessment
-- Current state ESG technology audit
-- Stakeholder alignment workshops
-- Sustainable technology partner selection
-- Pilot project implementation
-- Baseline sustainability metrics establishment
-
-Jaar 2-3: Scaling & Integration
-- Enterprise-wide sustainable tech rollout
-- Advanced analytics voor sustainability insights
-- Circular economy business model development
-- Industry collaboration initiatives
-- Customer sustainability engagement programs
-
-Jaar 4-5: Leadership & Innovation
-- Sustainability technology innovation labs
-- Industry standard development contribution
-- Thought leadership positioning
-- Sustainable technology investment fund
-- Next-generation sustainability solutions
-
-Measurement Framework:
-- Scope 1, 2, 3 carbon emission tracking
-- Digital inclusion impact metrics
-- Employee wellbeing technology adoption
-- Sustainable revenue stream development
-- Innovation sustainability index
-
-Business Case Development:
-- Cost savings from efficiency improvements
-- Revenue opportunities from sustainable products
-- Risk mitigation from climate adaptation
-- Brand value enhancement from ESG leadership
-- Investment attraction from sustainability focus
-
-</sustainable-transformation-framework>
-
-Ontwikkel voor organisatie: [COMPANY_PROFILE]
-Industry context: [SECTOR_SUSTAINABILITY_CHALLENGES]
-Transformation budget: [INVESTMENT_CAPACITY]`,
-      criteria: [
-        'Integreert alle ESG dimensies met technology strategy',
-        'Bevat measurable sustainability outcomes',
-        'Biedt concrete business value propositions',
-        'Adresseert industry-specific sustainability challenges',
-        'Includeert stakeholder engagement strategies'
-      ],
-      hints: [
-        'Sustainability en profitability kunnen hand-in-hand gaan',
-        'Technology is een enabler voor sustainability, niet het doel',
-        'Stakeholder buy-in is crucial voor sustainable transformation success',
-        'Measurement en transparency drive continuous improvement'
-      ],
-      tips: [
-        'Start met quick wins die immediate business value tonen',
-        'Integrate sustainability metrics in all technology decisions',
-        'Build sustainability into company culture, not just processes',
-        'Use technology to make sustainability data visible en actionable'
-      ],
-      resources: [
-        {
-          title: 'Sustainable Technology Guide',
-          type: 'article',
-          url: 'https://example.com/sustainable-tech',
-          description: 'Best practices voor sustainable technology implementation'
-        },
-        {
-          title: 'ESG Technology Framework',
-          type: 'tool',
-          url: 'https://example.com/esg-tech-framework',
-          description: 'Framework voor ESG-aligned technology strategy'
-        }
-      ]
-    },
-    {
       id: 'meta-prompting',
-      title: 'Meta-Prompting Systems',
-      description: 'Create prompts that help AI design better prompts - recursive prompt engineering',
+      title: 'Meta-Prompting Mastery',
+      description: 'Create prompts that help AI generate better prompts, unlocking recursive improvement capabilities',
       difficulty: 'advanced',
-      category: 'Meta-Cognition',
-      type: 'analysis',
-      estimatedTime: '45 min',
-      prompt: 'Build a meta-prompt system that analyzes prompt quality and suggests improvements.',
-      solution: `<role>You are a world-class prompt engineering researcher</role> with deep expertise in cognitive science, AI behavior analysis, and optimization methodologies.
+      category: 'Expert Techniques',
+      type: 'creative',
+      estimatedTime: '40 min',
+      prompt: 'Design a meta-prompt system that analyzes and improves existing prompts for maximum effectiveness.',
+      solution: `<role>You are a prompt engineering expert</role> who specializes in optimizing AI interactions for maximum effectiveness and reliability.
 
 <meta-analysis-framework>
-Analyze the submitted prompt across these critical dimensions:
+Analyze the provided prompt across these dimensions:
 
-**1. Clarity & Specificity Assessment**
-- Is the desired outcome precisely defined?
-- Are instructions unambiguous and actionable?
-- Does the prompt eliminate potential misinterpretations?
+**1. Clarity Assessment**
+- Is the task clearly defined and unambiguous?
+- Are instructions specific enough to prevent misinterpretation?
+- Does the prompt eliminate potential confusion points?
+- Score: [1-10] with specific reasoning
 
-**2. Context Richness Evaluation**
-- Is sufficient background provided for informed responses?
-- Are stakeholder perspectives and constraints included?
-- Does the context align with the complexity of the task?
+**2. Context Completeness**
+- Is sufficient background information provided?
+- Are all necessary constraints and requirements specified?
+- Does the prompt account for edge cases and exceptions?
+- Score: [1-10] with specific reasoning
 
-**3. Structure & Flow Analysis**
-- Does the prompt follow logical progression?
-- Are complex tasks broken into manageable steps?
-- Is there clear hierarchy of information importance?
+**3. Structure Evaluation**
+- Is the prompt logically organized and easy to follow?
+- Are there clear sections and hierarchical information?
+- Does the flow guide AI through the optimal reasoning path?
+- Score: [1-10] with specific reasoning
 
-**4. Output Quality Controls**
-- Are formatting requirements clearly specified?
-- Are quality criteria and success metrics defined?
-- Are examples provided to calibrate expectations?
+**4. Output Specification**
+- Is the desired output format clearly defined?
+- Are quality criteria and success metrics specified?
+- Does the prompt include examples of good vs. bad outputs?
+- Score: [1-10] with specific reasoning
 
-**5. Bias & Assumption Detection**
-- What implicit assumptions might bias the response?
-- Are multiple perspectives encouraged or restricted?
-- Could the prompt inadvertently limit creative solutions?
+**5. Optimization Potential**
+- What specific improvements would enhance effectiveness?
+- Are there missing elements that would improve reliability?
+- How could the prompt be made more efficient or powerful?
+- Score: [1-10] with specific reasoning
 </meta-analysis-framework>
 
 <improvement-methodology>
-For each identified weakness, provide:
+For each identified weakness:
 
-**Diagnostic Analysis:**
-- What specific issue reduces prompt effectiveness?
-- Why does this problem occur in prompt construction?
-- What cognitive biases might have caused this oversight?
+**Problem Identification**
+- Specific issue with current prompt
+- Impact on AI performance and output quality
+- Examples of how this manifests in practice
 
-**Optimization Strategy:**
-- What specific changes would address this issue?
-- How would these changes improve AI response quality?
-- What trade-offs or new risks might these changes introduce?
+**Solution Design**
+- Concrete improvement recommendations
+- Alternative phrasings or structural changes
+- Additional elements to include
 
-**Implementation Guidance:**
-- Provide exact text modifications or additions
-- Explain the reasoning behind each suggested change
-- Offer alternative approaches for different use cases
+**Implementation**
+- Revised prompt section with improvements
+- Explanation of why this change will help
+- Expected impact on output quality
 </improvement-methodology>
 
-<output-format>
-# 🔬 Prompt Engineering Analysis Report
-
-## 📊 Overall Quality Score: [X/100]
-
-## 🎯 Strengths Analysis
-**What this prompt does well:**
-- [Strength 1]: [Specific example and impact]
-- [Strength 2]: [Specific example and impact]
-- [Strength 3]: [Specific example and impact]
-
-## ⚠️ Critical Improvement Areas
-
-### Issue 1: [SPECIFIC_PROBLEM]
-**Impact on Response Quality:** [How this reduces effectiveness]
-**Root Cause:** [Why this issue occurred]
-**Optimization Strategy:** [Specific improvement approach]
-**Revised Text:** 
-```
-[Exact text to replace or add]
-```
-
-### Issue 2: [SPECIFIC_PROBLEM]
-[Same format as above]
-
-## 🚀 Enhanced Prompt Version
+<enhanced-prompt-template>
+Based on analysis, generate an improved version using this structure:
 
 ```
-[Complete rewritten prompt incorporating all improvements]
+<role>[Optimized role definition]</role>
+
+<context>[Enhanced context and background]</context>
+
+<task>[Clarified and specific task description]</task>
+
+<methodology>[Step-by-step approach if needed]</methodology>
+
+<output-format>[Detailed format specifications]</output-format>
+
+<quality-criteria>[Success metrics and standards]</quality-criteria>
+
+<examples>[Concrete examples of desired output]</examples>
 ```
+</enhanced-prompt-template>
 
-## 📈 Predicted Improvements
-**Response Quality:** [How much better responses should be]
-**Consistency:** [Reliability improvements expected]
-**Efficiency:** [Reduction in iterations needed]
+<validation-process>
+Test the improved prompt by:
+1. Checking for remaining ambiguities
+2. Verifying all requirements are addressed
+3. Ensuring output format is clearly specified
+4. Confirming examples align with expectations
+5. Assessing overall clarity and effectiveness
+</validation-process>
 
-## 🎓 Learning Points
-- [Key lesson about prompt construction]
-- [Insight about AI behavior and optimization]
-- [Best practice reinforced by this analysis]
-</output-format>
-
-Prompt to analyze and improve:
-[PASTE_PROMPT_HERE]`,
+Original prompt to analyze and improve: [PROMPT_TEXT]`,
       criteria: [
-        'Provides systematic analysis across multiple prompt quality dimensions',
-        'Identifies specific weaknesses with root cause analysis',
-        'Offers concrete, actionable improvement suggestions',
-        'Delivers a completely rewritten, optimized version',
-        'Explains the reasoning behind each optimization decision'
+        'Provides comprehensive multi-dimensional analysis framework',
+        'Includes systematic improvement methodology',
+        'Offers structured template for enhanced prompts',
+        'Incorporates validation and testing processes',
+        'Addresses both content and structural optimization'
       ],
       hints: [
-        'Meta-prompting requires analyzing prompts like a scientist studies experiments',
-        'Look for implicit assumptions and biases that might limit response quality',
-        'Always provide specific text improvements, not just general suggestions',
-        'Consider how each element of a prompt affects AI cognition and behavior'
+        'Meta-prompting requires analyzing prompts as systems, not just text',
+        'Focus on measurable dimensions like clarity, completeness, and structure',
+        'Always provide specific, actionable improvement recommendations',
+        'Include validation steps to ensure improvements actually work'
       ],
       tips: [
-        'Meta-prompting dramatically accelerates prompt engineering learning',
-        'Systematic analysis prevents overlooking subtle but important issues',
-        'Root cause analysis helps avoid repeating the same prompt construction mistakes',
-        'Iterative prompt improvement often yields exponentially better results'
+        'Meta-prompting can exponentially improve your prompt engineering skills',
+        'Systematic analysis reveals blind spots in prompt design',
+        'Template-based improvements ensure consistency across optimizations',
+        'Regular prompt optimization compounds effectiveness over time'
       ],
       resources: [
         {
-          title: 'Cognitive Science of Prompt Engineering',
+          title: 'Advanced Prompt Engineering',
           type: 'article',
-          url: 'https://example.com/cognitive-prompting',
-          description: 'How understanding AI cognition improves prompt effectiveness'
+          url: 'https://example.com/advanced-prompting',
+          description: 'Deep dive into meta-prompting and recursive improvement'
+        },
+        {
+          title: 'Prompt Optimization Toolkit',
+          type: 'tool',
+          url: 'https://example.com/prompt-optimizer',
+          description: 'Interactive tool for analyzing and improving prompts'
         }
-      ]
+      ],
+      examples: {
+        good: `<analysis>Clarity: 7/10 - Task clear but context lacking</analysis>
+<improvement>Add specific background information and constraints</improvement>`,
+        bad: `This prompt could be better.`,
+        explanation: 'The good example provides specific analysis dimensions and actionable improvements, while the bad example offers no useful guidance.'
+      }
     }
   ]
 };
