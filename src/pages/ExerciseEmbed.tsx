@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import EmbeddableExercise from "@/components/PromptEngineering/EmbeddableExercise";
 import { exerciseDatabase } from "@/components/PromptEngineering/ExerciseData";
+import SEO from "@/components/SEO";
 
 const ExerciseEmbed = () => {
   const [searchParams] = useSearchParams();
@@ -22,38 +23,56 @@ const ExerciseEmbed = () => {
         type: 'exercise-complete',
         exerciseId: exercise?.id,
         level,
-        score
+        score,
+        timestamp: new Date().toISOString()
       }, '*');
     }
     
-    console.log(`Exercise completed with score: ${score}%`);
+    console.log(`Exercise ${exercise?.id} completed with score: ${score}%`);
   };
 
   if (!exercise) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 p-4 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Exercise Not Found</h2>
-          <p className="text-gray-600">The requested exercise could not be found.</p>
+      <>
+        <SEO 
+          title="Exercise Not Found"
+          description="The requested prompt engineering exercise could not be found."
+          noindex={true}
+        />
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 p-4 flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Exercise Not Found</h2>
+            <p className="text-gray-600">The requested exercise could not be found.</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Please check the exercise ID and level parameters.
+            </p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 ${
-      compact ? 'p-2' : 'p-4'
-    }`}>
-      <div className={`${compact ? 'max-w-4xl' : 'max-w-6xl'} mx-auto`}>
-        <EmbeddableExercise
-          exercise={exercise}
-          showHeader={showHeader}
-          showLegend={showLegend}
-          compact={compact}
-          onComplete={handleComplete}
-        />
+    <>
+      <SEO 
+        title={`${exercise.title} - Prompt Engineering Exercise`}
+        description={`Interactive prompt engineering exercise: ${exercise.title}. ${exercise.description}`}
+        noindex={true}
+      />
+      <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 ${
+        compact ? 'p-2' : 'p-4'
+      }`}>
+        <div className={`${compact ? 'max-w-4xl' : 'max-w-6xl'} mx-auto`}>
+          <EmbeddableExercise
+            exercise={exercise}
+            showHeader={showHeader}
+            showLegend={showLegend}
+            compact={compact}
+            onComplete={handleComplete}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
