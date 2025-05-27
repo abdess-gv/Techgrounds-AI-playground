@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -300,12 +299,11 @@ Show your work clearly at each step and explain your reasoning.`,
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
-                      size={compact ? "sm" : "default"}
                     />
                   </div>
                   
                   <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger size={compact ? "sm" : "default"}>
+                    <SelectTrigger>
                       <SelectValue placeholder={t('category')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -318,7 +316,7 @@ Show your work clearly at each step and explain your reasoning.`,
                   </Select>
 
                   <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-                    <SelectTrigger size={compact ? "sm" : "default"}>
+                    <SelectTrigger>
                       <SelectValue placeholder={t('difficulty')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -419,7 +417,7 @@ Show your work clearly at each step and explain your reasoning.`,
                     <div className="flex space-x-2">
                       <Button
                         variant="outline"
-                        size={compact ? "sm" : "sm"}
+                        size="sm"
                         onClick={() => copyPrompt(prompt.prompt)}
                       >
                         <Copy className="h-4 w-4 mr-2" />
