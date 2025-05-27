@@ -5,11 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import EmbeddableExercise from "@/components/PromptEngineering/EmbeddableExercise";
+import EnhancedEmbeddableExercise from "@/components/PromptEngineering/EnhancedEmbeddableExercise";
 import { exerciseDatabase } from "@/components/PromptEngineering/ExerciseData";
 import SEO from "@/components/SEO";
-import { ArrowLeft, Target, BookOpen, Globe } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Target } from "lucide-react";
 
 const ExerciseEmbedNL = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,15 +45,6 @@ const ExerciseEmbedNL = () => {
       'exercise.notfound.desc': 'De gevraagde prompt engineering oefening kon niet worden gevonden.',
       'no.exercises': 'Geen Oefeningen Beschikbaar',
       'no.exercises.desc': 'Geen oefeningen gevonden voor het geselecteerde niveau.',
-      'back.to.english': 'Terug naar Engelse Versie',
-      'dutch.version': 'Nederlandse Versie',
-      'embed.code': 'Insluitcode',
-      'copy.embed': 'Kopieer Insluitcode',
-      'embed.copied': 'Insluitcode gekopieerd!',
-      'generate.embed': 'Genereer Insluitcode',
-      'embed.preview': 'Voorbeeld Insluiting',
-      'embed.title': 'Insluiting Configuratie',
-      'embed.description': 'Pas de instellingen aan en kopieer de code om deze oefening in je eigen website in te sluiten.'
     };
     
     return translations[key] || key;
@@ -108,36 +98,6 @@ const ExerciseEmbedNL = () => {
     console.log(`Oefening ${currentExercise?.id} voltooid met score: ${score}%`);
   };
 
-  const generateEmbedCode = () => {
-    const baseUrl = window.location.origin;
-    const params = new URLSearchParams({
-      level: selectedLevel,
-      exercise: selectedExerciseId,
-      lang: 'nl',
-      ...(compact && { compact: 'true' }),
-      ...(!showHeader && { header: 'false' }),
-      ...(!showLegend && { legend: 'false' }),
-      ...(!showSelector && { selector: 'false' })
-    });
-
-    return `<iframe src="${baseUrl}/exercise-embed-nl?${params.toString()}" width="100%" height="800" frameborder="0"></iframe>`;
-  };
-
-  const copyEmbedCode = () => {
-    const embedCode = generateEmbedCode();
-    navigator.clipboard.writeText(embedCode);
-    
-    // Simple notification (you could use a toast here)
-    const button = document.getElementById('copy-embed-btn');
-    if (button) {
-      const originalText = button.textContent;
-      button.textContent = t('embed.copied');
-      setTimeout(() => {
-        button.textContent = originalText;
-      }, 2000);
-    }
-  };
-
   const difficultyColors = {
     beginner: 'bg-green-100 text-green-800',
     intermediate: 'bg-yellow-100 text-yellow-800',
@@ -174,22 +134,6 @@ const ExerciseEmbedNL = () => {
       }`}>
         <div className={`${compact ? 'max-w-4xl' : 'max-w-6xl'} mx-auto space-y-4`}>
           
-          {/* Header with Navigation */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <Link to="/exercise-embed">
-                <Button variant="outline" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  {t('back.to.english')}
-                </Button>
-              </Link>
-              <Badge variant="outline" className="bg-orange-100 text-orange-800">
-                <Globe className="h-3 w-3 mr-1" />
-                {t('dutch.version')}
-              </Badge>
-            </div>
-          </div>
-
           {/* Exercise Selector */}
           {showSelector && (
             <Card className="border-2 border-purple-200">
@@ -277,41 +221,8 @@ const ExerciseEmbedNL = () => {
             </Card>
           )}
 
-          {/* Embed Code Generator */}
-          {!compact && (
-            <Card className="border-2 border-green-200">
-              <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
-                <CardTitle className="flex items-center space-x-2">
-                  <BookOpen className="h-6 w-6 text-green-600" />
-                  <span className="text-green-900">{t('embed.title')}</span>
-                </CardTitle>
-                <p className="text-green-700 text-sm mt-2">
-                  {t('embed.description')}
-                </p>
-              </CardHeader>
-              <CardContent className="pt-6">
-                <div className="bg-gray-50 p-4 rounded-lg border">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700">{t('embed.code')}</span>
-                    <Button 
-                      id="copy-embed-btn"
-                      variant="outline" 
-                      size="sm"
-                      onClick={copyEmbedCode}
-                    >
-                      {t('copy.embed')}
-                    </Button>
-                  </div>
-                  <code className="text-xs bg-white p-2 rounded border block overflow-x-auto">
-                    {generateEmbedCode()}
-                  </code>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Exercise Component */}
-          <EmbeddableExercise
+          {/* Enhanced Exercise Component */}
+          <EnhancedEmbeddableExercise
             exercise={currentExercise}
             showHeader={showHeader}
             showLegend={showLegend}

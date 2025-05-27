@@ -52,6 +52,7 @@ const App = () => (
                 <Route path="/prompt-engineering/exercise-embed" element={<ExerciseEmbed />} />
                 <Route path="/prompt-engineering/database-embed" element={<PromptDatabaseEmbed />} />
                 <Route path="/exercise-embed" element={<ExerciseEmbed />} />
+                <Route path="/exercise-embed-nl" element={<ExerciseEmbedNL />} />
                 <Route path="/database-embed" element={<PromptDatabaseEmbed />} />
                 <Route 
                   path="/dashboard" 
