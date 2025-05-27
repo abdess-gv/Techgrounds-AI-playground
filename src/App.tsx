@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import PromptEngineering from "./pages/PromptEngineering";
 import PromptEngineeringNL from "./pages/PromptEngineeringNL";
 import ExerciseEmbed from "./pages/ExerciseEmbed";
+import PromptDatabaseEmbed from "./pages/PromptDatabaseEmbed";
 
 const queryClient = new QueryClient();
 
@@ -48,7 +48,9 @@ const App = () => (
                 <Route path="/prompt-engineering" element={<PromptEngineering />} />
                 <Route path="/prompt-engineering/nl" element={<PromptEngineeringNL />} />
                 <Route path="/prompt-engineering/exercise-embed" element={<ExerciseEmbed />} />
+                <Route path="/prompt-engineering/database-embed" element={<PromptDatabaseEmbed />} />
                 <Route path="/exercise-embed" element={<ExerciseEmbed />} />
+                <Route path="/database-embed" element={<PromptDatabaseEmbed />} />
                 <Route 
                   path="/dashboard" 
                   element={
