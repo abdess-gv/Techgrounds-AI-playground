@@ -4,7 +4,7 @@ import { beginnerExercises } from './data/beginnerExercises';
 import { intermediateExercises } from './data/intermediateExercises';
 import { advancedExercises } from './data/advancedExercises';
 
-export { Exercise } from './types/Exercise';
+export type { Exercise } from './types/Exercise';
 
 export const exerciseDatabase: { [key: string]: Exercise[] } = {
   beginner: beginnerExercises,
