@@ -7,9 +7,10 @@ interface SEOProps {
   description?: string;
   canonical?: string;
   noindex?: boolean;
+  keywords?: string;
 }
 
-const SEO = ({ title, description, canonical, noindex = false }: SEOProps) => {
+const SEO = ({ title, description, canonical, noindex = false, keywords }: SEOProps) => {
   const { language } = useLanguage();
   
   const siteTitle = 'NoteAI - AI-Powered Note Taking & Transcription';
@@ -23,6 +24,7 @@ const SEO = ({ title, description, canonical, noindex = false }: SEOProps) => {
       <title>{pageTitle}</title>
       <meta name="description" content={pageDescription} />
       <meta name="language" content={language} />
+      {keywords && <meta name="keywords" content={keywords} />}
       
       {/* Open Graph */}
       <meta property="og:title" content={pageTitle} />

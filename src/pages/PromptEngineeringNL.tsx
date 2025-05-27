@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,11 @@ import { Link } from 'react-router-dom';
 
 const PromptEngineeringNL = () => {
   const [activeTab, setActiveTab] = useState('modules');
+  const [selectedLevel, setSelectedLevel] = useState<"beginner" | "intermediate" | "advanced">('beginner');
+
+  const handleLevelChange = (level: "beginner" | "intermediate" | "advanced") => {
+    setSelectedLevel(level);
+  };
 
   return (
     <>
@@ -123,7 +127,10 @@ const PromptEngineeringNL = () => {
                   Elke module bouwt voort op de vorige en bevat praktische oefeningen.
                 </p>
               </div>
-              <LearningPath />
+              <LearningPath 
+                selectedLevel={selectedLevel}
+                onLevelChange={handleLevelChange}
+              />
             </TabsContent>
 
             <TabsContent value="exercises" className="space-y-6">
@@ -136,7 +143,7 @@ const PromptEngineeringNL = () => {
                   Krijg directe feedback en verbeter je technieken stap voor stap.
                 </p>
               </div>
-              <ComprehensiveExercisePlayer />
+              <ComprehensiveExercisePlayer level={selectedLevel} />
             </TabsContent>
 
             <TabsContent value="database" className="space-y-6">
