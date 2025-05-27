@@ -1305,6 +1305,263 @@ Zorg voor transparantie, empathie en proactieve communicatie.`,
         }
       ],
       solution: "Een gestructureerd crisis communicatieplan met snelle response procedures, heldere boodschappen en stakeholder-specifieke benaderingen."
+    },
+    {
+      id: 'advanced-social-media',
+      title: 'Gevanceerde Social Media Strategie',
+      description: 'Ontwikkel een uitgebreide social media strategie voor verschillende platforms',
+      difficulty: 'intermediate',
+      category: 'Marketing',
+      type: 'creative',
+      estimatedTime: '35 min',
+      prompt: 'Creëer een complete social media strategie voor een Nederlandse tech startup die internationale groei nastreeft.',
+      solution: `<rol>Je bent een senior social media strategist</rol> met ervaring in internationale marktexpansie voor tech bedrijven.
+
+<context>Nederlandse tech startup wil internationale aanwezigheid opbouwen via social media</context>
+
+<strategie-framework>
+
+**Platform Selectie & Positionering:**
+LinkedIn: B2B networking en thought leadership
+Twitter: Real-time updates en industry conversations  
+Instagram: Behind-the-scenes en company culture
+YouTube: Product demos en educational content
+TikTok: Viral marketing en Gen Z engagement
+
+**Content Pijlers (70-20-10 regel):**
+70% Educational: Tech trends, tutorials, insights
+20% Inspirational: Success stories, team highlights
+10% Promotional: Product updates, company news
+
+**Internationale Aanpak:**
+- Engels als primaire taal voor global reach
+- Nederlandse content voor lokale community
+- Platform-specifieke content aanpassing
+- Tijdzone-optimalisatie voor posting
+
+**Engagement Strategie:**
+- Community building via LinkedIn Groups
+- Twitter chats en hashtag campaigns
+- Instagram Stories voor real-time engagement
+- YouTube comment interaction
+- Cross-platform content syndication
+
+</strategie-framework>
+
+Implementeer deze strategie voor: [BEDRIJF_BESCHRIJVING]`,
+      criteria: [
+        'Bevat platform-specifieke strategieën',
+        'Adresseert internationale groei doelstellingen',
+        'Integreert Nederlandse en internationale elementen',
+        'Gebruikt data-gedreven content verdeling',
+        'Includeert concrete implementatie stappen'
+      ],
+      hints: [
+        'Elke platform heeft zijn eigen audience en content stijl',
+        'Nederlandse bedrijven moeten balanceren tussen lokaal en globaal',
+        'Content planning moet verschillende tijdzones overwegen',
+        'Community building is belangrijker dan follower aantallen'
+      ],
+      tips: [
+        'Platform-native content presteert beter dan cross-posts',
+        'Internationale groei vereist culturele sensitiviteit',
+        'Consistentie in posting is cruciaal voor algoritme performance',
+        'Employee advocacy kan organische reach significant verhogen'
+      ],
+      resources: [
+        {
+          title: 'International Social Media Guide',
+          type: 'article',
+          url: 'https://example.com/international-social',
+          description: 'Best practices voor internationale social media expansie'
+        },
+        {
+          title: 'Tech Company Social Strategy',
+          type: 'example',
+          url: 'https://example.com/tech-social-examples',
+          description: 'Voorbeelden van succesvolle tech startup social strategies'
+        }
+      ]
+    },
+    {
+      id: 'customer-journey-optimization',
+      title: 'Customer Journey Optimalisatie',
+      description: 'Ontwerp een data-gedreven customer journey optimalisatie strategie',
+      difficulty: 'intermediate',
+      category: 'Customer Experience',
+      type: 'analysis',
+      estimatedTime: '40 min',
+      prompt: 'Ontwikkel een systematische aanpak voor het optimaliseren van de customer journey met behulp van data analytics.',
+      solution: `<rol>Je bent een customer experience analist</rol> gespecialiseerd in journey mapping en conversion optimalisatie.
+
+<journey-optimalisatie-framework>
+
+**Stap 1: Journey Mapping & Data Verzameling**
+- Touchpoint identificatie (online en offline)
+- Customer feedback verzameling (surveys, interviews)
+- Behavioral analytics (heatmaps, session recordings)
+- Conversion funnel analyse
+- Pain point detectie
+
+**Stap 2: Segmentatie & Persona Ontwikkeling**
+- Demographic segmentatie
+- Behavioral patterns analyse
+- Needs-based clustering
+- Journey variaties per segment
+- Personalization opportunities
+
+**Stap 3: Moment of Truth Identificatie**
+- Critical decision points
+- Emotion mapping
+- Friction analysis
+- Abandonment causes
+- Success factors
+
+**Stap 4: Optimalisatie Strategieën**
+- A/B testing framework
+- Personalization implementation
+- Content optimization
+- UX/UI improvements
+- Process streamlining
+
+**Stap 5: Measurement & Iteration**
+- KPI definitie (NPS, CSAT, conversion rates)
+- Attribution modeling
+- Cohort analysis
+- ROI tracking
+- Continuous improvement cycles
+
+</journey-optimalisatie-framework>
+
+Analyseer journey voor: [BUSINESS_TYPE]
+Focus gebieden: [IMPROVEMENT_AREAS]`,
+      criteria: [
+        'Integreert kwantitatieve en kwalitatieve data',
+        'Bevat concrete optimalisatie tactieken',
+        'Includeert meetbare KPIs en success metrics',
+        'Adresseert verschillende customer segments',
+        'Gebruikt systematische testing methodologie'
+      ],
+      hints: [
+        'Customer journey optimalisatie is een iteratief proces',
+        'Emotionele aspecten zijn net zo belangrijk als functionele',
+        'Cross-channel consistency is cruciaal voor customer experience',
+        'Kleine verbeteringen kunnen grote impact hebben op conversie'
+      ],
+      tips: [
+        'Gebruik mixed-methods research voor complete insights',
+        'Prioriteer optimalisaties op basis van impact en effort',
+        'Test wijzigingen systematisch om causaliteit te bewijzen',
+        'Betrek verschillende stakeholders in journey mapping'
+      ],
+      resources: [
+        {
+          title: 'Customer Journey Analytics',
+          type: 'tool',
+          url: 'https://example.com/journey-analytics',
+          description: 'Tools voor customer journey data analyse'
+        },
+        {
+          title: 'CX Optimization Playbook',
+          type: 'article',
+          url: 'https://example.com/cx-optimization',
+          description: 'Praktische gids voor customer experience verbetering'
+        }
+      ]
+    },
+    {
+      id: 'content-personalization',
+      title: 'AI-Gedreven Content Personalisatie',
+      description: 'Implementeer geavanceerde content personalisatie strategieën',
+      difficulty: 'intermediate',
+      category: 'Content Strategy',
+      type: 'hands-on',
+      estimatedTime: '45 min',
+      prompt: 'Ontwerp een AI-gedreven content personalisatie systeem dat schaalt voor duizenden gebruikers.',
+      solution: `<rol>Je bent een content personalisatie specialist</rol> met expertise in machine learning en marketing automation.
+
+<personalisatie-systeem-architectuur>
+
+**Data Foundation:**
+- User behavior tracking (page views, time spent, interactions)
+- Preference indicators (explicit en implicit)
+- Demographic en firmographic data  
+- Content engagement metrics
+- Purchase history en conversion data
+
+**Segmentatie & Clustering:**
+- RFM analysis (Recency, Frequency, Monetary)
+- Behavioral clustering algoritmes
+- Lookalike audience development
+- Propensity modeling
+- Lifecycle stage classification
+
+**Content Categorisatie:**
+- Topic taxonomy development
+- Content difficulty scoring
+- Format preference mapping
+- Channel suitability assessment
+- Performance benchmarking
+
+**Personalisatie Engine:**
+- Collaborative filtering
+- Content-based recommendations
+- Hybrid recommendation systems
+- Real-time personalization
+- A/B testing infrastructure
+
+**Implementation Roadmap:**
+Fase 1: Basic rule-based personalization
+Fase 2: Machine learning model deployment  
+Fase 3: Real-time personalization
+Fase 4: Predictive content creation
+Fase 5: Omnichannel personalization
+
+**Performance Monitoring:**
+- Engagement rate improvements
+- Conversion lift measurement
+- Customer lifetime value impact
+- Content performance analytics
+- Model accuracy tracking
+
+</personalisatie-systeem-architectuur>
+
+Implementeer voor: [PLATFORM_TYPE]
+Doelgroep: [TARGET_AUDIENCE]
+Content volume: [SCALE_REQUIREMENTS]`,
+      criteria: [
+        'Bevat technische implementatie details',
+        'Adresseert schaalbaarheid uitdagingen',
+        'Includeert concrete machine learning benaderingen',
+        'Definieert meetbare success metrics',
+        'Biedt gefaseerde implementatie strategie'
+      ],
+      hints: [
+        'Start simpel met rule-based personalisatie voordat je ML implementeert',
+        'Data kwaliteit is belangrijker dan complexe algoritmes',
+        'Real-time personalisatie vereist robuuste technische infrastructuur',
+        'Privacy en consent management zijn essentieel voor personalisatie'
+      ],
+      tips: [
+        'Hybrid recommendation systems presteren vaak beter dan pure approaches',
+        'Cold start probleem oplossen is cruciaal voor nieuwe gebruikers',
+        'Content diversiteit voorkomt filter bubbles',
+        'Continuous learning systemen adapteren aan veranderende voorkeuren'
+      ],
+      resources: [
+        {
+          title: 'ML Personalization Guide',
+          type: 'article',
+          url: 'https://example.com/ml-personalization',
+          description: 'Technische gids voor machine learning personalisatie'
+        },
+        {
+          title: 'Recommendation Systems Toolkit',
+          type: 'tool',
+          url: 'https://example.com/recommendation-tools',
+          description: 'Open source tools voor recommendation engine development'
+        }
+      ]
     }
   ],
   advanced: [
@@ -1737,6 +1994,374 @@ Zorg voor balans tussen financial performance en sustainability impact.`,
         }
       ],
       solution: "Een geïntegreerd ESG framework dat data, analytics, investment processen en reporting combineert met sterke governance en stakeholder engagement."
+    },
+    {
+      id: 'enterprise-ai-governance',
+      title: 'Enterprise AI Governance Framework',
+      description: 'Ontwikkel een uitgebreid AI governance framework voor grote organisaties',
+      difficulty: 'advanced',
+      category: 'AI Strategy',
+      type: 'hands-on',
+      estimatedTime: '60 min',
+      prompt: 'Creëer een volledig AI governance framework dat ethics, compliance, en business value integreert voor enterprise deployment.',
+      solution: `<rol>Je bent een Chief AI Officer</rol> verantwoordelijk voor enterprise-wide AI governance en responsible AI implementation.
+
+<ai-governance-framework>
+
+**Governance Structuur:**
+- AI Steering Committee (C-level leadership)
+- AI Ethics Board (diverse stakeholder representation)
+- AI Center of Excellence (technical expertise)
+- Business Unit AI Champions (domain knowledge)
+- Legal & Compliance Integration (regulatory oversight)
+
+**Policy Framework:**
+1. **AI Ethics Charter**
+   - Fairness en bias mitigation
+   - Transparency en explainability requirements
+   - Privacy en data protection
+   - Human oversight en control
+   - Social impact assessment
+
+2. **Risk Management Protocol**
+   - AI risk assessment matrix
+   - Model validation procedures
+   - Ongoing monitoring requirements
+   - Incident response procedures
+   - Audit en compliance tracking
+
+3. **Data Governance Integration**
+   - Data quality standards
+   - Consent en privacy management
+   - Cross-border data transfer protocols
+   - Data lineage tracking
+   - Retention en deletion policies
+
+**Implementation Roadmap:**
+
+**Fase 1: Foundation (0-6 maanden)**
+- Governance structure establishment
+- Policy development en approval
+- Initial team training
+- Pilot project selection
+- Basic monitoring setup
+
+**Fase 2: Scaling (6-18 maanden)**
+- Framework rollout across business units
+- Advanced monitoring implementation
+- Risk assessment automation
+- Stakeholder training programs
+- External partnership development
+
+**Fase 3: Optimization (18+ maanden)**
+- Predictive governance capabilities
+- Industry leadership positioning
+- Innovation acceleration
+- Ecosystem collaboration
+- Continuous improvement culture
+
+**Technology Infrastructure:**
+- Model lifecycle management platforms
+- Automated bias detection tools
+- Explainability dashboards
+- Compliance reporting systems
+- Risk monitoring alerts
+
+**Measurement & KPIs:**
+- Ethical AI compliance score
+- Model performance metrics
+- Risk mitigation effectiveness
+- Business value generation
+- Stakeholder satisfaction indices
+
+</ai-governance-framework>
+
+Implementeer voor organisatie: [COMPANY_PROFILE]
+Regulatory environment: [JURISDICTION]
+AI maturity level: [CURRENT_STATE]`,
+      criteria: [
+        'Integreert technische, ethische en business aspecten',
+        'Bevat concrete implementation roadmap',
+        'Adresseert regulatory compliance requirements',
+        'Includeert measurable governance metrics',
+        'Biedt scalable framework architectuur'
+      ],
+      hints: [
+        'AI governance moet business enablement en risk management balanceren',
+        'Cross-functionele collaboration is essentieel voor success',
+        'Regulatory landscape evolueert snel - build in flexibility',
+        'Culture change is vaak de grootste uitdaging'
+      ],
+      tips: [
+        'Start met pilot projects om governance framework te testen',
+        'Invest heavily in stakeholder education en buy-in',
+        'Automated governance tools verhogen compliance en efficiency',
+        'Industry partnerships accelereren best practice adoption'
+      ],
+      resources: [
+        {
+          title: 'AI Governance Best Practices',
+          type: 'article',
+          url: 'https://example.com/ai-governance',
+          description: 'Enterprise AI governance implementation guide'
+        },
+        {
+          title: 'Responsible AI Toolkit',
+          type: 'tool',
+          url: 'https://example.com/responsible-ai-tools',
+          description: 'Tools voor responsible AI implementation'
+        }
+      ]
+    },
+    {
+      id: 'quantum-computing-strategy',
+      title: 'Quantum Computing Business Strategie',
+      description: 'Ontwikkel een strategische roadmap voor quantum computing adoptie',
+      difficulty: 'advanced',
+      category: 'Emerging Technology',
+      type: 'analysis',
+      estimatedTime: '55 min',
+      prompt: 'Ontwerp een uitgebreide quantum computing adoptie strategie voor een enterprise organisatie.',
+      solution: `<rol>Je bent een quantum computing strategist</rol> en emerging technology consultant met deep expertise in quantum business applications.
+
+<quantum-adoptie-strategie>
+
+**Quantum Readiness Assessment:**
+1. **Technical Infrastructure Evaluation**
+   - Current computational bottlenecks
+   - Problem complexity analysis (optimization, simulation)
+   - Integration capabilities met classical systems
+   - Security infrastructure assessment
+   - Data requirements en quality evaluation
+
+2. **Use Case Prioritization Matrix**
+   **High-Impact Quantum Applications:**
+   - Supply chain optimization (logistics, routing)
+   - Financial portfolio optimization
+   - Drug discovery en molecular simulation  
+   - Cryptography en security (post-quantum crypto)
+   - Machine learning acceleration
+   - Risk modeling en scenario analysis
+
+3. **Quantum Technology Roadmap**
+   
+   **NISQ Era (2024-2030):**
+   - Hybrid quantum-classical algorithms
+   - Variational quantum eigensolvers
+   - Quantum approximate optimization
+   - Proof-of-concept development
+   - Partnership ecosystem building
+
+   **Fault-Tolerant Era (2030+):**
+   - Large-scale quantum applications
+   - Quantum advantage demonstration
+   - Industry ecosystem leadership
+   - Quantum-native business models
+
+**Strategic Implementation Plan:**
+
+**Fase 1: Foundation Building (Year 1-2)**
+- Quantum literacy development programs
+- Academic en vendor partnerships
+- Hybrid infrastructure development
+- Initial use case exploration
+- Talent acquisition strategy
+
+**Fase 2: Competitive Advantage (Year 2-5)**
+- Quantum algorithm development
+- Industry consortium participation
+- Intellectual property building
+- Customer value demonstration
+- Quantum software stack creation
+
+**Fase 3: Market Leadership (Year 5+)**
+- Quantum ecosystem orchestration
+- New revenue stream development
+- Industry standard contribution
+- Thought leadership positioning
+- Quantum computing services offering
+
+**Risk Management Framework:**
+- Technology dependency risks
+- Talent scarcity mitigation
+- Intellectual property protection
+- Quantum security threat preparation
+- Investment timeline uncertainty
+
+**Investment Strategy:**
+- R&D budget allocation (20% voor quantum initiatives)
+- Partnership en acquisition opportunities
+- Quantum startup investment portfolio
+- Academic research collaboration funding
+- Infrastructure development planning
+
+</quantum-adoptie-strategie>
+
+Ontwikkel strategie voor: [INDUSTRY_SECTOR]
+Organisatie grootte: [COMPANY_SIZE]
+Current tech capabilities: [TECH_MATURITY]`,
+      criteria: [
+        'Bevat realistic timeline expectations voor quantum development',
+        'Integreert business value met technical feasibility',
+        'Adresseert beide NISQ en fault-tolerant eras',
+        'Includeert concrete investment en partnership strategies',
+        'Biedt comprehensive risk assessment'
+      ],
+      hints: [
+        'Quantum computing is nog in early stages - focus op learning en experimentation',
+        'Hybrid quantum-classical approaches zijn de key voor near-term value',
+        'Talent development is critical - quantum expertise is scarce',
+        'Partnership strategy is essential - few organizations can go alone'
+      ],
+      tips: [
+        'Start met optimization problems - they show clearest quantum advantage',
+        'Build quantum literacy across organization, not just technical teams',
+        'Monitor quantum computing developments closely - field evolves rapidly',
+        'Prepare for post-quantum cryptography transition - it takes years'
+      ],
+      resources: [
+        {
+          title: 'Quantum Business Applications',
+          type: 'article',
+          url: 'https://example.com/quantum-business',
+          description: 'Business use cases voor quantum computing'
+        },
+        {
+          title: 'Quantum Computing Roadmap',
+          type: 'tool',
+          url: 'https://example.com/quantum-roadmap',
+          description: 'Interactive quantum technology timeline'
+        }
+      ]
+    },
+    {
+      id: 'sustainable-digital-transformation',
+      title: 'Duurzame Digitale Transformatie',
+      description: 'Integreer sustainability in enterprise digital transformation strategieën',
+      difficulty: 'advanced',
+      category: 'Sustainability',
+      type: 'creative',
+      estimatedTime: '50 min',
+      prompt: 'Ontwikkel een digital transformation strategie die sustainability en business growth combineert.',
+      solution: `<rol>Je bent een sustainable digital transformation consultant</rol> gespecialiseerd in ESG-aligned technology strategies.
+
+<sustainable-transformation-framework>
+
+**ESG-Technology Integration:**
+
+**Environmental Impact Optimization:**
+1. **Green IT Infrastructure**
+   - Cloud migration naar renewable energy providers
+   - Edge computing voor reduced data transmission
+   - AI-optimized resource allocation
+   - Circular economy principles in hardware lifecycle
+   - Carbon footprint tracking en reporting automation
+
+2. **Operational Efficiency Programs**
+   - IoT-enabled smart building management
+   - Predictive maintenance reducing waste
+   - Supply chain optimization algorithms
+   - Remote work technology reducing commuting
+   - Digital document workflows eliminating paper
+
+**Social Impact Enhancement:**
+1. **Digital Inclusion Initiatives**
+   - Accessibility-first design principles
+   - Digital skills training programs
+   - Inclusive AI algorithm development
+   - Community technology access programs
+   - Diverse supplier technology partnerships
+
+2. **Employee Wellbeing Technology**
+   - Mental health monitoring dashboards
+   - Work-life balance optimization tools
+   - Career development AI recommendations
+   - Collaborative technology reducing isolation
+   - Health en safety IoT implementations
+
+**Governance & Ethics Integration:**
+1. **Transparent Decision Making**
+   - Explainable AI implementations
+   - Automated compliance monitoring
+   - Stakeholder engagement platforms
+   - Real-time ESG reporting dashboards
+   - Ethical AI governance frameworks
+
+**Implementation Roadmap:**
+
+**Jaar 1: Foundation & Assessment**
+- Current state ESG technology audit
+- Stakeholder alignment workshops
+- Sustainable technology partner selection
+- Pilot project implementation
+- Baseline sustainability metrics establishment
+
+**Jaar 2-3: Scaling & Integration**
+- Enterprise-wide sustainable tech rollout
+- Advanced analytics voor sustainability insights
+- Circular economy business model development
+- Industry collaboration initiatives
+- Customer sustainability engagement programs
+
+**Jaar 4-5: Leadership & Innovation**
+- Sustainability technology innovation labs
+- Industry standard development contribution
+- Thought leadership positioning
+- Sustainable technology investment fund
+- Next-generation sustainability solutions
+
+**Measurement Framework:**
+- Scope 1, 2, 3 carbon emission tracking
+- Digital inclusion impact metrics
+- Employee wellbeing technology adoption
+- Sustainable revenue stream development
+- Innovation sustainability index
+
+**Business Case Development:**
+- Cost savings from efficiency improvements
+- Revenue opportunities from sustainable products
+- Risk mitigation from climate adaptation
+- Brand value enhancement from ESG leadership
+- Investment attraction from sustainability focus
+
+</sustainable-transformation-framework>
+
+Ontwikkel voor organisatie: [COMPANY_PROFILE]
+Industry context: [SECTOR_SUSTAINABILITY_CHALLENGES]
+Transformation budget: [INVESTMENT_CAPACITY]`,
+      criteria: [
+        'Integreert alle ESG dimensies met technology strategy',
+        'Bevat measurable sustainability outcomes',
+        'Biedt concrete business value propositions',
+        'Adresseert industry-specific sustainability challenges',
+        'Includeert stakeholder engagement strategies'
+      ],
+      hints: [
+        'Sustainability en profitability kunnen hand-in-hand gaan',
+        'Technology is een enabler voor sustainability, niet het doel',
+        'Stakeholder buy-in is crucial voor sustainable transformation success',
+        'Measurement en transparency drive continuous improvement'
+      ],
+      tips: [
+        'Start met quick wins die immediate business value tonen',
+        'Integrate sustainability metrics in all technology decisions',
+        'Build sustainability into company culture, not just processes',
+        'Use technology to make sustainability data visible en actionable'
+      ],
+      resources: [
+        {
+          title: 'Sustainable Technology Guide',
+          type: 'article',
+          url: 'https://example.com/sustainable-tech',
+          description: 'Best practices voor sustainable technology implementation'
+        },
+        {
+          title: 'ESG Technology Framework',
+          type: 'tool',
+          url: 'https://example.com/esg-tech-framework',
+          description: 'Framework voor ESG-aligned technology strategy'
+        }
+      ]
     }
   ]
 };
