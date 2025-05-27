@@ -98,7 +98,7 @@ Research article: [INSERT_ARTICLE_TEXT]
         }
       ],
       examples: {
-        good: `<role>Act as a research analyst</role>\n<task>Summarize in exactly 3 sentences</task>\n<structure>1. Main finding 2. Evidence 3. Implications</structure>`,
+        good: `<role>Act as a research analyst</role>\\n<task>Summarize in exactly 3 sentences</task>\\n<structure>1. Main finding 2. Evidence 3. Implications</structure>`,
         bad: `Please summarize this article for me in a few sentences.`,
         explanation: 'The good example provides structure, specific requirements, and context, while the bad example is vague and gives no guidance.'
       }
@@ -1035,76 +1035,118 @@ Funding needs: [CAPITAL_REQUIREMENTS]`,
     {
       id: 'chain-of-thought',
       title: 'Chain-of-Thought Reasoning',
-      description: 'Master systematic thinking processes for complex analytical tasks',
+      description: 'Guide AI through complex reasoning processes step-by-step for better accuracy',
       difficulty: 'intermediate',
-      category: 'Advanced Techniques',
+      category: 'Reasoning',
       type: 'analysis',
-      estimatedTime: '25 min',
-      prompt: 'Design a prompt that guides AI through complex problem-solving using structured reasoning chains.',
-      solution: `<role>You are a strategic problem-solving consultant</role> who specializes in breaking down complex challenges into manageable, logical steps.
+      estimatedTime: '30 min',
+      prompt: 'Create a chain-of-thought prompt for solving complex business strategy problems.',
+      solution: `<role>You are a senior strategy consultant</role> from McKinsey & Company with 15 years of experience helping Fortune 500 companies navigate complex strategic decisions.
 
-<reasoning-framework>
-For this problem: [PROBLEM_STATEMENT]
+<methodology>Chain-of-Thought Strategic Analysis</methodology>
 
-Use this systematic reasoning approach:
+<thinking-process>
+Before providing recommendations, walk through your reasoning step-by-step:
 
-**Step 1: Problem Decomposition**
-- What exactly is being asked?
-- What are the key components or sub-problems?
-- What information do I have, and what's missing?
-- What assumptions might I need to make?
+**Step 1: Problem Definition**
+- What is the core strategic challenge?
+- What are the underlying assumptions?
+- What constraints must we consider?
 
-**Step 2: Analysis Framework**
-- What analytical approach is most appropriate? (cause-effect, cost-benefit, risk-reward, etc.)
-- What factors should I consider and prioritize?
-- How do these factors interact with each other?
-- What are the potential consequences of different approaches?
+**Step 2: Stakeholder Analysis**
+- Who are the key stakeholders affected?
+- What are their motivations and concerns?
+- How do their interests align or conflict?
 
-**Step 3: Solution Development**
-- Generate 3-5 potential solutions
-- For each solution, consider: feasibility, resources needed, timeline, risks
-- What are the pros and cons of each approach?
-- How would I test or validate each solution?
+**Step 3: Option Generation**
+- What are 3-5 potential strategic approaches?
+- What are the pros and cons of each?
+- What resources would each option require?
 
-**Step 4: Decision Logic**
-- What criteria should guide the final decision?
-- How do the solutions perform against these criteria?
-- What are the implementation steps for the chosen solution?
-- What could go wrong, and how would I mitigate those risks?
+**Step 4: Risk Assessment**
+- What could go wrong with each option?
+- What are the potential unintended consequences?
+- How can risks be mitigated?
 
-**Step 5: Validation & Refinement**
-- Does this solution address the original problem completely?
-- Have I considered all stakeholders and their perspectives?
-- What would need to happen for this solution to succeed?
-- How would I measure success and adjust if needed?
-</reasoning-framework>
+**Step 5: Decision Framework**
+- What criteria should be used to evaluate options?
+- How should options be weighted against business objectives?
+- What timeline and success metrics apply?
+</thinking-process>
 
-Show your reasoning process step-by-step, making your thinking transparent at each stage.`,
+<output-format>
+# Strategic Analysis: [PROBLEM_TITLE]
+
+## 🔍 My Thinking Process
+
+**Problem Understanding:**
+[Walk through your analysis of the core challenge]
+
+**Stakeholder Mapping:**
+[Explain who's involved and their motivations]
+
+**Strategic Options:**
+[Detail 3-5 approaches with reasoning]
+
+**Risk Analysis:**
+[Identify and assess potential pitfalls]
+
+**Decision Logic:**
+[Explain how you're weighing trade-offs]
+
+## 📋 Recommendations
+
+### Primary Recommendation: [OPTION]
+**Why this approach:**
+- [Reasoning point 1]
+- [Reasoning point 2]
+- [Reasoning point 3]
+
+**Implementation Steps:**
+1. [Immediate actions]
+2. [Short-term initiatives]
+3. [Long-term strategic moves]
+
+**Success Metrics:**
+- [Quantifiable measure 1]
+- [Quantifiable measure 2]
+- [Quantifiable measure 3]
+
+**Risk Mitigation:**
+- [Key risk]: [Mitigation strategy]
+- [Key risk]: [Mitigation strategy]
+
+### Alternative Options:
+**Option B:** [Brief description and when to consider]
+**Option C:** [Brief description and when to consider]
+</output-format>
+
+Business challenge: [DESCRIBE_STRATEGIC_PROBLEM]`,
       criteria: [
-        'Provides systematic step-by-step reasoning framework',
-        'Requires explicit thinking at each stage',
-        'Includes validation and verification steps',
-        'Addresses complex multi-faceted problems',
-        'Demonstrates transparent logical progression'
+        'Demonstrates explicit step-by-step reasoning process',
+        'Shows consideration of multiple stakeholders and perspectives',
+        'Evaluates multiple strategic options with trade-offs',
+        'Includes risk assessment and mitigation strategies',
+        'Provides clear implementation roadmap with metrics'
       ],
       hints: [
-        'Break complex problems into smaller, manageable components',
-        'Make your reasoning process explicit and transparent',
-        'Consider multiple solutions before settling on one',
-        'Always validate your conclusion against the original problem'
+        'Make AI show its work - explicit reasoning leads to better decisions',
+        'Force consideration of multiple options before settling on one',
+        'Always include stakeholder analysis in strategic problems',
+        'Risk assessment should be integrated throughout the process'
       ],
       tips: [
-        'Structured reasoning prevents overlooking important factors',
-        'Step-by-step thinking improves solution quality',
-        'Transparent processes allow for better verification',
-        'Multiple solution consideration leads to better outcomes'
+        'Chain-of-thought dramatically improves reasoning quality',
+        'Explicit process steps prevent important considerations from being missed',
+        'Multiple option evaluation reduces confirmation bias',
+        'Stakeholder analysis reveals hidden complexity in business problems'
       ],
       resources: [
         {
-          title: 'Systems Thinking Guide',
+          title: 'Strategic Thinking Frameworks',
           type: 'article',
-          url: 'https://example.com/systems-thinking',
-          description: 'Framework for analyzing complex, interconnected problems'
+          url: 'https://example.com/strategy-frameworks',
+          description: 'Comprehensive guide to structured strategic analysis'
         }
       ]
     },
@@ -1191,7 +1233,7 @@ ANALYSE FRAMEWORK:
    - Data cleaning approach: [METHODIEK]
    - Tijdsperiode voor analyse: [PERIODE]
 
-2. BESCHRIJVENDE ANALYSE
+2. BESCHRIJDENDE ANALYSE
    - Wat is er gebeurd?
    - Key performance indicators
    - Trends en patronen
@@ -2242,7 +2284,7 @@ Current tech capabilities: [TECH_MATURITY]`,
       category: 'Sustainability',
       type: 'creative',
       estimatedTime: '50 min',
-      prompt: 'Ontwikkel een digital transformation strategie die sustainability en business growth combineert.',
+      prompt: 'Ontwerp een digital transformation strategie die sustainability en business growth combineert.',
       solution: `<rol>Je bent een sustainable digital transformation consultant</rol> gespecialiseerd in ESG-aligned technology strategies.
 
 <sustainable-transformation-framework>
@@ -2360,6 +2402,137 @@ Transformation budget: [INVESTMENT_CAPACITY]`,
           type: 'tool',
           url: 'https://example.com/esg-tech-framework',
           description: 'Framework voor ESG-aligned technology strategy'
+        }
+      ]
+    },
+    {
+      id: 'meta-prompting',
+      title: 'Meta-Prompting Systems',
+      description: 'Create prompts that help AI design better prompts - recursive prompt engineering',
+      difficulty: 'advanced',
+      category: 'Meta-Cognition',
+      type: 'analysis',
+      estimatedTime: '45 min',
+      prompt: 'Build a meta-prompt system that analyzes prompt quality and suggests improvements.',
+      solution: `<role>You are a world-class prompt engineering researcher</role> with deep expertise in cognitive science, AI behavior analysis, and optimization methodologies.
+
+<meta-analysis-framework>
+Analyze the submitted prompt across these critical dimensions:
+
+**1. Clarity & Specificity Assessment**
+- Is the desired outcome precisely defined?
+- Are instructions unambiguous and actionable?
+- Does the prompt eliminate potential misinterpretations?
+
+**2. Context Richness Evaluation**
+- Is sufficient background provided for informed responses?
+- Are stakeholder perspectives and constraints included?
+- Does the context align with the complexity of the task?
+
+**3. Structure & Flow Analysis**
+- Does the prompt follow logical progression?
+- Are complex tasks broken into manageable steps?
+- Is there clear hierarchy of information importance?
+
+**4. Output Quality Controls**
+- Are formatting requirements clearly specified?
+- Are quality criteria and success metrics defined?
+- Are examples provided to calibrate expectations?
+
+**5. Bias & Assumption Detection**
+- What implicit assumptions might bias the response?
+- Are multiple perspectives encouraged or restricted?
+- Could the prompt inadvertently limit creative solutions?
+</meta-analysis-framework>
+
+<improvement-methodology>
+For each identified weakness, provide:
+
+**Diagnostic Analysis:**
+- What specific issue reduces prompt effectiveness?
+- Why does this problem occur in prompt construction?
+- What cognitive biases might have caused this oversight?
+
+**Optimization Strategy:**
+- What specific changes would address this issue?
+- How would these changes improve AI response quality?
+- What trade-offs or new risks might these changes introduce?
+
+**Implementation Guidance:**
+- Provide exact text modifications or additions
+- Explain the reasoning behind each suggested change
+- Offer alternative approaches for different use cases
+</improvement-methodology>
+
+<output-format>
+# 🔬 Prompt Engineering Analysis Report
+
+## 📊 Overall Quality Score: [X/100]
+
+## 🎯 Strengths Analysis
+**What this prompt does well:**
+- [Strength 1]: [Specific example and impact]
+- [Strength 2]: [Specific example and impact]
+- [Strength 3]: [Specific example and impact]
+
+## ⚠️ Critical Improvement Areas
+
+### Issue 1: [SPECIFIC_PROBLEM]
+**Impact on Response Quality:** [How this reduces effectiveness]
+**Root Cause:** [Why this issue occurred]
+**Optimization Strategy:** [Specific improvement approach]
+**Revised Text:** 
+```
+[Exact text to replace or add]
+```
+
+### Issue 2: [SPECIFIC_PROBLEM]
+[Same format as above]
+
+## 🚀 Enhanced Prompt Version
+
+```
+[Complete rewritten prompt incorporating all improvements]
+```
+
+## 📈 Predicted Improvements
+**Response Quality:** [How much better responses should be]
+**Consistency:** [Reliability improvements expected]
+**Efficiency:** [Reduction in iterations needed]
+
+## 🎓 Learning Points
+- [Key lesson about prompt construction]
+- [Insight about AI behavior and optimization]
+- [Best practice reinforced by this analysis]
+</output-format>
+
+Prompt to analyze and improve:
+[PASTE_PROMPT_HERE]`,
+      criteria: [
+        'Provides systematic analysis across multiple prompt quality dimensions',
+        'Identifies specific weaknesses with root cause analysis',
+        'Offers concrete, actionable improvement suggestions',
+        'Delivers a completely rewritten, optimized version',
+        'Explains the reasoning behind each optimization decision'
+      ],
+      hints: [
+        'Meta-prompting requires analyzing prompts like a scientist studies experiments',
+        'Look for implicit assumptions and biases that might limit response quality',
+        'Always provide specific text improvements, not just general suggestions',
+        'Consider how each element of a prompt affects AI cognition and behavior'
+      ],
+      tips: [
+        'Meta-prompting dramatically accelerates prompt engineering learning',
+        'Systematic analysis prevents overlooking subtle but important issues',
+        'Root cause analysis helps avoid repeating the same prompt construction mistakes',
+        'Iterative prompt improvement often yields exponentially better results'
+      ],
+      resources: [
+        {
+          title: 'Cognitive Science of Prompt Engineering',
+          type: 'article',
+          url: 'https://example.com/cognitive-prompting',
+          description: 'How understanding AI cognition improves prompt effectiveness'
         }
       ]
     }
