@@ -13,6 +13,7 @@ import Pricing from "./pages/Pricing";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import PromptEngineering from "./pages/PromptEngineering";
+import PromptEngineeringNL from "./pages/PromptEngineeringNL";
 import ExerciseEmbed from "./pages/ExerciseEmbed";
 
 const queryClient = new QueryClient();
