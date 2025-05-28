@@ -1,16 +1,16 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookOpen, Target, Database, Code, Play, Users, Globe, ChevronRight } from 'lucide-react';
+import { BookOpen, Target, Database, Code, Play, Users, ChevronRight } from 'lucide-react';
 import LearningPath from '@/components/PromptEngineering/LearningPath';
 import EnhancedPromptDatabase from '@/components/PromptEngineering/EnhancedPromptDatabase';
 import FrameworkLibrary from '@/components/PromptEngineering/FrameworkLibrary';
 import DutchExerciseEmbedGenerator from '@/components/PromptEngineering/DutchExerciseEmbedGenerator';
 import ComprehensiveExercisePlayer from '@/components/PromptEngineering/ComprehensiveExercisePlayer';
 import SEO from '@/components/SEO';
-import { Link } from 'react-router-dom';
 
 const PromptEngineeringNL = () => {
   const [activeTab, setActiveTab] = useState('modules');
@@ -33,10 +33,6 @@ const PromptEngineeringNL = () => {
           <div className="absolute inset-0 bg-black opacity-20"></div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
             <div className="text-center">
-              <div className="flex items-center justify-center space-x-2 mb-4">
-                <Globe className="h-8 w-8 text-white" />
-                <Badge className="bg-orange-500 text-white px-3 py-1">Nederlandse Versie</Badge>
-              </div>
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
                 Nederlandse Prompt Engineering
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
@@ -64,20 +60,16 @@ const PromptEngineeringNL = () => {
         {/* Navigation Bar */}
         <div className="bg-white border-b sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center space-x-4">
-                <Link to="/prompt-engineering" className="text-sm text-gray-600 hover:text-purple-600 transition-colors">
-                  🇺🇸 English Version
-                </Link>
-                <span className="text-gray-300">|</span>
-                <span className="text-sm font-medium text-purple-600">🇳🇱 Nederlandse Versie</span>
-              </div>
+            <div className="flex items-center justify-center h-16">
               <div className="flex items-center space-x-4">
                 <Badge variant="outline" className="text-green-600 border-green-600">
                   Gratis Toegang
                 </Badge>
                 <Badge variant="outline" className="text-blue-600 border-blue-600">
                   Interactief Leren
+                </Badge>
+                <Badge variant="outline" className="text-purple-600 border-purple-600">
+                  Nederlandse Interface
                 </Badge>
               </div>
             </div>
@@ -178,22 +170,28 @@ const PromptEngineeringNL = () => {
                   Nederlandse Embed Generator
                 </h2>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  Sluit onze Nederlandse prompt engineering oefeningen en database in op je eigen website. 
+                  Sluit onze Nederlandse prompt engineering content in op je eigen website. 
                   Volledig aanpasbaar en eenvoudig te implementeren.
                 </p>
                 <div className="flex justify-center space-x-4 mt-6">
-                  <Link to="/exercise-embed-nl">
+                  <a href="/exercise-embed-nl" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="flex items-center space-x-2">
                       <span>Bekijk Oefening Embed</span>
                       <ChevronRight className="h-4 w-4" />
                     </Button>
-                  </Link>
-                  <Link to="/database-embed?lang=nl">
+                  </a>
+                  <a href="/database-embed-nl" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="flex items-center space-x-2">
                       <span>Bekijk Database Embed</span>
                       <ChevronRight className="h-4 w-4" />
                     </Button>
-                  </Link>
+                  </a>
+                  <a href="/framework-embed-nl" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" className="flex items-center space-x-2">
+                      <span>Bekijk Framework Embed</span>
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </a>
                 </div>
               </div>
               <DutchExerciseEmbedGenerator />
@@ -214,7 +212,7 @@ const PromptEngineeringNL = () => {
                 <div className="text-gray-600">Professionele Prompts</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-600 mb-2">10+</div>
+                <div className="text-3xl font-bold text-green-600 mb-2">15+</div>
                 <div className="text-gray-600">Bewezen Frameworks</div>
               </div>
               <div className="text-center">

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Copy, ExternalLink, Code, Eye, Database, AlertCircle } from 'lucide-react';
+import { Copy, ExternalLink, Code, Eye, Database, AlertCircle, BookOpen, Target } from 'lucide-react';
 import { exerciseDatabase } from './ExerciseData';
 import { toast } from "sonner";
 
@@ -29,6 +28,14 @@ interface DatabaseEmbedConfig {
   showHeader: boolean;
   showLegend: boolean;
   showSearch: boolean;
+  language: 'nl';
+}
+
+interface FrameworkEmbedConfig {
+  category: string;
+  compact: boolean;
+  showHeader: boolean;
+  showLegend: boolean;
   language: 'nl';
 }
 
@@ -53,7 +60,14 @@ const DutchExerciseEmbedGenerator = () => {
     language: 'nl'
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [frameworkConfig, setFrameworkConfig] = useState<FrameworkEmbedConfig>({
+    category: "all",
+    compact: false,
+    showHeader: true,
+    showLegend: true,
+    language: 'nl'
+  });
+
   const [previewError, setPreviewError] = useState<string | null>(null);
 
   const exercises = exerciseDatabase[exerciseConfig.level] || [];
@@ -99,26 +113,49 @@ const DutchExerciseEmbedGenerator = () => {
         lang: 'nl'
       });
       
-      return `${baseUrl}/database-embed?${params.toString()}`;
+      return `${baseUrl}/database-embed-nl?${params.toString()}`;
     } catch (error) {
       console.error('Error generating database embed URL:', error);
       return '';
     }
   };
 
-  const generateIframeCode = (url: string, type: 'exercise' | 'database'): string => {
-    const height = exerciseConfig.compact || databaseConfig.compact ? '600' : 
-                  type === 'database' ? '900' : '800';
-    const width = exerciseConfig.compact || databaseConfig.compact ? '800' : '1200';
+  const generateFrameworkEmbedUrl = (): string => {
+    try {
+      const baseUrl = window.location.origin;
+      const params = new URLSearchParams({
+        compact: frameworkConfig.compact.toString(),
+        header: frameworkConfig.showHeader.toString(),
+        legend: frameworkConfig.showLegend.toString(),
+        category: frameworkConfig.category,
+        lang: 'nl'
+      });
+      
+      return `${baseUrl}/framework-embed-nl?${params.toString()}`;
+    } catch (error) {
+      console.error('Error generating framework embed URL:', error);
+      return '';
+    }
+  };
+
+  const generateIframeCode = (url: string, type: 'exercise' | 'database' | 'framework'): string => {
+    const getHeight = () => {
+      if (exerciseConfig.compact || databaseConfig.compact || frameworkConfig.compact) return '600';
+      if (type === 'database') return '900';
+      if (type === 'framework') return '800';
+      return '800';
+    };
+    
+    const width = exerciseConfig.compact || databaseConfig.compact || frameworkConfig.compact ? '800' : '1200';
     
     return `<iframe 
   src="${url}"
   width="${width}" 
-  height="${height}"
+  height="${getHeight()}"
   frameborder="0"
   style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); max-width: 100%;"
   allowfullscreen
-  title="Nederlandse Prompt Engineering ${type === 'exercise' ? 'Oefening' : 'Database'}">
+  title="Nederlandse Prompt Engineering ${type === 'exercise' ? 'Oefening' : type === 'database' ? 'Database' : 'Frameworks'}">
 </iframe>`;
   };
 
@@ -147,6 +184,11 @@ const DutchExerciseEmbedGenerator = () => {
     setPreviewError(null);
   };
 
+  const updateFrameworkConfig = (updates: Partial<FrameworkEmbedConfig>) => {
+    setFrameworkConfig(prev => ({ ...prev, ...updates }));
+    setPreviewError(null);
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       <Card className="border-2 border-blue-200">
@@ -156,19 +198,23 @@ const DutchExerciseEmbedGenerator = () => {
             <span>Nederlandse Embed Generator</span>
           </CardTitle>
           <p className="text-blue-700 text-sm mt-2">
-            Genereer insluitcodes voor Nederlandse prompt engineering oefeningen en databases
+            Genereer insluitcodes voor Nederlandse prompt engineering content
           </p>
         </CardHeader>
         <CardContent className="pt-6">
           <Tabs defaultValue="exercises" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="exercises" className="flex items-center space-x-2">
                 <Eye className="h-4 w-4" />
-                <span>Oefeningen Insluiten</span>
+                <span>Oefeningen</span>
               </TabsTrigger>
               <TabsTrigger value="database" className="flex items-center space-x-2">
                 <Database className="h-4 w-4" />
-                <span>Database Insluiten</span>
+                <span>Database</span>
+              </TabsTrigger>
+              <TabsTrigger value="frameworks" className="flex items-center space-x-2">
+                <BookOpen className="h-4 w-4" />
+                <span>Frameworks</span>
               </TabsTrigger>
             </TabsList>
 
@@ -538,6 +584,150 @@ const DutchExerciseEmbedGenerator = () => {
                 )}
               </div>
             </TabsContent>
+
+            <TabsContent value="frameworks" className="space-y-6 mt-6">
+              {/* Framework Configuration */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <Card className="border border-purple-200">
+                  <CardHeader className="bg-purple-50">
+                    <CardTitle className="text-purple-900 text-lg">Framework Configuratie</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 pt-4">
+                    <div>
+                      <Label htmlFor="framework-category">Standaard Categorie</Label>
+                      <Select 
+                        value={frameworkConfig.category} 
+                        onValueChange={(value) => setFrameworkConfig(prev => ({ ...prev, category: value }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecteer categorie" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">Alle Categorieën</SelectItem>
+                          <SelectItem value="zakelijk">Zakelijk</SelectItem>
+                          <SelectItem value="content">Content</SelectItem>
+                          <SelectItem value="planning">Planning</SelectItem>
+                          <SelectItem value="marketing">Marketing</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border border-indigo-200">
+                  <CardHeader className="bg-indigo-50">
+                    <CardTitle className="text-indigo-900 text-lg">Weergave Opties</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 pt-4">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="framework-compact"
+                        checked={frameworkConfig.compact}
+                        onCheckedChange={(checked) => setFrameworkConfig(prev => ({ ...prev, compact: checked }))}
+                      />
+                      <Label htmlFor="framework-compact">Compacte Weergave</Label>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="framework-header"
+                        checked={frameworkConfig.showHeader}
+                        onCheckedChange={(checked) => setFrameworkConfig(prev => ({ ...prev, showHeader: checked }))}
+                      />
+                      <Label htmlFor="framework-header">Toon Koptekst</Label>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="framework-legend"
+                        checked={frameworkConfig.showLegend}
+                        onCheckedChange={(checked) => setFrameworkConfig(prev => ({ ...prev, showLegend: checked }))}
+                      />
+                      <Label htmlFor="framework-legend">Toon Kleur Legenda</Label>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Framework Embed Codes */}
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label className="text-base font-semibold">Directe URL</Label>
+                    <div className="flex space-x-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => copyToClipboard(generateFrameworkEmbedUrl(), "Framework URL")}
+                      >
+                        <Copy className="h-3 w-3 mr-1" />
+                        Kopieer
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => window.open(generateFrameworkEmbedUrl(), '_blank')}
+                      >
+                        <ExternalLink className="h-3 w-3 mr-1" />
+                        Open
+                      </Button>
+                    </div>
+                  </div>
+                  <Textarea
+                    value={generateFrameworkEmbedUrl()}
+                    readOnly
+                    className="font-mono text-sm bg-gray-50"
+                    rows={2}
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label className="text-base font-semibold">Iframe Insluitcode</Label>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => copyToClipboard(generateIframeCode(generateFrameworkEmbedUrl(), 'framework'), "Framework iframe code")}
+                    >
+                      <Copy className="h-3 w-3 mr-1" />
+                      Kopieer
+                    </Button>
+                  </div>
+                  <Textarea
+                    value={generateIframeCode(generateFrameworkEmbedUrl(), 'framework')}
+                    readOnly
+                    className="font-mono text-sm bg-gray-50"
+                    rows={8}
+                  />
+                </div>
+              </div>
+
+              {/* Framework Preview */}
+              <div>
+                <div className="flex items-center space-x-2 mb-4">
+                  <Eye className="h-4 w-4 text-gray-600" />
+                  <Label className="text-base font-semibold">Live Voorbeeld</Label>
+                </div>
+                {previewError ? (
+                  <div className="border rounded-lg p-8 bg-red-50 border-red-200">
+                    <div className="flex items-center space-x-2 text-red-600">
+                      <AlertCircle className="h-5 w-5" />
+                      <span>{previewError}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="border rounded-lg overflow-hidden shadow-sm">
+                    <iframe
+                      src={generateFrameworkEmbedUrl()}
+                      width="100%"
+                      height={frameworkConfig.compact ? "600" : "800"}
+                      className="border-0"
+                      title="Framework Voorbeeld"
+                    />
+                  </div>
+                )}
+              </div>
+            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
@@ -551,27 +741,32 @@ const DutchExerciseEmbedGenerator = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <h4 className="font-semibold text-green-900">Oefening Insluiting:</h4>
               <ul className="space-y-1 text-sm text-gray-600">
-                <li>• Gebruikers kunnen moeilijkheidsniveaus en oefeningen selecteren</li>
-                <li>• Voortgang bijhouden voor alle oefeningen</li>
-                <li>• Interactief leren met uitgebreide hints en feedback</li>
-                <li>• Compacte modus voor kleinere ruimtes</li>
-                <li>• Aanpasbare UI-componenten</li>
-                <li>• Volledig Nederlandse interface</li>
+                <li>• Interactieve Nederlandse oefeningen</li>
+                <li>• Voortgang bijhouden</li>
+                <li>• Uitgebreide feedback</li>
+                <li>• Aanpasbare moeilijkheidsgraden</li>
               </ul>
             </div>
             <div className="space-y-2">
               <h4 className="font-semibold text-orange-900">Database Insluiting:</h4>
               <ul className="space-y-1 text-sm text-gray-600">
-                <li>• Bladeren en zoeken door professionele prompts</li>
-                <li>• Filteren op categorie en moeilijkheidsgraad</li>
-                <li>• Prompts kopiëren met één klik</li>
-                <li>• Kleurgecodeerde prompt highlighting</li>
-                <li>• Responsief ontwerp voor alle apparaten</li>
-                <li>• Nederlandse lokalisatie</li>
+                <li>• Professionele Nederlandse prompts</li>
+                <li>• Zoeken en filteren</li>
+                <li>• Één-klik kopiëren</li>
+                <li>• Kleurgecodeerde highlighting</li>
+              </ul>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-semibold text-purple-900">Framework Insluiting:</h4>
+              <ul className="space-y-1 text-sm text-gray-600">
+                <li>• Bewezen Nederlandse frameworks</li>
+                <li>• Praktische templates</li>
+                <li>• Uitgebreide voorbeelden</li>
+                <li>• Toepassingsinstructies</li>
               </ul>
             </div>
           </div>
