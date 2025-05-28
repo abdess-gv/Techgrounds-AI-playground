@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -109,8 +108,143 @@ const prompts = [
 
 **Leerprincipes**: Gebruik actief leren, microlearning en praktische toepassingen.`,
     tags: ['Onderwijs', 'Cursus', 'E-learning', 'Instructional Design']
+  },
+  {
+    id: '5',
+    title: 'Zero-Shot Prompting',
+    category: 'Prompt Engineering',
+    difficulty: 'beginner',
+    description: 'Basale vorm van prompting zonder voorbeelden',
+    prompt: `**Zero-Shot Prompting Techniek**
+
+Dit is de meest basale vorm van prompt engineering. Je geeft de AI een taak zonder expliciete voorbeelden van hoe de output eruit moet zien.
+
+**Wanneer te gebruiken**:
+- Voor relatief eenvoudige taken
+- Gangbare opdrachten waar het model al veel kennis van heeft
+- Als je een directe, duidelijke instructie kunt geven
+
+**Voorbeeld**:
+Vertaal '[TEKST]' naar [DOELTAAL].
+
+**Instructie**: [GEEF DUIDELIJKE TAAK]
+
+**Tips voor succes**:
+- Wees specifiek en duidelijk in je instructie
+- Vermijd dubbelzinnigheden
+- Test eerst met eenvoudige taken
+- Moderne LLM's zijn vaak al heel goed in zero-shot taken`,
+    tags: ['Zero-Shot', 'Basis Technieken', 'Prompt Engineering', 'Eenvoudig']
+  },
+  {
+    id: '6',
+    title: 'Few-Shot Prompting (In-Context Learning)',
+    category: 'Prompt Engineering',
+    difficulty: 'intermediate',
+    description: 'Leer de AI met voorbeelden van input en output',
+    prompt: `**Few-Shot Prompting Techniek**
+
+Geef de AI een paar voorbeelden van de input en gewenste output voordat je de daadwerkelijke vraag stelt.
+
+**Wanneer te gebruiken**:
+- Voor taken die een specifiek format vereisen
+- Als je een bepaalde stijl wilt aanleren
+- Voor complexere patronen die moeilijk uit te leggen zijn
+
+**Template**:
+Voorbeelden:
+Input: [VOORBEELD 1 INPUT]
+Output: [VOORBEELD 1 OUTPUT]
+
+Input: [VOORBEELD 2 INPUT]  
+Output: [VOORBEELD 2 OUTPUT]
+
+Input: [VOORBEELD 3 INPUT]
+Output: [VOORBEELD 3 OUTPUT]
+
+Nu jouw beurt:
+Input: [JOUW INPUT]
+Output:
+
+**Tips**:
+- Gebruik 2-5 voorbeelden voor beste resultaten
+- Zorg dat voorbeelden representatief zijn
+- Varieer de voorbeelden om het patroon duidelijk te maken`,
+    tags: ['Few-Shot', 'In-Context Learning', 'Voorbeelden', 'Patroon Herkenning']
+  },
+  {
+    id: '7',
+    title: 'Chain-of-Thought (CoT) Prompting',
+    category: 'Prompt Engineering',
+    difficulty: 'intermediate',
+    description: 'Laat de AI stap voor stap redeneren voor complexe taken',
+    prompt: `**Chain-of-Thought Prompting Techniek**
+
+Voor complexere taken die redeneren of meerdere stappen vereisen, vraag je de AI om het denkproces stap voor stap te laten zien.
+
+**Wanneer te gebruiken**:
+- Voor complexe problemen die meerdere stappen vereisen
+- Wanneer je transparantie wilt in het redeneerproces
+- Voor wiskundige of logische vraagstukken
+
+**Template**:
+**Probleem**: [BESCHRIJF COMPLEX PROBLEEM]
+
+**Instructie**: Los dit op door stap voor stap na te denken. Leg je redenering uit bij elke stap.
+
+**Stappen**:
+1. **Analyse**: Wat is er gegeven en wat moet ik vinden?
+2. **Planning**: Welke methode ga ik gebruiken?
+3. **Uitvoering**: Werk de oplossing stap voor stap uit
+4. **Verificatie**: Controleer of het antwoord logisch is
+
+**Magische zinnen**:
+- "Denk stap voor stap na"
+- "Leg je redenering uit"
+- "Laat je denkproces zien"
+
+**Voordelen**: Verhoogt betrouwbaarheid en geeft inzicht in de oplossingsmethode.`,
+    tags: ['Chain-of-Thought', 'Redeneren', 'Stap-voor-stap', 'Complexe Problemen']
+  },
+  {
+    id: '8',
+    title: 'Persona Prompting',
+    category: 'Prompt Engineering',
+    difficulty: 'beginner',
+    description: 'Geef de AI een specifieke rol of expertise',
+    prompt: `**Persona Prompting Techniek**
+
+Geef de AI een specifieke rol, persona of expertise om de output te sturen qua toon, stijl en kennisniveau.
+
+**Wanneer te gebruiken**:
+- Voor domeinspecifieke expertise
+- Om een bepaalde toon of stijl te bereiken
+- Voor doelgroepspecifieke communicatie
+
+**Template**:
+**Rol**: Je bent een [SPECIFIEKE EXPERT/ROL] met [AANTAL] jaar ervaring in [VAKGEBIED].
+
+**Expertise**: Je specialiseert in [SPECIALISATIE] en bent bekend om [KARAKTERISTIEKE EIGENSCHAP].
+
+**Taak**: [BESCHRIJF OPDRACHT]
+
+**Doelgroep**: [BESCHRIJF DOELGROEP EN NIVEAU]
+
+**Toon**: [GEWENSTE COMMUNICATIESTIJL]
+
+**Voorbeelden van persona's**:
+- "Je bent een cyberveiligheidsexpert..."
+- "Je bent een vriendelijke leraar voor kinderen..."  
+- "Je bent een senior marketingstrateeg..."
+- "Je bent een ervaren data scientist..."
+
+**Voordelen**: Verrijkt antwoorden met domeinkennis en passende communicatiestijl.`,
+    tags: ['Persona', 'Rol', 'Expertise', 'Doelgroep', 'Communicatiestijl']
   }
 ];
+
+const categories = ['all', ...Array.from(new Set(prompts.map(p => p.category)))];
+const difficulties = ['all', 'beginner', 'intermediate', 'advanced'];
 
 const EmbeddablePromptDatabase = ({
   compact = false,
@@ -124,9 +258,6 @@ const EmbeddablePromptDatabase = ({
   const [selectedCategory, setSelectedCategory] = useState(category);
   const [selectedDifficulty, setSelectedDifficulty] = useState(difficulty);
   const [expandedPrompts, setExpandedPrompts] = useState<Set<string>>(new Set());
-
-  const categories = ['all', ...Array.from(new Set(prompts.map(p => p.category)))];
-  const difficulties = ['all', 'beginner', 'intermediate', 'advanced'];
 
   const filteredPrompts = prompts.filter(prompt => {
     const matchesSearch = prompt.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
