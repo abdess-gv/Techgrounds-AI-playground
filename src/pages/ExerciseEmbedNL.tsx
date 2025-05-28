@@ -56,7 +56,6 @@ const ExerciseEmbedNL = () => {
             />
           </Suspense>
           
-          {/* Branding */}
           <Card className="mt-8 border-blue-200">
             <CardContent className="p-4 text-center">
               <p className="text-sm text-blue-600">
