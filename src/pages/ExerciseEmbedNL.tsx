@@ -10,7 +10,7 @@ const LoadingFallback = () => (
   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
     <div className="text-center">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-      <p className="text-gray-600">Oefening wordt geladen...</p>
+      <p className="text-gray-600">AI oefening wordt geladen...</p>
     </div>
   </div>
 );
@@ -23,7 +23,6 @@ const ExerciseEmbedNL = () => {
   const compact = searchParams.get('compact') === 'true';
   const showHeader = searchParams.get('header') !== 'false';
   const showLegend = searchParams.get('legend') !== 'false';
-  const showSelector = searchParams.get('selector') !== 'false';
 
   const exercise = useMemo(() => {
     const exercises = exerciseDatabase[level] || [];
@@ -37,7 +36,7 @@ const ExerciseEmbedNL = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Geen oefening gevonden</p>
+          <p className="text-gray-600">Geen AI oefening gevonden</p>
         </div>
       </div>
     );
@@ -61,7 +60,7 @@ const ExerciseEmbedNL = () => {
           <Card className="mt-8 border-blue-200">
             <CardContent className="p-4 text-center">
               <p className="text-sm text-blue-600">
-                Aangedreven door <strong>NoteAI</strong> Nederlandse Prompt Engineering Platform
+                Aangedreven door <strong>AI Leren</strong> - Nederlands AI Educatieplatform
               </p>
             </CardContent>
           </Card>
