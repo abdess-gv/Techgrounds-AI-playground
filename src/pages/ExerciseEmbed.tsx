@@ -2,13 +2,12 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import EmbeddableExercise from "@/components/PromptEngineering/EmbeddableExercise";
 import { exerciseDatabase } from "@/components/PromptEngineering/ExerciseData";
 import SEO from "@/components/SEO";
-import { ArrowLeft, Target, BookOpen } from "lucide-react";
+import { Target } from "lucide-react";
 
 const ExerciseEmbed = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,13 +23,10 @@ const ExerciseEmbed = () => {
   const [selectedExerciseId, setSelectedExerciseId] = useState(exerciseId);
   const [completedExercises, setCompletedExercises] = useState<Set<string>>(new Set());
 
-  // Check if accessed from Dutch page or has Dutch language parameter
   const isDutch = language === 'nl' || window.location.pathname.includes('/nl');
-
   const exercises = exerciseDatabase[selectedLevel] || [];
   const currentExercise = exercises.find(ex => ex.id === selectedExerciseId) || exercises[0];
 
-  // Dutch translations
   const t = (key: string) => {
     const translations: { [key: string]: { [key: string]: string } } = {
       en: {
@@ -88,7 +84,6 @@ const ExerciseEmbed = () => {
       setSelectedExerciseId(newExercises[0].id);
     }
     
-    // Update URL params
     const newParams = new URLSearchParams(searchParams);
     newParams.set('level', newLevel);
     newParams.set('exercise', newExercises[0]?.id || '');
@@ -98,7 +93,6 @@ const ExerciseEmbed = () => {
   const handleExerciseChange = (exerciseId: string) => {
     setSelectedExerciseId(exerciseId);
     
-    // Update URL params
     const newParams = new URLSearchParams(searchParams);
     newParams.set('exercise', exerciseId);
     setSearchParams(newParams);
@@ -109,7 +103,6 @@ const ExerciseEmbed = () => {
       setCompletedExercises(prev => new Set([...prev, currentExercise.id]));
     }
     
-    // Post message to parent window if embedded in iframe
     if (window.parent !== window) {
       window.parent.postMessage({
         type: 'exercise-complete',
@@ -151,7 +144,7 @@ const ExerciseEmbed = () => {
     <>
       <SEO 
         title={`${currentExercise.title} - Prompt Engineering ${t('exercise.count')}`}
-        description={`Interactieve prompt engineering oefening: ${currentExercise.title}. ${currentExercise.description}`}
+        description={`Interactive prompt engineering exercise: ${currentExercise.title}. ${currentExercise.description}`}
         noindex={true}
       />
       <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 ${
@@ -159,7 +152,6 @@ const ExerciseEmbed = () => {
       }`}>
         <div className={`${compact ? 'max-w-4xl' : 'max-w-6xl'} mx-auto space-y-4`}>
           
-          {/* Exercise Selector */}
           {showSelector && (
             <Card className="border-2 border-purple-200">
               <CardHeader className={`bg-gradient-to-r from-purple-50 to-blue-50 ${compact ? 'p-4' : ''}`}>
@@ -225,7 +217,6 @@ const ExerciseEmbed = () => {
                   </div>
                 </div>
 
-                {/* Progress indicator */}
                 <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-blue-800">
@@ -246,7 +237,6 @@ const ExerciseEmbed = () => {
             </Card>
           )}
 
-          {/* Exercise Component */}
           <EmbeddableExercise
             exercise={currentExercise}
             showHeader={showHeader}

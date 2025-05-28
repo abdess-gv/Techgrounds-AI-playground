@@ -15,6 +15,8 @@ import LanguageSwitch from "@/components/LanguageSwitch";
 import SEO from "@/components/SEO";
 
 const PromptEngineering = () => {
+  const [activeTab, setActiveTab] = useState("modules");
+
   return (
     <>
       <SEO 
@@ -52,7 +54,7 @@ const PromptEngineering = () => {
                 and practical frameworks. Learn to write effective prompts for ChatGPT, GPT-4, Claude, and other AI systems.
               </p>
               <div className="flex flex-wrap gap-2">
-                <Badge className="bg-green-100 text-green-800">🎯 8 Interactive Exercises per Level</Badge>
+                <Badge className="bg-green-100 text-green-800">🎯 24 Interactive Exercises</Badge>
                 <Badge className="bg-blue-100 text-blue-800">📚 3 Complete Learning Modules</Badge>
                 <Badge className="bg-purple-100 text-purple-800">🧠 Practical Frameworks & Templates</Badge>
                 <Badge className="bg-orange-100 text-orange-800">🔗 Embeddable Exercises</Badge>
@@ -63,7 +65,7 @@ const PromptEngineering = () => {
           {/* Color Legend */}
           <PromptLegend />
           
-          <Tabs defaultValue="modules" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-4 mb-8">
               <TabsTrigger value="modules" className="text-sm font-medium">
                 📚 Learning Modules
