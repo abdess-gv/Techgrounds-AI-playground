@@ -12,13 +12,20 @@ import Dashboard from "./pages/Dashboard";
 import Pricing from "./pages/Pricing";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
-import PromptEngineering from "./pages/PromptEngineering";
 import PromptEngineeringNL from "./pages/PromptEngineeringNL";
-import ExerciseEmbed from "./pages/ExerciseEmbed";
 import ExerciseEmbedNL from "./pages/ExerciseEmbedNL";
-import PromptDatabaseEmbed from "./pages/PromptDatabaseEmbed";
+import DatabaseEmbedNL from "./pages/DatabaseEmbedNL";
+import FrameworkEmbedNL from "./pages/FrameworkEmbedNL";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
@@ -47,13 +54,21 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/pricing" element={<Pricing />} />
-                <Route path="/prompt-engineering" element={<PromptEngineering />} />
+                <Route path="/prompt-engineering" element={<Navigate to="/prompt-engineering/nl" replace />} />
                 <Route path="/prompt-engineering/nl" element={<PromptEngineeringNL />} />
-                <Route path="/prompt-engineering/exercise-embed" element={<ExerciseEmbed />} />
-                <Route path="/prompt-engineering/database-embed" element={<PromptDatabaseEmbed />} />
-                <Route path="/exercise-embed" element={<ExerciseEmbed />} />
+                
+                {/* Dutch Embed Routes - Primary */}
                 <Route path="/exercise-embed-nl" element={<ExerciseEmbedNL />} />
-                <Route path="/database-embed" element={<PromptDatabaseEmbed />} />
+                <Route path="/database-embed-nl" element={<DatabaseEmbedNL />} />
+                <Route path="/framework-embed-nl" element={<FrameworkEmbedNL />} />
+                
+                {/* Legacy redirects to ensure no 404s */}
+                <Route path="/exercise-embed" element={<Navigate to="/exercise-embed-nl" replace />} />
+                <Route path="/database-embed" element={<Navigate to="/database-embed-nl" replace />} />
+                <Route path="/framework-embed" element={<Navigate to="/framework-embed-nl" replace />} />
+                <Route path="/prompt-engineering/exercise-embed" element={<Navigate to="/exercise-embed-nl" replace />} />
+                <Route path="/prompt-engineering/database-embed" element={<Navigate to="/database-embed-nl" replace />} />
+                
                 <Route 
                   path="/dashboard" 
                   element={

@@ -1,7 +1,18 @@
 
 import { useSearchParams } from 'react-router-dom';
+import { Suspense } from 'react';
 import EmbeddableFrameworkLibrary from '@/components/PromptEngineering/EmbeddableFrameworkLibrary';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { Card, CardContent } from '@/components/ui/card';
+
+const LoadingFallback = () => (
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p className="text-gray-600">Frameworks worden geladen...</p>
+    </div>
+  </div>
+);
 
 const FrameworkEmbedNL = () => {
   const [searchParams] = useSearchParams();
@@ -12,25 +23,29 @@ const FrameworkEmbedNL = () => {
   const category = searchParams.get('category') || 'all';
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-7xl mx-auto">
-        <EmbeddableFrameworkLibrary
-          compact={compact}
-          showHeader={showHeader}
-          showLegend={showLegend}
-          category={category}
-        />
-        
-        {/* Branding */}
-        <Card className="mt-8 border-blue-200">
-          <CardContent className="p-4 text-center">
-            <p className="text-sm text-blue-600">
-              Aangedreven door <strong>NoteAI</strong> Nederlandse Prompt Engineering Platform
-            </p>
-          </CardContent>
-        </Card>
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gray-50 p-4">
+        <div className="max-w-7xl mx-auto">
+          <Suspense fallback={<LoadingFallback />}>
+            <EmbeddableFrameworkLibrary
+              compact={compact}
+              showHeader={showHeader}
+              showLegend={showLegend}
+              category={category}
+            />
+          </Suspense>
+          
+          {/* Branding */}
+          <Card className="mt-8 border-blue-200">
+            <CardContent className="p-4 text-center">
+              <p className="text-sm text-blue-600">
+                Aangedreven door <strong>NoteAI</strong> Nederlandse Prompt Engineering Platform
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 
