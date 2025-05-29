@@ -13,8 +13,8 @@ interface SEOProps {
 const SEO = ({ title, description, canonical, noindex = false, keywords }: SEOProps) => {
   const { language } = useLanguage();
   
-  const siteTitle = 'NoteAI - AI-Powered Note Taking & Transcription';
-  const siteDescription = 'Transform your voice into organized, searchable notes with advanced AI transcription and intelligent conversations. Choose from OpenAI Whisper, Deepgram, or AssemblyAI.';
+  const siteTitle = 'AI Leren - Nederlands AI en Prompt Engineering Platform';
+  const siteDescription = 'Leer AI gebruiken en prompt engineering in het Nederlands. Gratis toegang tot oefeningen, frameworks en veiligheidsrichtlijnen voor verantwoord AI-gebruik.';
   
   const pageTitle = title ? `${title} | ${siteTitle}` : siteTitle;
   const pageDescription = description || siteDescription;
@@ -49,14 +49,14 @@ const SEO = ({ title, description, canonical, noindex = false, keywords }: SEOPr
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          "name": "NoteAI",
+          "name": "AI Leren",
           "description": pageDescription,
-          "applicationCategory": "ProductivityApplication",
+          "applicationCategory": "EducationalApplication",
           "operatingSystem": "Web",
           "offers": {
             "@type": "Offer",
             "price": "0",
-            "priceCurrency": "USD"
+            "priceCurrency": "EUR"
           }
         })}
       </script>

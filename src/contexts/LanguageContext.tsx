@@ -1,5 +1,5 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useAuth } from './AuthContext';
 
 interface Translations {
   [key: string]: {
@@ -189,24 +189,19 @@ export const useLanguage = () => {
 };
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
-  const { profile, updateProfile } = useAuth();
-  const [language, setLanguageState] = useState('en');
+  const [language, setLanguageState] = useState('nl'); // Default to Dutch
 
   useEffect(() => {
-    if (profile?.language_preference) {
-      setLanguageState(profile.language_preference);
+    // Load language preference from localStorage
+    const savedLanguage = localStorage.getItem('language-preference');
+    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'nl')) {
+      setLanguageState(savedLanguage);
     }
-  }, [profile]);
+  }, []);
 
-  const setLanguage = async (lang: string) => {
+  const setLanguage = (lang: string) => {
     setLanguageState(lang);
-    if (profile) {
-      try {
-        await updateProfile({ language_preference: lang });
-      } catch (error) {
-        console.error('Error updating language preference:', error);
-      }
-    }
+    localStorage.setItem('language-preference', lang);
   };
 
   const t = (key: string): string => {
