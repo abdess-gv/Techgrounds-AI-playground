@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +12,7 @@ import ExerciseEmbedNL from "./pages/ExerciseEmbedNL";
 import DatabaseEmbedNL from "./pages/DatabaseEmbedNL";
 import FrameworkEmbedNL from "./pages/FrameworkEmbedNL";
 import AISafetyEmbedNL from "./pages/AISafetyEmbedNL";
+import SecurityEmbedNL from "./pages/SecurityEmbedNL";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +42,7 @@ const App = () => (
               <Route path="/database-embed-nl" element={<DatabaseEmbedNL />} />
               <Route path="/framework-embed-nl" element={<FrameworkEmbedNL />} />
               <Route path="/ai-veiligheid-embed-nl" element={<AISafetyEmbedNL />} />
+              <Route path="/veiligheid-embed-nl" element={<SecurityEmbedNL />} />
               
               {/* Legacy redirects */}
               <Route path="/exercise-embed-nl" element={<Navigate to="/oefening-embed-nl" replace />} />

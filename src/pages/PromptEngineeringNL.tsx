@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,8 @@ import EnhancedPromptDatabase from '@/components/PromptEngineering/EnhancedPromp
 import FrameworkLibrary from '@/components/PromptEngineering/FrameworkLibrary';
 import DutchExerciseEmbedGenerator from '@/components/PromptEngineering/DutchExerciseEmbedGenerator';
 import ComprehensiveExercisePlayer from '@/components/PromptEngineering/ComprehensiveExercisePlayer';
+import SecurityModule from '@/components/PromptEngineering/SecurityModule';
+import AdminPromptManager from '@/components/PromptEngineering/AdminPromptManager';
 import SEO from '@/components/SEO';
 
 const PromptEngineeringNL = () => {
@@ -87,36 +88,15 @@ const PromptEngineeringNL = () => {
 
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-            <div className="bg-white rounded-lg shadow-sm border p-2">
-              <TabsList className="grid w-full grid-cols-5 h-12">
-                <TabsTrigger value="modules" className="flex items-center space-x-2">
-                  <BookOpen className="h-4 w-4" />
-                  <span className="hidden sm:inline">Leermodules</span>
-                  <span className="sm:hidden">Modules</span>
-                </TabsTrigger>
-                <TabsTrigger value="exercises" className="flex items-center space-x-2">
-                  <Target className="h-4 w-4" />
-                  <span className="hidden sm:inline">Oefeningen</span>
-                  <span className="sm:hidden">Oefenen</span>
-                </TabsTrigger>
-                <TabsTrigger value="database" className="flex items-center space-x-2">
-                  <Database className="h-4 w-4" />
-                  <span className="hidden sm:inline">Prompt Database</span>
-                  <span className="sm:hidden">Database</span>
-                </TabsTrigger>
-                <TabsTrigger value="frameworks" className="flex items-center space-x-2">
-                  <Target className="h-4 w-4" />
-                  <span className="hidden sm:inline">Frameworks</span>
-                  <span className="sm:hidden">Frames</span>
-                </TabsTrigger>
-                <TabsTrigger value="embed" className="flex items-center space-x-2">
-                  <Code className="h-4 w-4" />
-                  <span className="hidden sm:inline">Insluiten</span>
-                  <span className="sm:hidden">Embed</span>
-                </TabsTrigger>
-              </TabsList>
-            </div>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-6">
+              <TabsTrigger value="modules">Modules</TabsTrigger>
+              <TabsTrigger value="database">Database</TabsTrigger>
+              <TabsTrigger value="frameworks">Frameworks</TabsTrigger>
+              <TabsTrigger value="safety">Veiligheid</TabsTrigger>
+              <TabsTrigger value="embed">Embed</TabsTrigger>
+              <TabsTrigger value="admin">Admin</TabsTrigger>
+            </TabsList>
 
             <TabsContent value="modules" className="space-y-6">
               <div className="text-center mb-8">
@@ -132,19 +112,6 @@ const PromptEngineeringNL = () => {
                 selectedLevel={selectedLevel}
                 onLevelChange={handleLevelChange}
               />
-            </TabsContent>
-
-            <TabsContent value="exercises" className="space-y-6">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                  Interactieve AI Oefeningen
-                </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
-                  Oefen je AI en prompt engineering vaardigheden met onze interactieve oefeningen. 
-                  Krijg directe feedback en verbeter je technieken stap voor stap.
-                </p>
-              </div>
-              <ComprehensiveExercisePlayer level={selectedLevel} />
             </TabsContent>
 
             <TabsContent value="database" className="space-y-6">
@@ -171,6 +138,10 @@ const PromptEngineeringNL = () => {
                 </p>
               </div>
               <FrameworkLibrary />
+            </TabsContent>
+
+            <TabsContent value="safety">
+              <SecurityModule />
             </TabsContent>
 
             <TabsContent value="embed" className="space-y-6">
@@ -210,6 +181,10 @@ const PromptEngineeringNL = () => {
                 </div>
               </div>
               <DutchExerciseEmbedGenerator />
+            </TabsContent>
+
+            <TabsContent value="admin">
+              <AdminPromptManager />
             </TabsContent>
           </Tabs>
         </div>
