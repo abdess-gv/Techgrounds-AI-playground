@@ -4,16 +4,18 @@ export interface Exercise {
   title: string;
   description: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  category: string;
-  type: 'hands-on' | 'analysis' | 'creative';
+  category?: string;
+  type?: 'hands-on' | 'analysis' | 'creative';
   prompt: string;
-  solution: string;
-  criteria: string[];
+  solution?: string;
+  sampleSolution?: string;
+  criteria?: string[];
+  evaluationCriteria?: string[];
   hints: string[];
   tips: string[];
   timeLimit?: number;
-  estimatedTime: string;
-  resources: Array<{
+  estimatedTime?: string;
+  resources?: Array<{
     title: string;
     type: 'article' | 'video' | 'tool' | 'example';
     url: string;

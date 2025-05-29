@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -318,7 +317,7 @@ Timeline: [TIMELINE]`,
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold">Prompt Management</h2>
-        <Button onClick={handleCreate} disabled={isCreating || isEditing}>
+        <Button onClick={handleCreate} disabled={Boolean(isCreating || isEditing)}>
           <Plus className="h-4 w-4 mr-2" />
           Add New Prompt
         </Button>
@@ -444,7 +443,7 @@ Timeline: [TIMELINE]`,
                     variant="outline"
                     size="sm"
                     onClick={() => handleEdit(prompt)}
-                    disabled={isCreating || isEditing}
+                    disabled={Boolean(isCreating || isEditing)}
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -452,7 +451,7 @@ Timeline: [TIMELINE]`,
                     variant="outline"
                     size="sm"
                     onClick={() => handleDelete(prompt.id)}
-                    disabled={isCreating || isEditing}
+                    disabled={Boolean(isCreating || isEditing)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

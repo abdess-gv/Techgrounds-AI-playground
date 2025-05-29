@@ -18,7 +18,7 @@ export const securityExercises: Exercise[] = [
       "Think about what information the AI actually needs to help you",
       "Use brackets [ ] to indicate where personal information would go"
     ],
-    sampleSolution: `Help me write a professional email template to decline a job offer. The email should:
+    solution: `Help me write a professional email template to decline a job offer. The email should:
 
 - Be polite and grateful
 - Clearly state the decision
@@ -50,7 +50,7 @@ Format: Professional email template with placeholders for [COMPANY_NAME], [POSIT
       "Ask for both pros and cons to get balanced information",
       "Request confidence levels or uncertainty indicators"
     ],
-    sampleSolution: `Please provide information about the scientifically-proven benefits of meditation. For each benefit mentioned:
+    solution: `Please provide information about the scientifically-proven benefits of meditation. For each benefit mentioned:
 
 1. Cite specific research studies or meta-analyses
 2. Include publication dates and sample sizes when available
@@ -87,7 +87,7 @@ Format the response with clear citations and confidence indicators.`,
       "Ask for context-dependent recommendations",
       "Request acknowledgment of different viewpoints"
     ],
-    sampleSolution: `I'm interested in learning programming. Please provide a balanced analysis of programming languages for beginners, considering:
+    solution: `I'm interested in learning programming. Please provide a balanced analysis of programming languages for beginners, considering:
 
 1. Different career paths (web development, data science, mobile apps, etc.)
 2. Learning difficulty and time investment
@@ -124,7 +124,7 @@ Please avoid declaring any single language as "the best" and instead focus on he
       "Ask for guidance on how to properly cite AI assistance",
       "Focus on learning and understanding, not just getting answers"
     ],
-    sampleSolution: `I'm working on a university report about renewable energy and want to use AI assistance ethically. Please help me with:
+    solution: `I'm working on a university report about renewable energy and want to use AI assistance ethically. Please help me with:
 
 1. Creating a comprehensive outline and structure
 2. Suggesting reliable academic sources to research
@@ -161,7 +161,7 @@ Please also advise on:
       "Request counterarguments and alternative perspectives",
       "Ask about common misconceptions in the topic area"
     ],
-    sampleSolution: `Please explain how blockchain technology works, and then help me critically evaluate your explanation by:
+    solution: `Please explain how blockchain technology works, and then help me critically evaluate your explanation by:
 
 1. Identifying any oversimplifications in your explanation
 2. Pointing out common misconceptions about blockchain you may have inadvertently included

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -87,19 +86,31 @@ const SecurityModule = () => {
               
               <InteractiveExercise
                 exercise={securityExercises[currentExerciseIndex]}
-                onNext={() => {
-                  if (currentExerciseIndex < securityExercises.length - 1) {
-                    setCurrentExerciseIndex(currentExerciseIndex + 1);
-                  }
-                }}
-                onPrevious={() => {
-                  if (currentExerciseIndex > 0) {
-                    setCurrentExerciseIndex(currentExerciseIndex - 1);
-                  }
-                }}
-                hasNext={currentExerciseIndex < securityExercises.length - 1}
-                hasPrevious={currentExerciseIndex > 0}
               />
+              
+              <div className="flex justify-between mt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    if (currentExerciseIndex > 0) {
+                      setCurrentExerciseIndex(currentExerciseIndex - 1);
+                    }
+                  }}
+                  disabled={currentExerciseIndex === 0}
+                >
+                  Vorige
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (currentExerciseIndex < securityExercises.length - 1) {
+                      setCurrentExerciseIndex(currentExerciseIndex + 1);
+                    }
+                  }}
+                  disabled={currentExerciseIndex === securityExercises.length - 1}
+                >
+                  Volgende
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
