@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +14,7 @@ import DatabaseEmbedNL from "./pages/DatabaseEmbedNL";
 import FrameworkEmbedNL from "./pages/FrameworkEmbedNL";
 import AISafetyEmbedNL from "./pages/AISafetyEmbedNL";
 import SecurityEmbedNL from "./pages/SecurityEmbedNL";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,6 +38,9 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/ai-leren" element={<Navigate to="/ai-leren/nl" replace />} />
               <Route path="/ai-leren/nl" element={<PromptEngineeringNL />} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminDashboardPage />} />
               
               {/* Dutch Embed Routes */}
               <Route path="/oefening-embed-nl" element={<ExerciseEmbedNL />} />

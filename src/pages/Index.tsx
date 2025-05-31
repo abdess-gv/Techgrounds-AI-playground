@@ -81,6 +81,12 @@ const Index = () => {
                 <Badge className="bg-green-100 text-green-800 text-xs animate-pulse">LIVE</Badge>
               </div>
               <div className="flex items-center space-x-4">
+                <Link to="/admin">
+                  <Button variant="outline" size="sm" className="text-gray-600 hover:text-blue-600">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Admin
+                  </Button>
+                </Link>
                 <Link to="/ai-leren/nl">
                   <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200">
                     <Sparkles className="h-4 w-4 mr-2" />
