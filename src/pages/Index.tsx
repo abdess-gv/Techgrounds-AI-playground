@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Target, Database, Shield, BookOpen, Play, ArrowRight, Lightbulb, Users, Award, ChevronRight, Zap, Globe, MessageSquare, Code, Sparkles } from 'lucide-react';
+import { Brain, Target, Database, Shield, BookOpen, Play, ArrowRight, Lightbulb, Users, Award, ChevronRight, Zap, Globe, MessageSquare, Code, Sparkles, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SEO from '@/components/SEO';
 
