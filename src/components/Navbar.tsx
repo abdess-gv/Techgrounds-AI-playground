@@ -13,16 +13,19 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
             <Brain className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-900">NoteAI</span>
+            <span className="text-xl font-bold text-gray-900">AI Leren</span>
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
             <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
             <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
-            <Link to="/prompt-engineering/nl" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link to="/ai-leren/nl" className="text-gray-600 hover:text-gray-900 transition-colors">
               🇳🇱 Leer Prompting
             </Link>
-            <Link to="/login" className="text-gray-600 hover:text-gray-900 transition-colors">Login</Link>
+            <Link to="/tools" className="text-gray-600 hover:text-gray-900 transition-colors">
+              AI Tools
+            </Link>
+            <Link to="/admin" className="text-gray-600 hover:text-gray-900 transition-colors">Admin</Link>
             <Link to="/dashboard">
               <Button className="bg-blue-600 hover:bg-blue-700">Get Started</Button>
             </Link>
@@ -44,8 +47,9 @@ const Navbar = () => {
             <div className="flex flex-col space-y-3">
               <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
               <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
-              <Link to="/prompt-engineering/nl" className="text-gray-600 hover:text-gray-900 transition-colors">🇳🇱 Leer Prompting</Link>
-              <Link to="/login" className="text-gray-600 hover:text-gray-900 transition-colors">Login</Link>
+              <Link to="/ai-leren/nl" className="text-gray-600 hover:text-gray-900 transition-colors">🇳🇱 Leer Prompting</Link>
+              <Link to="/tools" className="text-gray-600 hover:text-gray-900 transition-colors">AI Tools</Link>
+              <Link to="/admin" className="text-gray-600 hover:text-gray-900 transition-colors">Admin</Link>
               <Link to="/dashboard">
                 <Button className="bg-blue-600 hover:bg-blue-700 w-full">Get Started</Button>
               </Link>

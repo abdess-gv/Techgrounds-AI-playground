@@ -17,7 +17,6 @@ import AISafetyEmbedNL from "./pages/AISafetyEmbedNL";
 import SecurityEmbedNL from "./pages/SecurityEmbedNL";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AIToolsPage from "./pages/AIToolsPage";
-import MoodleIntegration from "./pages/MoodleIntegration";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,7 +42,6 @@ const App = () => (
                 <Route path="/ai-leren" element={<Navigate to="/ai-leren/nl" replace />} />
                 <Route path="/ai-leren/nl" element={<PromptEngineeringNL />} />
                 <Route path="/tools" element={<AIToolsPage />} />
-                <Route path="/lms" element={<MoodleIntegration />} />
                 
                 {/* Admin Routes */}
                 <Route path="/admin" element={<AdminDashboardPage />} />
