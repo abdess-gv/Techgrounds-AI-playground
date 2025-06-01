@@ -69,7 +69,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
               {tool.name}
             </CardTitle>
             {tool.verified && (
-              <Shield className="h-4 w-4 text-blue-600" title="Geverifieerd" />
+              <Shield className="h-4 w-4 text-blue-600" />
             )}
           </div>
           <div className="flex items-center space-x-1 text-yellow-500">
