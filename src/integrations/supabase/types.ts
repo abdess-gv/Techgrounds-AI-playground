@@ -50,6 +50,48 @@ export type Database = {
           },
         ]
       }
+      course_progress: {
+        Row: {
+          certificate_earned: boolean | null
+          completed_lessons: number | null
+          completion_percentage: number | null
+          course_name: string
+          created_at: string | null
+          id: string
+          last_accessed: string | null
+          moodle_course_id: number
+          total_lessons: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          certificate_earned?: boolean | null
+          completed_lessons?: number | null
+          completion_percentage?: number | null
+          course_name: string
+          created_at?: string | null
+          id?: string
+          last_accessed?: string | null
+          moodle_course_id: number
+          total_lessons?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          certificate_earned?: boolean | null
+          completed_lessons?: number | null
+          completion_percentage?: number | null
+          course_name?: string
+          created_at?: string | null
+          id?: string
+          last_accessed?: string | null
+          moodle_course_id?: number
+          total_lessons?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       folders: {
         Row: {
           created_at: string | null
@@ -91,6 +133,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      moodle_config: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          setting_key: string
+          setting_value: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          setting_key: string
+          setting_value: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          setting_key?: string
+          setting_value?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      moodle_users: {
+        Row: {
+          created_at: string | null
+          enrollment_date: string | null
+          id: string
+          moodle_user_id: number
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          enrollment_date?: string | null
+          id?: string
+          moodle_user_id: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          enrollment_date?: string | null
+          id?: string
+          moodle_user_id?: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       notes: {
         Row: {
@@ -142,6 +238,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      premium_access: {
+        Row: {
+          access_level: string
+          course_type: string
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          payment_amount: number | null
+          payment_status: string | null
+          purchase_date: string | null
+          stripe_payment_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_level: string
+          course_type: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          payment_amount?: number | null
+          payment_status?: string | null
+          purchase_date?: string | null
+          stripe_payment_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_level?: string
+          course_type?: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          payment_amount?: number | null
+          payment_status?: string | null
+          purchase_date?: string | null
+          stripe_payment_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
