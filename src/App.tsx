@@ -15,6 +15,7 @@ import FrameworkEmbedNL from "./pages/FrameworkEmbedNL";
 import AISafetyEmbedNL from "./pages/AISafetyEmbedNL";
 import SecurityEmbedNL from "./pages/SecurityEmbedNL";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
+import AIToolsPage from "./pages/AIToolsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/ai-leren" element={<Navigate to="/ai-leren/nl" replace />} />
               <Route path="/ai-leren/nl" element={<PromptEngineeringNL />} />
+              <Route path="/tools" element={<AIToolsPage />} />
               
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminDashboardPage />} />

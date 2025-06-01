@@ -1,8 +1,9 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Target, Database, Shield, BookOpen, Play, ArrowRight, Lightbulb, Users, Award, ChevronRight, Zap, Globe, MessageSquare, Code, Sparkles, Settings } from 'lucide-react';
+import { Brain, Target, Database, Shield, BookOpen, Play, ArrowRight, Lightbulb, Users, Award, ChevronRight, Zap, Globe, MessageSquare, Code, Sparkles, Settings, Wrench } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SEO from '@/components/SEO';
 
@@ -28,7 +29,7 @@ const Index = () => {
     },
     {
       icon: Database,
-      title: "Nederlandse Prompt Database",
+      title: "Prompt Database",
       description: "Uitgebreide collectie van professionele prompts",
       color: "from-purple-500 to-pink-500",
       stats: "200+ Prompts"
@@ -44,16 +45,16 @@ const Index = () => {
 
   const testimonials = [
     { name: "Sarah M.", role: "Marketing Professional", text: "Dankzij AI Leren kan ik nu veel effectievere prompts schrijven voor mijn werk." },
-    { name: "Tom K.", role: "Student", text: "De Nederlandse uitleg maakt AI leren veel toegankelijker voor mij." },
+    { name: "Tom K.", role: "Student", text: "De uitleg maakt AI leren veel toegankelijker voor mij." },
     { name: "Lisa R.", role: "Ondernemer", text: "De veiligheidstips hebben me geholpen AI verantwoord in te zetten." }
   ];
 
   return (
     <>
       <SEO 
-        title="AI Leren - Nederlandse AI en Prompt Engineering Platform"
-        description="Leer AI gebruiken en prompt engineering in het Nederlands. Gratis toegang tot oefeningen, frameworks en veiligheidsrichtlijnen voor verantwoord AI-gebruik."
-        keywords="AI leren, prompt engineering, Nederlands, kunstmatige intelligentie, AI veiligheid, ChatGPT, AI training"
+        title="AI Leren - AI en Prompt Engineering Platform"
+        description="Leer AI gebruiken en prompt engineering met interactieve oefeningen, frameworks en een uitgebreide prompt database. Voor beginners tot gevorderden."
+        keywords="AI leren, prompt engineering, kunstmatige intelligentie, ChatGPT, Gemini, Claude, AI training, AI tools"
       />
       
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-hidden">
@@ -80,6 +81,12 @@ const Index = () => {
                 <Badge className="bg-green-100 text-green-800 text-xs animate-pulse">LIVE</Badge>
               </div>
               <div className="flex items-center space-x-4">
+                <Link to="/tools">
+                  <Button variant="outline" size="sm" className="text-gray-600 hover:text-blue-600">
+                    <Wrench className="h-4 w-4 mr-2" />
+                    AI Tools
+                  </Button>
+                </Link>
                 <Link to="/admin">
                   <Button variant="outline" size="sm" className="text-gray-600 hover:text-blue-600">
                     <Settings className="h-4 w-4 mr-2" />
@@ -113,9 +120,9 @@ const Index = () => {
               </div>
               
               <h1 className="text-4xl md:text-7xl font-bold text-gray-900 mb-8 leading-tight">
-                Beheers AI in
+                Beheers
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 animate-pulse">
-                  Het Nederlands
+                  Kunstmatige Intelligentie
                 </span>
               </h1>
               
@@ -132,10 +139,10 @@ const Index = () => {
                     <ArrowRight className="h-6 w-6 ml-3" />
                   </Button>
                 </Link>
-                <Link to="/ai-veiligheid-embed-nl">
+                <Link to="/tools">
                   <Button size="lg" variant="outline" className="text-lg px-10 py-4 border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50 transform hover:scale-105 transition-all duration-200">
-                    <Shield className="h-6 w-6 mr-3" />
-                    AI Veiligheid
+                    <Wrench className="h-6 w-6 mr-3" />
+                    Ontdek AI Tools
                   </Button>
                 </Link>
               </div>
@@ -246,11 +253,11 @@ const Index = () => {
               </div>
               <div className="transform hover:scale-110 transition-transform duration-200">
                 <div className="text-5xl font-bold mb-2 animate-pulse">200+</div>
-                <div className="text-purple-100">Nederlandse Prompts</div>
+                <div className="text-purple-100">Prompts</div>
               </div>
               <div className="transform hover:scale-110 transition-transform duration-200">
                 <div className="text-5xl font-bold mb-2 animate-pulse">15+</div>
-                <div className="text-pink-100">Proven Frameworks</div>
+                <div className="text-pink-100">Frameworks</div>
               </div>
               <div className="transform hover:scale-110 transition-transform duration-200">
                 <div className="text-5xl font-bold mb-2 animate-pulse">100%</div>
@@ -402,7 +409,7 @@ const Index = () => {
                   <span className="text-xl font-bold">AI Leren</span>
                 </div>
                 <p className="text-gray-400 mb-4">
-                  Het meest complete Nederlandse platform voor AI en prompt engineering educatie.
+                  Het meest complete platform voor AI en prompt engineering educatie.
                 </p>
                 <div className="flex space-x-4">
                   <Badge className="bg-blue-600">100% Nederlands</Badge>
@@ -421,12 +428,12 @@ const Index = () => {
               </div>
               
               <div>
-                <h3 className="font-semibold mb-4 text-lg">Veiligheid</h3>
+                <h3 className="font-semibold mb-4 text-lg">Tools & Veiligheid</h3>
                 <ul className="space-y-3 text-gray-400">
+                  <li><Link to="/tools" className="hover:text-white transition-colors">AI Tools Database</Link></li>
                   <li><Link to="/ai-veiligheid-embed-nl" className="hover:text-white transition-colors">AI Veiligheid</Link></li>
                   <li><a href="#" className="hover:text-white transition-colors">Privacy Gids</a></li>
                   <li><a href="#" className="hover:text-white transition-colors">Ethische AI</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Beste Praktijken</a></li>
                 </ul>
               </div>
               
@@ -442,7 +449,7 @@ const Index = () => {
             </div>
             
             <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-              <p>&copy; 2024 AI Leren. Het gratis Nederlandse AI educatie platform voor iedereen.</p>
+              <p>&copy; 2024 AI Leren. Het gratis AI educatie platform voor iedereen.</p>
             </div>
           </div>
         </footer>
