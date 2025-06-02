@@ -20,6 +20,8 @@ interface User {
   created_at: string;
 }
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://daamkldzorjgkxgbwqqu.supabase.co';
+
 const AdminUserManager = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +39,7 @@ const AdminUserManager = () => {
       const { data: session } = await supabase.auth.getSession();
       if (!session.session) return;
 
-      const response = await fetch(`${supabase.supabaseUrl}/functions/v1/admin-users`, {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-users`, {
         headers: {
           'Authorization': `Bearer ${session.session.access_token}`,
           'Content-Type': 'application/json'
@@ -66,7 +68,7 @@ const AdminUserManager = () => {
       const { data: session } = await supabase.auth.getSession();
       if (!session.session) return;
 
-      const response = await fetch(`${supabase.supabaseUrl}/functions/v1/admin-users`, {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-users`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${session.session.access_token}`,
@@ -103,7 +105,7 @@ const AdminUserManager = () => {
       const { data: session } = await supabase.auth.getSession();
       if (!session.session) return;
 
-      const response = await fetch(`${supabase.supabaseUrl}/functions/v1/admin-users`, {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-users`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${session.session.access_token}`,
@@ -268,69 +270,71 @@ const AdminUserManager = () => {
 
       {/* Edit User Modal */}
       {editingUser && (
-        <Card className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <CardContent className="bg-white p-6 rounded-lg w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">Gebruiker Bewerken</h3>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Naam</label>
-                <Input
-                  value={editingUser.full_name || ''}
-                  onChange={(e) => setEditingUser({...editingUser, full_name: e.target.value})}
-                />
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-bold mb-4">Gebruiker Bewerken</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium">Naam</label>
+                  <Input
+                    value={editingUser.full_name || ''}
+                    onChange={(e) => setEditingUser({...editingUser, full_name: e.target.value})}
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium">Rol</label>
+                  <Select
+                    value={editingUser.user_role}
+                    onValueChange={(value: 'user' | 'admin') => 
+                      setEditingUser({...editingUser, user_role: value})}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="user">User</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium">Abonnement</label>
+                  <Select
+                    value={editingUser.subscription_plan}
+                    onValueChange={(value: 'free' | 'pro' | 'enterprise') => 
+                      setEditingUser({...editingUser, subscription_plan: value})}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="free">Free</SelectItem>
+                      <SelectItem value="pro">Pro</SelectItem>
+                      <SelectItem value="enterprise">Enterprise</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               
-              <div>
-                <label className="text-sm font-medium">Rol</label>
-                <Select
-                  value={editingUser.user_role}
-                  onValueChange={(value: 'user' | 'admin') => 
-                    setEditingUser({...editingUser, user_role: value})}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="user">User</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="flex justify-end space-x-2 mt-6">
+                <Button variant="outline" onClick={() => setEditingUser(null)}>
+                  Annuleren
+                </Button>
+                <Button onClick={() => updateUser(editingUser.id, {
+                  full_name: editingUser.full_name,
+                  user_role: editingUser.user_role,
+                  subscription_plan: editingUser.subscription_plan
+                })}>
+                  Opslaan
+                </Button>
               </div>
-              
-              <div>
-                <label className="text-sm font-medium">Abonnement</label>
-                <Select
-                  value={editingUser.subscription_plan}
-                  onValueChange={(value: 'free' | 'pro' | 'enterprise') => 
-                    setEditingUser({...editingUser, subscription_plan: value})}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="free">Free</SelectItem>
-                    <SelectItem value="pro">Pro</SelectItem>
-                    <SelectItem value="enterprise">Enterprise</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            
-            <div className="flex justify-end space-x-2 mt-6">
-              <Button variant="outline" onClick={() => setEditingUser(null)}>
-                Annuleren
-              </Button>
-              <Button onClick={() => updateUser(editingUser.id, {
-                full_name: editingUser.full_name,
-                user_role: editingUser.user_role,
-                subscription_plan: editingUser.subscription_plan
-              })}>
-                Opslaan
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       )}
     </div>
   );

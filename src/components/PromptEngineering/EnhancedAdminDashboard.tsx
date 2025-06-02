@@ -15,6 +15,8 @@ import AdminUserManager from './AdminUserManager';
 import AdminContentManager from './AdminContentManager';
 import AdminAnalyticsPanel from './AdminAnalyticsPanel';
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://daamkldzorjgkxgbwqqu.supabase.co';
+
 const EnhancedAdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [stats, setStats] = useState<any>({});
@@ -31,7 +33,7 @@ const EnhancedAdminDashboard = () => {
       const { data: session } = await supabase.auth.getSession();
       if (!session.session) return;
 
-      const response = await fetch(`${supabase.supabaseUrl}/functions/v1/admin-analytics`, {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-analytics`, {
         headers: {
           'Authorization': `Bearer ${session.session.access_token}`,
           'Content-Type': 'application/json'

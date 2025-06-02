@@ -20,6 +20,8 @@ interface ContentModule {
   updated_at: string;
 }
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://daamkldzorjgkxgbwqqu.supabase.co';
+
 const AdminContentManager = () => {
   const [modules, setModules] = useState<ContentModule[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +44,7 @@ const AdminContentManager = () => {
       const { data: session } = await supabase.auth.getSession();
       if (!session.session) return;
 
-      const response = await fetch(`${supabase.supabaseUrl}/functions/v1/admin-content`, {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-content`, {
         headers: {
           'Authorization': `Bearer ${session.session.access_token}`,
           'Content-Type': 'application/json'
@@ -88,7 +90,7 @@ const AdminContentManager = () => {
 
       if (editingModule) {
         // Update existing module
-        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/admin-content`, {
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-content`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${session.session.access_token}`,
@@ -113,7 +115,7 @@ const AdminContentManager = () => {
         });
       } else {
         // Create new module
-        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/admin-content`, {
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-content`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${session.session.access_token}`,
@@ -152,7 +154,7 @@ const AdminContentManager = () => {
       const { data: session } = await supabase.auth.getSession();
       if (!session.session) return;
 
-      const response = await fetch(`${supabase.supabaseUrl}/functions/v1/admin-content`, {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-content`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${session.session.access_token}`,
@@ -214,7 +216,7 @@ const AdminContentManager = () => {
             <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Vernieuwen
           </Button>
-          <Button onClick={() => setIsCreating(true)} disabled={isCreating || editingModule}>
+          <Button onClick={() => setIsCreating(true)} disabled={isCreating || !!editingModule}>
             <Plus className="h-4 w-4 mr-2" />
             Nieuwe Module
           </Button>
