@@ -5,6 +5,7 @@ import EmbeddableExercise from '@/components/PromptEngineering/EmbeddableExercis
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { Card, CardContent } from '@/components/ui/card';
 import { exerciseDatabase } from '@/components/PromptEngineering/ExerciseData';
+import BreadcrumbNavigation from '@/components/ui/breadcrumb-navigation';
 
 const LoadingFallback = () => (
   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -34,17 +35,38 @@ const ExerciseEmbedNL = () => {
 
   if (!exercise) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">Geen AI oefening gevonden</p>
+      <ErrorBoundary>
+        <div className="min-h-screen bg-gray-50">
+          <BreadcrumbNavigation 
+            customItems={[
+              { label: 'AI Leren', href: '/ai-leren/nl' },
+              { label: 'Exercise Embed' },
+              { label: 'Not Found' }
+            ]}
+          />
+          <div className="flex items-center justify-center pt-16">
+            <div className="text-center">
+              <p className="text-gray-600">Geen AI oefening gevonden</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </ErrorBoundary>
     );
   }
 
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gray-50 p-4">
+        {!compact && (
+          <BreadcrumbNavigation 
+            customItems={[
+              { label: 'AI Leren', href: '/ai-leren/nl' },
+              { label: 'Exercise Embed' },
+              { label: exercise.title }
+            ]}
+          />
+        )}
+        
         <div className="max-w-7xl mx-auto">
           <Suspense fallback={<LoadingFallback />}>
             <EmbeddableExercise

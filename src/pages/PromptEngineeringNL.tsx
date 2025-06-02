@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookOpen, Target, Database, Code, Play, Users, ChevronRight, Shield, Brain } from 'lucide-react';
+import { BookOpen, Target, Database, Code, Play, Users, ChevronRight, Shield, Brain, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LearningPath from '@/components/PromptEngineering/LearningPath';
 import EnhancedPromptDatabase from '@/components/PromptEngineering/EnhancedPromptDatabase';
@@ -13,6 +13,7 @@ import ComprehensiveExercisePlayer from '@/components/PromptEngineering/Comprehe
 import SecurityModule from '@/components/PromptEngineering/SecurityModule';
 import AdminPromptManager from '@/components/PromptEngineering/AdminPromptManager';
 import SEO from '@/components/SEO';
+import BreadcrumbNavigation from '@/components/ui/breadcrumb-navigation';
 
 const PromptEngineeringNL = () => {
   const [activeTab, setActiveTab] = useState('modules');
@@ -52,7 +53,11 @@ const PromptEngineeringNL = () => {
                 Van basis concepten tot geavanceerde technieken - alles gratis toegankelijk.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 font-semibold">
+                <Button 
+                  size="lg" 
+                  className="bg-white text-purple-600 hover:bg-gray-100 font-semibold"
+                  onClick={() => setActiveTab('modules')}
+                >
                   <Play className="h-5 w-5 mr-2" />
                   Start Leren
                 </Button>
@@ -66,6 +71,9 @@ const PromptEngineeringNL = () => {
             </div>
           </div>
         </div>
+
+        {/* Breadcrumb Navigation */}
+        <BreadcrumbNavigation />
 
         {/* Navigation Bar */}
         <div className="bg-white border-b sticky top-0 z-40">
