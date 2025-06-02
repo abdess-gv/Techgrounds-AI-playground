@@ -143,7 +143,7 @@ const ModulePlayer = () => {
           onNext={() => {
             if (currentLessonIndex < currentModule.lessons.length - 1) {
               setCurrentLessonIndex(prev => prev + 1);
-            } else if (currentModuleIndex < currentModules.length - 1) {
+            } else if (Array.isArray(currentModules) && currentModuleIndex < currentModules.length - 1) {
               setCurrentModuleIndex(prev => prev + 1);
               setCurrentLessonIndex(0);
             } else {

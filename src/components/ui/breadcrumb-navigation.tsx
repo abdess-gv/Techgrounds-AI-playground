@@ -16,7 +16,7 @@ const BreadcrumbNavigation = ({ customItems }: BreadcrumbNavigationProps) => {
   
   const getPathSegments = () => {
     const segments = location.pathname.split('/').filter(Boolean);
-    const breadcrumbs = [{ label: 'Home', href: '/' }];
+    const breadcrumbs: Array<{ label: string; href?: string }> = [{ label: 'Home', href: '/' }];
     
     if (customItems) {
       breadcrumbs.push(...customItems);
