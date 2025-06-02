@@ -36,9 +36,14 @@ const NotFound = () => {
               Prompt Engineering (EN)
             </Button>
           </Link>
-          <Link to="/prompt-engineering/nl">
+          <Link to="/ai-leren/nl">
             <Button variant="outline" className="w-full">
-              Prompt Engineering (NL)
+              AI Leren (NL)
+            </Button>
+          </Link>
+          <Link to="/tools">
+            <Button variant="outline" className="w-full">
+              AI Tools
             </Button>
           </Link>
         </div>
