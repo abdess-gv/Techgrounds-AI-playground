@@ -1,73 +1,62 @@
-
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { HelmetProvider } from 'react-helmet-async';
-import { LanguageProvider } from "@/contexts/LanguageContext";
-import { AuthProvider } from "@/contexts/AuthContext";
-import Index from "./pages/Index";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import { Toaster } from "@/components/ui/toaster"
+import { AuthProvider } from "./contexts/AuthContext";
+import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
-import PromptEngineeringNL from "./pages/PromptEngineeringNL";
-import ExerciseEmbedNL from "./pages/ExerciseEmbedNL";
-import DatabaseEmbedNL from "./pages/DatabaseEmbedNL";
-import FrameworkEmbedNL from "./pages/FrameworkEmbedNL";
-import AISafetyEmbedNL from "./pages/AISafetyEmbedNL";
-import SecurityEmbedNL from "./pages/SecurityEmbedNL";
+import SEO from "./components/SEO";
+import { HelmetProvider } from 'react-helmet-async';
+import PromptTemplatePage from "./pages/PromptTemplatePage";
+import PromptDetailPage from "./pages/PromptDetailPage";
+import PromptCreatePage from "./pages/PromptCreatePage";
+import PromptEditPage from "./pages/PromptEditPage";
+import AiChatPage from "./pages/AiChatPage";
+import ModulePlayerPage from "./pages/ModulePlayerPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
-import AIToolsPage from "./pages/AIToolsPage";
+import AdminLoginPage from '@/pages/AdminLoginPage';
+import AdminGuard from '@/components/AdminAuth/AdminGuard';
+import EnhancedAdminDashboard from '@/components/PromptEngineering/EnhancedAdminDashboard';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 3,
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+const queryClient = new QueryClient()
 
-const App = () => (
-  <HelmetProvider>
-    <LanguageProvider>
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
+function App() {
+  return (
+    <BrowserRouter>
+      <QueryClient client={queryClient}>
+        <AuthProvider>
+          <HelmetProvider>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/prompt-templates" element={<PromptTemplatePage />} />
+              <Route path="/prompt-templates/:id" element={<PromptDetailPage />} />
+              <Route path="/prompt-templates/create" element={<PromptCreatePage />} />
+              <Route path="/prompt-templates/:id/edit" element={<PromptEditPage />} />
+              <Route path="/ai-chat" element={<AiChatPage />} />
+              <Route path="/ai-leren/nl" element={<ModulePlayerPage />} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin/login" element={<AdminLoginPage />} />
+              <Route path="/admin" element={
+                <AdminGuard>
+                  <EnhancedAdminDashboard />
+                </AdminGuard>
+              } />
+              
+              <Route path="*" element={<NotFound />} />
+            </Routes>
             <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/ai-leren" element={<Navigate to="/ai-leren/nl" replace />} />
-                <Route path="/ai-leren/nl" element={<PromptEngineeringNL />} />
-                <Route path="/tools" element={<AIToolsPage />} />
-                
-                {/* Admin Routes */}
-                <Route path="/admin" element={<AdminDashboardPage />} />
-                
-                {/* Dutch Embed Routes */}
-                <Route path="/oefening-embed-nl" element={<ExerciseEmbedNL />} />
-                <Route path="/database-embed-nl" element={<DatabaseEmbedNL />} />
-                <Route path="/framework-embed-nl" element={<FrameworkEmbedNL />} />
-                <Route path="/ai-veiligheid-embed-nl" element={<AISafetyEmbedNL />} />
-                <Route path="/veiligheid-embed-nl" element={<SecurityEmbedNL />} />
-                
-                {/* Legacy redirects */}
-                <Route path="/exercise-embed-nl" element={<Navigate to="/oefening-embed-nl" replace />} />
-                <Route path="/database-embed-nl" element={<Navigate to="/database-embed-nl" replace />} />
-                <Route path="/framework-embed-nl" element={<Navigate to="/framework-embed-nl" replace />} />
-                <Route path="/prompt-engineering" element={<Navigate to="/ai-leren/nl" replace />} />
-                <Route path="/prompt-engineering/nl" element={<Navigate to="/ai-leren/nl" replace />} />
-                
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </QueryClientProvider>
-      </AuthProvider>
-    </LanguageProvider>
-  </HelmetProvider>
-);
+          </HelmetProvider>
+        </AuthProvider>
+      </QueryClient>
+    </BrowserRouter>
+  );
+}
 
 export default App;
