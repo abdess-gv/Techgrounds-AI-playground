@@ -1,11 +1,10 @@
-
 import React, { Suspense } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link, useNavigate } from "react-router-dom";
 import { 
-  ArrowLeft, Code, Workflow, FileJson, Python, 
+  ArrowLeft, Code, Workflow, FileJson, Code2, 
   Sparkles, Zap, Target, BookOpen 
 } from 'lucide-react';
 import SEO from '@/components/SEO';
@@ -31,7 +30,7 @@ const TechgroundsPlayground = () => {
       id: 'python',
       title: 'Python Programming',
       description: 'Master Python programming met hands-on coding exercises',
-      icon: Python,
+      icon: Code2,
       color: 'bg-green-500',
       levels: ['Beginner', 'Intermediate', 'Advanced'],
       features: ['In-browser Execution', 'Step-by-step Guidance', 'Project-based Learning'],
