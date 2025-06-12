@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Techgrounds AI Playground</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #e0e7ff 100%);
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            background: #fee2e2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📡</div>
+        <h1>Je bent offline</h1>
+        <p>
+            Controleer je internetverbinding en probeer het opnieuw. 
+            De Techgrounds AI Playground heeft een internetverbinding nodig om te functioneren.
+        </p>
+        <button class="btn" onclick="window.location.reload()">
+            Probeer Opnieuw
+        </button>
+    </div>
+
+    <script>
+        // Auto-retry when online
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+        
+        // Check connection periodically
+        setInterval(() => {
+            if (navigator.onLine) {
+                fetch('/')
+                    .then(() => window.location.reload())
+                    .catch(() => {});
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

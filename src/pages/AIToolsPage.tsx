@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Wrench } from "lucide-react";
+import { ArrowLeft, Wrench, Sparkles, Code, Workflow } from "lucide-react";
 import SEO from '@/components/SEO';
 
 const AIToolsPage = () => {
@@ -36,11 +36,53 @@ const AIToolsPage = () => {
             </p>
           </div>
 
+          {/* Techgrounds AI-Playground - Featured */}
+          <Card className="mb-8 border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50">
+            <CardHeader>
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg">
+                  <Sparkles className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl">Techgrounds AI-Playground</CardTitle>
+                  <CardDescription className="text-lg">
+                    Nieuw! Interactief leerplatform voor programmeren en workflows
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-4 mb-6">
+                <div className="p-4 bg-white rounded-lg">
+                  <Code className="h-8 w-8 text-blue-600 mb-2" />
+                  <h4 className="font-semibold">JSON & Python</h4>
+                  <p className="text-sm text-gray-600">Hands-on coding met real-time feedback</p>
+                </div>
+                <div className="p-4 bg-white rounded-lg">
+                  <Workflow className="h-8 w-8 text-purple-600 mb-2" />
+                  <h4 className="font-semibold">Workflow Designer</h4>
+                  <p className="text-sm text-gray-600">Visual workflow creation tool</p>
+                </div>
+                <div className="p-4 bg-white rounded-lg">
+                  <Sparkles className="h-8 w-8 text-green-600 mb-2" />
+                  <h4 className="font-semibold">3 Skill Levels</h4>
+                  <p className="text-sm text-gray-600">Beginner tot gevorderd niveau</p>
+                </div>
+              </div>
+              <Link to="/playground">
+                <Button size="lg" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                  <Sparkles className="h-5 w-5 mr-2" />
+                  Launch AI-Playground
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>AI Tools Platform</CardTitle>
+              <CardTitle>AI Learning Platform</CardTitle>
               <CardDescription>
-                Deze pagina wordt momenteel ontwikkeld om een uitgebreide collectie AI-tools te bieden.
+                Bestaande leermodules en frameworks voor AI prompt engineering
               </CardDescription>
             </CardHeader>
             <CardContent>
