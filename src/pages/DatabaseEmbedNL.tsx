@@ -39,11 +39,10 @@ const DatabaseEmbedNL = () => {
             />
           </Suspense>
           
-          {/* Branding */}
           <Card className="mt-8 border-blue-200">
             <CardContent className="p-4 text-center">
               <p className="text-sm text-blue-600">
-                Aangedreven door <strong>NoteAI</strong> Nederlandse Prompt Engineering Platform
+                Aangedreven door <strong>Techgrounds AI-Playground</strong> - Nederlands AI Educatieplatform
               </p>
             </CardContent>
           </Card>

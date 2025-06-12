@@ -1,16 +1,15 @@
 
 import { useSearchParams } from 'react-router-dom';
 import { Suspense } from 'react';
-import EmbeddableExercise from '@/components/PromptEngineering/EmbeddableExercise';
+import EmbeddableSecurityModule from '@/components/PromptEngineering/EmbeddableSecurityModule';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { Card, CardContent } from '@/components/ui/card';
-import { securityExercises } from '@/components/PromptEngineering/data/securityExercises';
 
 const LoadingFallback = () => (
   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
     <div className="text-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-      <p className="text-gray-600">AI veiligheid oefening wordt geladen...</p>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+      <p className="text-gray-600">AI Veiligheid module wordt geladen...</p>
     </div>
   </div>
 );
@@ -18,32 +17,16 @@ const LoadingFallback = () => (
 const SecurityEmbedNL = () => {
   const [searchParams] = useSearchParams();
   
-  const exerciseId = searchParams.get('exercise') || '';
   const compact = searchParams.get('compact') === 'true';
   const showHeader = searchParams.get('header') !== 'false';
   const showLegend = searchParams.get('legend') !== 'false';
-
-  const exercise = exerciseId 
-    ? securityExercises.find(ex => ex.id === exerciseId) || securityExercises[0]
-    : securityExercises[0];
-
-  if (!exercise) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">Geen AI veiligheid oefening gevonden</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gray-50 p-4">
         <div className="max-w-7xl mx-auto">
           <Suspense fallback={<LoadingFallback />}>
-            <EmbeddableExercise
-              exercise={exercise}
+            <EmbeddableSecurityModule
               compact={compact}
               showHeader={showHeader}
               showLegend={showLegend}
@@ -54,7 +37,7 @@ const SecurityEmbedNL = () => {
           <Card className="mt-8 border-blue-200">
             <CardContent className="p-4 text-center">
               <p className="text-sm text-blue-600">
-                Aangedreven door <strong>AI Leren</strong> - Nederlands AI Educatieplatform
+                Aangedreven door <strong>Techgrounds AI-Playground</strong> - Nederlands AI Educatieplatform
               </p>
             </CardContent>
           </Card>

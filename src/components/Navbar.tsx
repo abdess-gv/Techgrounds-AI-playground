@@ -13,21 +13,21 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
             <Brain className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-900">AI Leren</span>
+            <span className="text-xl font-bold text-gray-900">Techgrounds AI-Playground</span>
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
-            <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
-            <Link to="/ai-leren/nl" className="text-gray-600 hover:text-gray-900 transition-colors">
-              🇳🇱 Leer Prompting
+            <Link to="/playground" className="text-gray-600 hover:text-gray-900 transition-colors">
+              AI-Playground
             </Link>
-            <Link to="/tools" className="text-gray-600 hover:text-gray-900 transition-colors">
-              AI Tools
+            <Link to="/embed/quiz" className="text-gray-600 hover:text-gray-900 transition-colors">
+              AI Quiz
             </Link>
-            <Link to="/admin" className="text-gray-600 hover:text-gray-900 transition-colors">Admin</Link>
-            <Link to="/dashboard">
-              <Button className="bg-blue-600 hover:bg-blue-700">Get Started</Button>
+            <Link to="/embed/prompt-engineering" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Prompt Training
+            </Link>
+            <Link to="/playground">
+              <Button className="bg-blue-600 hover:bg-blue-700">Start Learning</Button>
             </Link>
           </div>
 
@@ -45,13 +45,17 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
             <div className="flex flex-col space-y-3">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
-              <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
-              <Link to="/ai-leren/nl" className="text-gray-600 hover:text-gray-900 transition-colors">🇳🇱 Leer Prompting</Link>
-              <Link to="/tools" className="text-gray-600 hover:text-gray-900 transition-colors">AI Tools</Link>
-              <Link to="/admin" className="text-gray-600 hover:text-gray-900 transition-colors">Admin</Link>
-              <Link to="/dashboard">
-                <Button className="bg-blue-600 hover:bg-blue-700 w-full">Get Started</Button>
+              <Link to="/playground" className="text-gray-600 hover:text-gray-900 transition-colors">
+                AI-Playground
+              </Link>
+              <Link to="/embed/quiz" className="text-gray-600 hover:text-gray-900 transition-colors">
+                AI Quiz
+              </Link>
+              <Link to="/embed/prompt-engineering" className="text-gray-600 hover:text-gray-900 transition-colors">
+                Prompt Training
+              </Link>
+              <Link to="/playground">
+                <Button className="bg-blue-600 hover:bg-blue-700 w-full">Start Learning</Button>
               </Link>
             </div>
           </div>

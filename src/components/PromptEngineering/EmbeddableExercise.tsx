@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, XCircle, Lightbulb, Target, RotateCcw, ExternalLink } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Target, RotateCcw } from 'lucide-react';
 import PromptHighlighter from './PromptHighlighter';
 import PromptLegend from './PromptLegend';
 import { Exercise } from './ExerciseData';
@@ -52,8 +52,7 @@ const EmbeddableExercise = ({
         'prompt.placeholder': 'Write your prompt here...',
         'criteria.met': 'criteria met',
         'hint.of': 'of',
-        'powered.by': 'Powered by Prompt Engineering Learning Platform',
-        'view.full': 'View Full Platform'
+        'powered.by': 'Powered by Techgrounds AI-Playground'
       },
       nl: {
         'exercise.prompt': 'Oefening Opdracht:',
@@ -69,8 +68,7 @@ const EmbeddableExercise = ({
         'prompt.placeholder': 'Schrijf hier je prompt...',
         'criteria.met': 'criteria behaald',
         'hint.of': 'van',
-        'powered.by': 'Aangedreven door Prompt Engineering Leerplatform',
-        'view.full': 'Bekijk Volledig Platform'
+        'powered.by': 'Aangedreven door Techgrounds AI-Playground'
       }
     };
     
@@ -310,15 +308,9 @@ const EmbeddableExercise = ({
         </Card>
       </div>
 
-      {/* Embed Info */}
+      {/* Branding Footer */}
       <div className="text-center text-xs text-gray-500 border-t pt-2">
         <span>{t('powered.by')}</span>
-        <Button variant="link" className="p-0 h-auto ml-2 text-xs" asChild>
-          <a href={language === 'nl' ? "/prompt-engineering/nl" : "/prompt-engineering"} target="_blank" rel="noopener noreferrer">
-            <ExternalLink className="h-3 w-3 mr-1" />
-            {t('view.full')}
-          </a>
-        </Button>
       </div>
     </div>
   );
