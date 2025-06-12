@@ -1,20 +1,24 @@
-
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link, useNavigate } from "react-router-dom";
 import { 
   ArrowLeft, Code, Workflow, FileJson, Code2, Brain, Shield, Database, 
-  Sparkles, Zap, Target, BookOpen, HelpCircle, Trophy
+  Sparkles, Zap, Target, BookOpen, HelpCircle, Trophy, Share2
 } from 'lucide-react';
 import SEO from '@/components/SEO';
 import AppErrorBoundary from '@/components/ErrorBoundary/AppErrorBoundary';
 import { useSystemMonitoring } from '@/hooks/useSystemMonitoring';
+import EmbedModal from '@/components/EmbedGenerator/EmbedModal';
 
 const TechgroundsPlayground = () => {
   const navigate = useNavigate();
   const { status, isHealthy } = useSystemMonitoring();
+  const [embedModal, setEmbedModal] = useState<{ isOpen: boolean; moduleType: any }>({
+    isOpen: false,
+    moduleType: null
+  });
 
   const programmingModules = [
     {
@@ -113,6 +117,14 @@ const TechgroundsPlayground = () => {
     }
   ];
 
+  const openEmbedModal = (moduleType: any) => {
+    setEmbedModal({ isOpen: true, moduleType });
+  };
+
+  const closeEmbedModal = () => {
+    setEmbedModal({ isOpen: false, moduleType: null });
+  };
+
   const renderModuleGrid = (modules: any[], title: string) => (
     <div className="mb-12">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">{title}</h2>
@@ -166,23 +178,51 @@ const TechgroundsPlayground = () => {
                 </ul>
               </div>
 
-              <Button 
-                className="w-full mt-6" 
-                onClick={() => {
-                  if (module.available && module.path) {
-                    navigate(module.path);
-                  }
-                }}
-              >
-                <Code className="h-4 w-4 mr-2" />
-                Start Learning
-              </Button>
+              <div className="grid grid-cols-2 gap-2 mt-6">
+                <Button 
+                  className="flex-1" 
+                  onClick={() => {
+                    if (module.available && module.path) {
+                      navigate(module.path);
+                    }
+                  }}
+                >
+                  <Code className="h-4 w-4 mr-2" />
+                  Start Learning
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  onClick={() => openEmbedModal(module.embedType || module.id)}
+                >
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Embed
+                </Button>
+              </div>
             </CardContent>
           </Card>
         ))}
       </div>
     </div>
   );
+
+  const updatedProgrammingModules = programmingModules.map(module => ({
+    ...module,
+    embedType: module.id
+  }));
+
+  const updatedAiTrainingModules = aiTrainingModules.map(module => ({
+    ...module,
+    embedType: module.id === 'ai-safety' ? 'ai-safety' : 
+               module.id === 'frameworks' ? 'frameworks' :
+               module.id === 'database' ? 'database' : 
+               'prompt-engineering'
+  }));
+
+  const updatedQuizModules = quizModules.map(module => ({
+    ...module,
+    embedType: 'quiz'
+  }));
 
   return (
     <AppErrorBoundary>
@@ -258,13 +298,13 @@ const TechgroundsPlayground = () => {
               </div>
 
               {/* Programming Modules */}
-              {renderModuleGrid(programmingModules, "🚀 Programmeer Training")}
+              {renderModuleGrid(updatedProgrammingModules, "🚀 Programmeer Training")}
 
               {/* AI Training Modules */}
-              {renderModuleGrid(aiTrainingModules, "🤖 AI Training & Veiligheid")}
+              {renderModuleGrid(updatedAiTrainingModules, "🤖 AI Training & Veiligheid")}
 
               {/* Quiz Modules */}
-              {renderModuleGrid(quizModules, "🎯 Knowledge Testing")}
+              {renderModuleGrid(updatedQuizModules, "🎯 Knowledge Testing")}
 
               {/* System Status */}
               {!isHealthy && (
@@ -301,6 +341,13 @@ const TechgroundsPlayground = () => {
               </Card>
             </div>
           </div>
+
+          {/* Embed Modal */}
+          <EmbedModal
+            isOpen={embedModal.isOpen}
+            onClose={closeEmbedModal}
+            moduleType={embedModal.moduleType}
+          />
         </>
       </Suspense>
     </AppErrorBoundary>

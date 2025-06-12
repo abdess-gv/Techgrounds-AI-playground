@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { RotateCcw, ArrowLeft, Trophy } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import SEO from '@/components/SEO';
 
 interface QuizItem {
@@ -13,12 +13,26 @@ interface QuizItem {
 }
 
 const AITermsQuizNL = () => {
+  const [searchParams] = useSearchParams();
   const [selectedLevel, setSelectedLevel] = useState<'easy' | 'medium' | 'hard' | null>(null);
   const [currentData, setCurrentData] = useState<QuizItem[]>([]);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [correctMatches, setCorrectMatches] = useState<Set<string>>(new Set());
   const [incorrectShake, setIncorrectShake] = useState<string | null>(null);
   const [gameCompleted, setGameCompleted] = useState(false);
+
+  // URL parameters
+  const compact = searchParams.get('compact') === 'true';
+  const showHeader = searchParams.get('header') !== 'false';
+  const autoStart = searchParams.get('autostart') === 'true';
+  const presetLevel = searchParams.get('level') as 'easy' | 'medium' | 'hard' | null;
+
+  // Auto-start with preset level
+  useEffect(() => {
+    if (autoStart && presetLevel && !selectedLevel) {
+      startGame(presetLevel);
+    }
+  }, [autoStart, presetLevel, selectedLevel]);
 
   const easyData: QuizItem[] = [
     { id: 'data', term: 'Data', description: 'De informatie (tekst, beelden, etc.) waarmee AI leert.' },
@@ -120,7 +134,7 @@ const AITermsQuizNL = () => {
     }
   };
 
-  if (!selectedLevel) {
+  if (!selectedLevel && !(autoStart && presetLevel)) {
     return (
       <>
         <SEO 
@@ -128,14 +142,16 @@ const AITermsQuizNL = () => {
           description="Test je kennis van AI-begrippen met onze interactieve drag-and-drop quiz"
           keywords="AI quiz, AI begrippen, drag and drop, Nederlands, artificial intelligence"
         />
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
+        <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center ${compact ? 'p-2' : 'p-4'}`}>
           <Card className="w-full max-w-2xl">
-            <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-gray-900 mb-2">
-                Kies een Niveau
-              </CardTitle>
-              <p className="text-gray-600">Test je kennis van AI-begrippen.</p>
-            </CardHeader>
+            {showHeader && (
+              <CardHeader className="text-center">
+                <CardTitle className="text-3xl font-bold text-gray-900 mb-2">
+                  Kies een Niveau
+                </CardTitle>
+                <p className="text-gray-600">Test je kennis van AI-begrippen.</p>
+              </CardHeader>
+            )}
             <CardContent className="space-y-4">
               <div className="grid gap-4">
                 {['easy', 'medium', 'hard'].map((level) => (
@@ -159,23 +175,25 @@ const AITermsQuizNL = () => {
   return (
     <>
       <SEO 
-        title={`AI-termen Quiz - ${getLevelName(selectedLevel)} Niveau`}
+        title={`AI-termen Quiz - ${getLevelName(selectedLevel!)} Niveau`}
         description="Test je kennis van AI-begrippen met onze interactieve drag-and-drop quiz"
         keywords="AI quiz, AI begrippen, drag and drop, Nederlands"
       />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4">
-        <div className="max-w-6xl mx-auto">
-          <Card className="mb-6">
-            <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-gray-900 mb-2">
-                AI Begrippen Spel
-              </CardTitle>
-              <p className="text-gray-600">Sleep de term naar de juiste beschrijving.</p>
-              <Badge className={`${getLevelColor(selectedLevel)} text-white`}>
-                {getLevelName(selectedLevel)} Niveau
-              </Badge>
-            </CardHeader>
-          </Card>
+      <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 ${compact ? 'p-2' : 'p-4'}`}>
+        <div className={`${compact ? 'max-w-4xl' : 'max-w-6xl'} mx-auto`}>
+          {showHeader && (
+            <Card className="mb-6">
+              <CardHeader className="text-center">
+                <CardTitle className="text-3xl font-bold text-gray-900 mb-2">
+                  AI Begrippen Spel
+                </CardTitle>
+                <p className="text-gray-600">Sleep de term naar de juiste beschrijving.</p>
+                <Badge className={`${getLevelColor(selectedLevel!)} text-white`}>
+                  {getLevelName(selectedLevel!)} Niveau
+                </Badge>
+              </CardHeader>
+            </Card>
+          )}
 
           {gameCompleted && (
             <Card className="mb-6 bg-green-50 border-green-200">
@@ -252,14 +270,16 @@ const AITermsQuizNL = () => {
           </div>
 
           <div className="mt-8 flex justify-center space-x-4">
-            <Button
-              onClick={backToLevels}
-              variant="outline"
-              className="flex items-center space-x-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span>Terug naar Levels</span>
-            </Button>
+            {!autoStart && (
+              <Button
+                onClick={backToLevels}
+                variant="outline"
+                className="flex items-center space-x-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                <span>Terug naar Levels</span>
+              </Button>
+            )}
             <Button
               onClick={resetGame}
               className="flex items-center space-x-2"
@@ -269,13 +289,15 @@ const AITermsQuizNL = () => {
             </Button>
           </div>
 
-          <Card className="mt-6 border-blue-200">
-            <CardContent className="p-4 text-center">
-              <p className="text-sm text-blue-600">
-                Aangedreven door <strong>Techgrounds AI-Playground</strong>
-              </p>
-            </CardContent>
-          </Card>
+          {!compact && (
+            <Card className="mt-6 border-blue-200">
+              <CardContent className="p-4 text-center">
+                <p className="text-sm text-blue-600">
+                  Aangedreven door <strong>Techgrounds AI-Playground</strong>
+                </p>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </>
