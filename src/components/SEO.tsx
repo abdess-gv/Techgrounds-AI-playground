@@ -1,6 +1,5 @@
 
 import { Helmet } from 'react-helmet-async';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 interface SEOProps {
   title?: string;
@@ -11,10 +10,8 @@ interface SEOProps {
 }
 
 const SEO = ({ title, description, canonical, noindex = false, keywords }: SEOProps) => {
-  const { language } = useLanguage();
-  
-  const siteTitle = 'AI Leren - Nederlands AI en Prompt Engineering Platform';
-  const siteDescription = 'Leer AI gebruiken en prompt engineering in het Nederlands. Gratis toegang tot oefeningen, frameworks en veiligheidsrichtlijnen voor verantwoord AI-gebruik.';
+  const siteTitle = 'Techgrounds AI-Playground - Interactive Learning Platform';
+  const siteDescription = 'Leer programmeren en workflows met onze interactieve AI-aangedreven leerplatform voor JSON, Python en Workflow Design.';
   
   const pageTitle = title ? `${title} | ${siteTitle}` : siteTitle;
   const pageDescription = description || siteDescription;
@@ -23,14 +20,14 @@ const SEO = ({ title, description, canonical, noindex = false, keywords }: SEOPr
     <Helmet>
       <title>{pageTitle}</title>
       <meta name="description" content={pageDescription} />
-      <meta name="language" content={language} />
+      <meta name="language" content="nl" />
       {keywords && <meta name="keywords" content={keywords} />}
       
       {/* Open Graph */}
       <meta property="og:title" content={pageTitle} />
       <meta property="og:description" content={pageDescription} />
       <meta property="og:type" content="website" />
-      <meta property="og:locale" content={language === 'nl' ? 'nl_NL' : 'en_US'} />
+      <meta property="og:locale" content="nl_NL" />
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -40,7 +37,7 @@ const SEO = ({ title, description, canonical, noindex = false, keywords }: SEOPr
       {/* Technical */}
       <meta name="robots" content={noindex ? "noindex,nofollow" : "index,follow"} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta httpEquiv="Content-Language" content={language} />
+      <meta httpEquiv="Content-Language" content="nl" />
       
       {canonical && <link rel="canonical" href={canonical} />}
       
@@ -49,7 +46,7 @@ const SEO = ({ title, description, canonical, noindex = false, keywords }: SEOPr
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          "name": "AI Leren",
+          "name": "Techgrounds AI-Playground",
           "description": pageDescription,
           "applicationCategory": "EducationalApplication",
           "operatingSystem": "Web",
