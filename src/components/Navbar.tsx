@@ -1,8 +1,8 @@
 
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Brain, Menu, X } from "lucide-react";
-import { useState } from "react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,9 +17,6 @@ const Navbar = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/playground" className="text-gray-600 hover:text-gray-900 transition-colors">
-              AI-Playground
-            </Link>
             <Link to="/embed/quiz" className="text-gray-600 hover:text-gray-900 transition-colors">
               AI Quiz
             </Link>
@@ -45,9 +42,6 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
             <div className="flex flex-col space-y-3">
-              <Link to="/playground" className="text-gray-600 hover:text-gray-900 transition-colors">
-                AI-Playground
-              </Link>
               <Link to="/embed/quiz" className="text-gray-600 hover:text-gray-900 transition-colors">
                 AI Quiz
               </Link>
