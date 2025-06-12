@@ -31,3 +31,10 @@ export const exerciseDatabaseNL: { [key: string]: Exercise[] } = {
 export const getExerciseDatabase = (language: 'en' | 'nl' = 'en') => {
   return language === 'nl' ? exerciseDatabaseNL : exerciseDatabase;
 };
+
+// Function to get security exercises by level and language
+export const getSecurityExercisesByLevel = (level: 'beginner' | 'intermediate' | 'advanced', language: 'en' | 'nl' = 'en') => {
+  const db = getExerciseDatabase(language);
+  const securityExercises = db.security || [];
+  return securityExercises.filter(exercise => exercise.difficulty === level);
+};
