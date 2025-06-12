@@ -16,6 +16,11 @@ import TechgroundsPlayground from './pages/TechgroundsPlayground';
 import JSONEmbedNL from './pages/JSONEmbedNL';
 import PythonEmbedNL from './pages/PythonEmbedNL';
 import WorkflowEmbedNL from './pages/WorkflowEmbedNL';
+import AITermsQuizNL from './pages/AITermsQuizNL';
+import PromptEngineeringEmbedNL from './pages/PromptEngineeringEmbedNL';
+import SecurityEmbedNL from './pages/SecurityEmbedNL';
+import FrameworkEmbedNL from './pages/FrameworkEmbedNL';
+import DatabaseEmbedNL from './pages/DatabaseEmbedNL';
 import AppErrorBoundary from './components/ErrorBoundary/AppErrorBoundary';
 
 const queryClient = new QueryClient({
@@ -40,10 +45,19 @@ function App() {
               {/* Techgrounds AI-Playground */}
               <Route path="/playground" element={<TechgroundsPlayground />} />
               
-              {/* Embedded Learning Modules */}
+              {/* Programming Learning Modules */}
               <Route path="/embed/json" element={<JSONEmbedNL />} />
               <Route path="/embed/python" element={<PythonEmbedNL />} />
               <Route path="/embed/workflow" element={<WorkflowEmbedNL />} />
+              
+              {/* AI Training Modules */}
+              <Route path="/embed/prompt-engineering" element={<PromptEngineeringEmbedNL />} />
+              <Route path="/embed/ai-safety" element={<SecurityEmbedNL />} />
+              <Route path="/embed/frameworks" element={<FrameworkEmbedNL />} />
+              <Route path="/embed/database" element={<DatabaseEmbedNL />} />
+              
+              {/* Quiz Module */}
+              <Route path="/embed/quiz" element={<AITermsQuizNL />} />
               
               <Route path="*" element={<NotFound />} />
             </Routes>

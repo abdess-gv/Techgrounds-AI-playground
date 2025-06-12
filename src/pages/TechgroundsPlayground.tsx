@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link, useNavigate } from "react-router-dom";
 import { 
-  ArrowLeft, Code, Workflow, FileJson, Code2, 
-  Sparkles, Zap, Target, BookOpen 
+  ArrowLeft, Code, Workflow, FileJson, Code2, Brain, Shield, Database, 
+  Sparkles, Zap, Target, BookOpen, HelpCircle, Trophy
 } from 'lucide-react';
 import SEO from '@/components/SEO';
 import AppErrorBoundary from '@/components/ErrorBoundary/AppErrorBoundary';
@@ -16,7 +16,7 @@ const TechgroundsPlayground = () => {
   const navigate = useNavigate();
   const { status, isHealthy } = useSystemMonitoring();
 
-  const modules = [
+  const programmingModules = [
     {
       id: 'json',
       title: 'JSON Mastery',
@@ -52,6 +52,138 @@ const TechgroundsPlayground = () => {
     }
   ];
 
+  const aiTrainingModules = [
+    {
+      id: 'prompt-engineering',
+      title: 'Prompt Engineering',
+      description: 'Leer effectieve prompts schrijven voor AI-systemen',
+      icon: Brain,
+      color: 'bg-indigo-500',
+      levels: ['Beginner', 'Intermediate', 'Advanced'],
+      features: ['Interactive Exercises', 'Real Examples', 'Best Practices'],
+      available: true,
+      path: '/embed/prompt-engineering'
+    },
+    {
+      id: 'ai-safety',
+      title: 'AI Veiligheid',
+      description: 'Leer over veilig en verantwoord gebruik van AI-systemen',
+      icon: Shield,
+      color: 'bg-red-500',
+      levels: ['Basic', 'Intermediate', 'Advanced'],
+      features: ['Security Guidelines', 'Risk Assessment', 'Best Practices'],
+      available: true,
+      path: '/embed/ai-safety'
+    },
+    {
+      id: 'frameworks',
+      title: 'AI Frameworks',
+      description: 'Ontdek bewezen frameworks voor effectieve prompt constructie',
+      icon: Database,
+      color: 'bg-teal-500',
+      levels: ['STAR', 'RACE', 'SMART'],
+      features: ['Framework Templates', 'Use Cases', 'Examples'],
+      available: true,
+      path: '/embed/frameworks'
+    },
+    {
+      id: 'database',
+      title: 'Prompt Database',
+      description: 'Doorzoekbare database met geteste prompts en templates',
+      icon: Database,
+      color: 'bg-cyan-500',
+      levels: ['Search', 'Filter', 'Categories'],
+      features: ['500+ Prompts', 'Copy Templates', 'Category Filter'],
+      available: true,
+      path: '/embed/database'
+    }
+  ];
+
+  const quizModules = [
+    {
+      id: 'ai-terms-quiz',
+      title: 'AI-termen Quiz',
+      description: 'Test je kennis van AI-begrippen met drag-and-drop quiz',
+      icon: Trophy,
+      color: 'bg-orange-500',
+      levels: ['Makkelijk', 'Gemiddeld', 'Moeilijk'],
+      features: ['Drag & Drop', '3 Levels', 'Instant Feedback'],
+      available: true,
+      path: '/embed/quiz'
+    }
+  ];
+
+  const renderModuleGrid = (modules: any[], title: string) => (
+    <div className="mb-12">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">{title}</h2>
+      <div className="grid lg:grid-cols-3 gap-6">
+        {modules.map((module) => (
+          <Card key={module.id} className="relative overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <CardHeader>
+              <div className="flex items-center space-x-3 mb-4">
+                <div className={`p-3 ${module.color} rounded-lg`}>
+                  <module.icon className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">{module.title}</CardTitle>
+                  {module.available && (
+                    <Badge className="mt-1 bg-green-100 text-green-800">Beschikbaar</Badge>
+                  )}
+                </div>
+              </div>
+              <CardDescription className="text-base">
+                {module.description}
+              </CardDescription>
+            </CardHeader>
+            
+            <CardContent className="space-y-4">
+              {/* Skill Levels */}
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Niveaus/Opties:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {module.levels.map((level: string, index: number) => (
+                    <Badge 
+                      key={level} 
+                      variant={index === 0 ? "default" : index === 1 ? "secondary" : "outline"}
+                      className="text-xs"
+                    >
+                      {level}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* Features */}
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Features:</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  {module.features.map((feature: string) => (
+                    <li key={feature} className="flex items-center space-x-2">
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <Button 
+                className="w-full mt-6" 
+                onClick={() => {
+                  if (module.available && module.path) {
+                    navigate(module.path);
+                  }
+                }}
+              >
+                <Code className="h-4 w-4 mr-2" />
+                Start Learning
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <AppErrorBoundary>
       <Suspense fallback={
@@ -62,8 +194,8 @@ const TechgroundsPlayground = () => {
         <>
           <SEO 
             title="Techgrounds AI-Playground - Interactive Learning Platform"
-            description="Leer programmeren en workflows met interactieve oefeningen voor JSON, Python en Workflow Design"
-            keywords="techgrounds, AI, playground, JSON, Python, workflow, programming, learning"
+            description="Leer programmeren en workflows met interactieve oefeningen voor JSON, Python, Workflow Design, AI Training en Quiz"
+            keywords="techgrounds, AI, playground, JSON, Python, workflow, programming, prompt engineering, AI safety, quiz"
           />
           
           <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -105,7 +237,7 @@ const TechgroundsPlayground = () => {
                 </h1>
                 
                 <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                  Interactief leerplatform voor programmeren en workflow design. 
+                  Interactief leerplatform voor programmeren, AI training en knowledge testing. 
                   Leer door te doen met hands-on oefeningen en real-time feedback.
                 </p>
 
@@ -116,7 +248,7 @@ const TechgroundsPlayground = () => {
                   </div>
                   <div className="flex items-center space-x-1">
                     <Target className="h-4 w-4 text-green-500" />
-                    <span>3 Skill Levels</span>
+                    <span>Multiple Skill Levels</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <BookOpen className="h-4 w-4 text-blue-500" />
@@ -125,72 +257,14 @@ const TechgroundsPlayground = () => {
                 </div>
               </div>
 
-              {/* Learning Modules */}
-              <div className="grid lg:grid-cols-3 gap-8 mb-16">
-                {modules.map((module) => (
-                  <Card key={module.id} className="relative overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                    <CardHeader>
-                      <div className="flex items-center space-x-3 mb-4">
-                        <div className={`p-3 ${module.color} rounded-lg`}>
-                          <module.icon className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-xl">{module.title}</CardTitle>
-                          {module.available && (
-                            <Badge className="mt-1 bg-green-100 text-green-800">Beschikbaar</Badge>
-                          )}
-                        </div>
-                      </div>
-                      <CardDescription className="text-base">
-                        {module.description}
-                      </CardDescription>
-                    </CardHeader>
-                    
-                    <CardContent className="space-y-4">
-                      {/* Skill Levels */}
-                      <div>
-                        <h4 className="font-medium text-gray-900 mb-2">Skill Levels:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {module.levels.map((level, index) => (
-                            <Badge 
-                              key={level} 
-                              variant={index === 0 ? "default" : index === 1 ? "secondary" : "outline"}
-                              className="text-xs"
-                            >
-                              {level}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
+              {/* Programming Modules */}
+              {renderModuleGrid(programmingModules, "🚀 Programmeer Training")}
 
-                      {/* Features */}
-                      <div>
-                        <h4 className="font-medium text-gray-900 mb-2">Features:</h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          {module.features.map((feature) => (
-                            <li key={feature} className="flex items-center space-x-2">
-                              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-                              <span>{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+              {/* AI Training Modules */}
+              {renderModuleGrid(aiTrainingModules, "🤖 AI Training & Veiligheid")}
 
-                      <Button 
-                        className="w-full mt-6" 
-                        onClick={() => {
-                          if (module.available && module.path) {
-                            navigate(module.path);
-                          }
-                        }}
-                      >
-                        <Code className="h-4 w-4 mr-2" />
-                        Start Learning
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              {/* Quiz Modules */}
+              {renderModuleGrid(quizModules, "🎯 Knowledge Testing")}
 
               {/* System Status */}
               {!isHealthy && (

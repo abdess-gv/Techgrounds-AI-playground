@@ -36,21 +36,49 @@ const NotFound = () => {
               AI-Playground
             </Button>
           </Link>
-          <Link to="/embed/json">
-            <Button variant="outline" className="w-full">
-              JSON Leren
-            </Button>
-          </Link>
-          <Link to="/embed/python">
-            <Button variant="outline" className="w-full">
-              Python Leren
-            </Button>
-          </Link>
-          <Link to="/embed/workflow">
-            <Button variant="outline" className="w-full">
-              Workflow Designer
-            </Button>
-          </Link>
+          
+          {/* Programming */}
+          <div className="text-left">
+            <h4 className="font-semibold text-gray-700 mb-2">🚀 Programmeer Training:</h4>
+            <div className="space-y-2">
+              <Link to="/embed/json">
+                <Button variant="outline" size="sm" className="w-full">JSON Leren</Button>
+              </Link>
+              <Link to="/embed/python">
+                <Button variant="outline" size="sm" className="w-full">Python Leren</Button>
+              </Link>
+              <Link to="/embed/workflow">
+                <Button variant="outline" size="sm" className="w-full">Workflow Designer</Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* AI Training */}
+          <div className="text-left">
+            <h4 className="font-semibold text-gray-700 mb-2">🤖 AI Training:</h4>
+            <div className="space-y-2">
+              <Link to="/embed/prompt-engineering">
+                <Button variant="outline" size="sm" className="w-full">Prompt Engineering</Button>
+              </Link>
+              <Link to="/embed/ai-safety">
+                <Button variant="outline" size="sm" className="w-full">AI Veiligheid</Button>
+              </Link>
+              <Link to="/embed/frameworks">
+                <Button variant="outline" size="sm" className="w-full">AI Frameworks</Button>
+              </Link>
+              <Link to="/embed/database">
+                <Button variant="outline" size="sm" className="w-full">Prompt Database</Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Quiz */}
+          <div className="text-left">
+            <h4 className="font-semibold text-gray-700 mb-2">🎯 Quiz:</h4>
+            <Link to="/embed/quiz">
+              <Button variant="outline" size="sm" className="w-full">AI-termen Quiz</Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

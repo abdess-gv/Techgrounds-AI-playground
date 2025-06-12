@@ -2,108 +2,145 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Mic, Brain, Search, FolderOpen, Tags, Settings, 
-  Upload, Languages, Zap, MessageSquare, FileText, Lock 
-} from "lucide-react";
+  Code, Workflow, FileJson, Code2, Brain, Shield, Database, Trophy,
+  Sparkles, Zap, Target, BookOpen, Users, Award
+} from 'lucide-react';
 
 const Features = () => {
-  const features = [
+  const programmingFeatures = [
     {
-      icon: <Mic className="h-6 w-6" />,
-      title: "Multi-Provider Transcription",
-      description: "Choose between OpenAI Whisper, Deepgram, and AssemblyAI for the best transcription quality.",
-      badges: ["AI-Powered", "Multi-Language"]
+      icon: FileJson,
+      title: "JSON Mastery",
+      description: "Leer JSON structuren begrijpen en maken met real-time validatie en interactieve oefeningen.",
+      badge: "Live Editor",
+      color: "text-blue-600"
     },
     {
-      icon: <Brain className="h-6 w-6" />,
-      title: "AI Knowledge Chat",
-      description: "Converse with your notes using ChatGPT, Grok, or Gemini. Ask questions and get insights from your knowledge base.",
-      badges: ["GPT-4", "Gemini", "Grok"]
+      icon: Code2,
+      title: "Python Programming",
+      description: "Master Python basics tot advanced concepten met in-browser code execution en stap-voor-stap begeleiding.",
+      badge: "Hands-on",
+      color: "text-green-600"
     },
     {
-      icon: <FileText className="h-6 w-6" />,
-      title: "Advanced Markdown Editor",
-      description: "Rich text editing with syntax highlighting, live preview, and seamless markdown support.",
-      badges: ["Syntax Highlighting", "Live Preview"]
-    },
-    {
-      icon: <FolderOpen className="h-6 w-6" />,
-      title: "Smart Organization",
-      description: "Organize notes with folders, tags, and smart categorization. Never lose a thought again.",
-      badges: ["Folders", "Tags", "Categories"]
-    },
-    {
-      icon: <Search className="h-6 w-6" />,
-      title: "Powerful Search",
-      description: "Find any note instantly with full-text search, tag filtering, and AI-powered semantic search.",
-      badges: ["Full-Text", "Semantic Search"]
-    },
-    {
-      icon: <Upload className="h-6 w-6" />,
-      title: "Audio Upload & Processing",
-      description: "Upload audio files in multiple formats for automatic transcription and note generation.",
-      badges: ["Multiple Formats", "Auto-Processing"]
-    },
-    {
-      icon: <Languages className="h-6 w-6" />,
-      title: "Multi-Language Support",
-      description: "Transcribe and work with notes in multiple languages with customizable language detection.",
-      badges: ["100+ Languages", "Auto-Detect"]
-    },
-    {
-      icon: <Settings className="h-6 w-6" />,
-      title: "Customizable Transcription",
-      description: "Fine-tune transcription settings including tone analysis, formatting options, and output styles.",
-      badges: ["Tone Analysis", "Custom Formatting"]
-    },
-    {
-      icon: <Lock className="h-6 w-6" />,
-      title: "Secure & Private",
-      description: "Your notes are encrypted and stored securely. Complete privacy with enterprise-grade security.",
-      badges: ["Encrypted", "Private", "Secure"]
+      icon: Workflow,
+      title: "Workflow Designer",
+      description: "Verstaan en ontwerpen van workflows met drag-and-drop interface en terminology guide.",
+      badge: "Visueel",
+      color: "text-purple-600"
     }
   ];
 
+  const aiFeatures = [
+    {
+      icon: Brain,
+      title: "Prompt Engineering",
+      description: "Leer effectieve prompts schrijven voor AI-systemen met interactieve oefeningen en best practices.",
+      badge: "AI Training",
+      color: "text-indigo-600"
+    },
+    {
+      icon: Shield,
+      title: "AI Veiligheid",
+      description: "Leer over veilig en verantwoord gebruik van AI-systemen met praktische richtlijnen.",
+      badge: "Veiligheid",
+      color: "text-red-600"
+    },
+    {
+      icon: Database,
+      title: "AI Frameworks & Database",
+      description: "Ontdek bewezen frameworks en doorzoek 500+ geteste prompts en templates.",
+      badge: "500+ Prompts",
+      color: "text-teal-600"
+    }
+  ];
+
+  const quizFeatures = [
+    {
+      icon: Trophy,
+      title: "AI-termen Quiz",
+      description: "Test je kennis van AI-begrippen met een interactieve drag-and-drop quiz in 3 niveaus.",
+      badge: "3 Levels",
+      color: "text-orange-600"
+    }
+  ];
+
+  const renderFeatureGrid = (features: any[], title: string) => (
+    <div className="mb-12">
+      <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">{title}</h3>
+      <div className="grid md:grid-cols-3 gap-6">
+        {features.map((feature, index) => (
+          <Card key={index} className="border-l-4 border-l-blue-500 hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center justify-between mb-4">
+                <feature.icon className={`h-8 w-8 ${feature.color}`} />
+                <Badge variant="secondary">{feature.badge}</Badge>
+              </div>
+              <CardTitle className="text-xl">{feature.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-base leading-relaxed">
+                {feature.description}
+              </CardDescription>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
-    <section id="features" className="py-20 bg-white">
+    <div className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-            Everything You Need for Smart Note-Taking
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Alles wat je nodig hebt om te leren
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Powerful features designed to enhance your productivity and transform how you capture, organize, and interact with information.
+            Van programmeerconcepten tot AI-training en knowledge testing - 
+            alles in één interactief platform.
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-gray-200">
-              <CardHeader>
-                <div className="flex items-center space-x-3 mb-2">
-                  <div className="bg-blue-100 rounded-lg p-2">
-                    {feature.icon}
-                  </div>
-                  <CardTitle className="text-lg">{feature.title}</CardTitle>
-                </div>
-                <CardDescription className="text-gray-600">
-                  {feature.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {feature.badges.map((badge, badgeIndex) => (
-                    <Badge key={badgeIndex} variant="secondary" className="text-xs">
-                      {badge}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
+
+        {/* Programming Features */}
+        {renderFeatureGrid(programmingFeatures, "🚀 Programmeer Training")}
+
+        {/* AI Features */}
+        {renderFeatureGrid(aiFeatures, "🤖 AI Training & Veiligheid")}
+
+        {/* Quiz Features */}
+        {renderFeatureGrid(quizFeatures, "🎯 Knowledge Testing")}
+
+        {/* Platform Features */}
+        <div className="mt-16">
+          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+            ⚡ Platform Features
+          </h3>
+          <div className="grid md:grid-cols-4 gap-6">
+            <Card className="text-center p-6">
+              <Zap className="h-8 w-8 text-yellow-500 mx-auto mb-4" />
+              <h4 className="font-semibold mb-2">Real-time Feedback</h4>
+              <p className="text-sm text-gray-600">Instant validatie en resultaten</p>
             </Card>
-          ))}
+            <Card className="text-center p-6">
+              <Target className="h-8 w-8 text-green-500 mx-auto mb-4" />
+              <h4 className="font-semibold mb-2">Multiple Levels</h4>
+              <p className="text-sm text-gray-600">Beginner tot expert niveau</p>
+            </Card>
+            <Card className="text-center p-6">
+              <BookOpen className="h-8 w-8 text-blue-500 mx-auto mb-4" />
+              <h4 className="font-semibold mb-2">Embeddable</h4>
+              <p className="text-sm text-gray-600">Integreer in je eigen website</p>
+            </Card>
+            <Card className="text-center p-6">
+              <Users className="h-8 w-8 text-purple-500 mx-auto mb-4" />
+              <h4 className="font-semibold mb-2">Geen Registratie</h4>
+              <p className="text-sm text-gray-600">Direct aan de slag</p>
+            </Card>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
