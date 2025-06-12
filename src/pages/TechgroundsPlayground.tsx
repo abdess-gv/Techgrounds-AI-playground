@@ -1,3 +1,4 @@
+
 import React, { Suspense } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,8 @@ const TechgroundsPlayground = () => {
       color: 'bg-blue-500',
       levels: ['Beginner', 'Intermediate', 'Advanced'],
       features: ['Live Code Editor', 'Real-time Validation', 'Interactive Examples'],
-      available: false // Will be implemented in step 2
+      available: true,
+      path: '/embed/json'
     },
     {
       id: 'python',
@@ -34,7 +36,8 @@ const TechgroundsPlayground = () => {
       color: 'bg-green-500',
       levels: ['Beginner', 'Intermediate', 'Advanced'],
       features: ['In-browser Execution', 'Step-by-step Guidance', 'Project-based Learning'],
-      available: false // Will be implemented in step 2
+      available: true,
+      path: '/embed/python'
     },
     {
       id: 'workflow',
@@ -44,7 +47,8 @@ const TechgroundsPlayground = () => {
       color: 'bg-purple-500',
       levels: ['Basic', 'Intermediate', 'Expert'],
       features: ['Visual Builder', 'Terminology Guide', 'Export Options'],
-      available: false // Will be implemented in step 3
+      available: true,
+      path: '/embed/workflow'
     }
   ];
 
@@ -132,8 +136,8 @@ const TechgroundsPlayground = () => {
                         </div>
                         <div>
                           <CardTitle className="text-xl">{module.title}</CardTitle>
-                          {!module.available && (
-                            <Badge variant="outline" className="mt-1">Binnenkort</Badge>
+                          {module.available && (
+                            <Badge className="mt-1 bg-green-100 text-green-800">Beschikbaar</Badge>
                           )}
                         </div>
                       </div>
@@ -174,21 +178,14 @@ const TechgroundsPlayground = () => {
 
                       <Button 
                         className="w-full mt-6" 
-                        disabled={!module.available}
                         onClick={() => {
-                          if (module.available) {
-                            navigate(`/playground/${module.id}`);
+                          if (module.available && module.path) {
+                            navigate(module.path);
                           }
                         }}
                       >
-                        {module.available ? (
-                          <>
-                            <Code className="h-4 w-4 mr-2" />
-                            Start Learning
-                          </>
-                        ) : (
-                          'Coming Soon'
-                        )}
+                        <Code className="h-4 w-4 mr-2" />
+                        Start Learning
                       </Button>
                     </CardContent>
                   </Card>
@@ -197,7 +194,7 @@ const TechgroundsPlayground = () => {
 
               {/* System Status */}
               {!isHealthy && (
-                <Card className="border-red-200 bg-red-50">
+                <Card className="border-red-200 bg-red-50 mb-8">
                   <CardContent className="p-4">
                     <div className="flex items-center space-x-2 text-red-700">
                       <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
@@ -208,18 +205,24 @@ const TechgroundsPlayground = () => {
                 </Card>
               )}
 
-              {/* Coming Soon Banner */}
+              {/* Embed Info */}
               <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
                 <CardContent className="p-8 text-center">
-                  <h3 className="text-2xl font-bold mb-4">Meer Modules Binnenkort!</h3>
+                  <h3 className="text-2xl font-bold mb-4">Embed deze Modules!</h3>
                   <p className="text-blue-100 mb-6">
-                    We werken aan meer interactieve leermodules. Blijf op de hoogte van onze updates.
+                    Alle leermodules zijn embeddable en kunnen eenvoudig in je eigen website worden geïntegreerd.
                   </p>
-                  <Button variant="secondary" asChild>
-                    <Link to="/">
-                      Ontdek Meer AI Tools
-                    </Link>
-                  </Button>
+                  <div className="flex justify-center space-x-4 flex-wrap gap-2">
+                    <Badge variant="secondary" className="text-blue-800">
+                      iframe-ready
+                    </Badge>
+                    <Badge variant="secondary" className="text-blue-800">
+                      Responsive Design
+                    </Badge>
+                    <Badge variant="secondary" className="text-blue-800">
+                      No Registration Required
+                    </Badge>
+                  </div>
                 </CardContent>
               </Card>
             </div>
