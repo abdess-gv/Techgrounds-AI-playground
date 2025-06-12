@@ -4,7 +4,7 @@ import { Suspense, useMemo } from 'react';
 import EmbeddableExercise from '@/components/PromptEngineering/EmbeddableExercise';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { Card, CardContent } from '@/components/ui/card';
-import { exerciseDatabase } from '@/components/PromptEngineering/ExerciseData';
+import { getExerciseDatabase } from '@/components/PromptEngineering/ExerciseData';
 import BreadcrumbNavigation from '@/components/ui/breadcrumb-navigation';
 
 const LoadingFallback = () => (
@@ -26,6 +26,7 @@ const ExerciseEmbedNL = () => {
   const showLegend = searchParams.get('legend') !== 'false';
 
   const exercise = useMemo(() => {
+    const exerciseDatabase = getExerciseDatabase('nl');
     const exercises = exerciseDatabase[level] || [];
     if (exerciseId) {
       return exercises.find(ex => ex.id === exerciseId) || exercises[0];

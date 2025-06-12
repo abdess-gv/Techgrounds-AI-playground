@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import EmbeddableExercise from "@/components/PromptEngineering/EmbeddableExercise";
-import { exerciseDatabase } from "@/components/PromptEngineering/ExerciseData";
+import { getExerciseDatabase } from "@/components/PromptEngineering/ExerciseData";
 import SEO from "@/components/SEO";
 import { Target } from "lucide-react";
 
@@ -24,6 +24,7 @@ const ExerciseEmbed = () => {
   const [completedExercises, setCompletedExercises] = useState<Set<string>>(new Set());
 
   const isDutch = language === 'nl' || window.location.pathname.includes('/nl');
+  const exerciseDatabase = getExerciseDatabase(isDutch ? 'nl' : 'en');
   const exercises = exerciseDatabase[selectedLevel] || [];
   const currentExercise = exercises.find(ex => ex.id === selectedExerciseId) || exercises[0];
 

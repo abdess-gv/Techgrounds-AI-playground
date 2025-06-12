@@ -4,9 +4,7 @@ import { Suspense } from 'react';
 import EmbeddableExercise from '@/components/PromptEngineering/EmbeddableExercise';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { Card, CardContent } from '@/components/ui/card';
-import { beginnerExercises } from '@/components/PromptEngineering/data/beginnerExercises';
-import { intermediateExercises } from '@/components/PromptEngineering/data/intermediateExercises';
-import { advancedExercises } from '@/components/PromptEngineering/data/advancedExercises';
+import { getExerciseDatabase } from '@/components/PromptEngineering/ExerciseData';
 
 const LoadingFallback = () => (
   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -26,10 +24,15 @@ const PromptEngineeringEmbedNL = () => {
   const showHeader = searchParams.get('header') !== 'false';
   const showLegend = searchParams.get('legend') !== 'false';
 
-  const allExercises = [...beginnerExercises, ...intermediateExercises, ...advancedExercises];
+  const exerciseDatabase = getExerciseDatabase('nl');
+  const allExercises = [
+    ...exerciseDatabase.beginner,
+    ...exerciseDatabase.intermediate, 
+    ...exerciseDatabase.advanced
+  ];
   const exercise = exerciseId 
-    ? allExercises.find(ex => ex.id === exerciseId) || beginnerExercises[0]
-    : beginnerExercises[0];
+    ? allExercises.find(ex => ex.id === exerciseId) || exerciseDatabase.beginner[0]
+    : exerciseDatabase.beginner[0];
 
   if (!exercise) {
     return (

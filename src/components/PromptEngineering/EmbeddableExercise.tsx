@@ -105,7 +105,7 @@ const EmbeddableExercise = ({
   };
 
   const completedCriteria = Object.values(evaluation).filter(Boolean).length;
-  const totalCriteria = exercise.criteria.length;
+  const totalCriteria = exercise.criteria?.length || 0;
   const score = isEvaluated ? (completedCriteria / totalCriteria) * 100 : 0;
 
   const difficultyColor = {
@@ -212,7 +212,7 @@ const EmbeddableExercise = ({
               </Button>
             </div>
 
-            {showHints && (
+            {showHints && exercise.hints && (
               <Card className="bg-yellow-50 border-2 border-yellow-300">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
@@ -272,7 +272,7 @@ const EmbeddableExercise = ({
 
             <div className="space-y-2">
               <h4 className="font-semibold text-sm">{t('criteria.evaluation')}</h4>
-              {exercise.criteria.map((criterion, index) => (
+              {exercise.criteria?.map((criterion, index) => (
                 <div key={index} className="flex items-start space-x-2 p-2 rounded border text-sm">
                   {isEvaluated ? (
                     evaluation[criterion] ? (
@@ -293,10 +293,10 @@ const EmbeddableExercise = ({
                     {criterion}
                   </span>
                 </div>
-              ))}
+              )) || []}
             </div>
 
-            {isEvaluated && !compact && (
+            {isEvaluated && !compact && exercise.solution && (
               <div className="bg-gray-50 p-3 rounded border mt-4">
                 <h4 className="font-semibold mb-2 text-sm">✨ {t('sample.solution')}</h4>
                 <div className="bg-white p-3 rounded border max-h-40 overflow-y-auto">
