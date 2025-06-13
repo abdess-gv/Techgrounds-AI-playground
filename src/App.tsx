@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   BrowserRouter,
@@ -22,6 +21,7 @@ import PromptEngineeringEmbedNL from './pages/PromptEngineeringEmbedNL';
 import SecurityEmbedNL from './pages/SecurityEmbedNL';
 import FrameworkEmbedNL from './pages/FrameworkEmbedNL';
 import DatabaseEmbedNL from './pages/DatabaseEmbedNL';
+import PromptEngineering2EmbedNL from "./pages/PromptEngineering2EmbedNL"; // Added import
 import AppErrorBoundary from './components/ErrorBoundary/AppErrorBoundary';
 
 const queryClient = new QueryClient({
@@ -53,6 +53,7 @@ function App() {
               
               {/* AI Training Modules */}
               <Route path="/embed/prompt-engineering" element={<PromptEngineeringEmbedNL />} />
+              <Route path="/embed/prompt-engineering-2" element={<PromptEngineering2EmbedNL />} /> {/* Added route */}
               <Route path="/embed/ai-safety" element={<SecurityEmbedNL />} />
               <Route path="/embed/frameworks" element={<FrameworkEmbedNL />} />
               <Route path="/embed/database" element={<DatabaseEmbedNL />} />
