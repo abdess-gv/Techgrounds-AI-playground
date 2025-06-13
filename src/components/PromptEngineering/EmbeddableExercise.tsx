@@ -129,7 +129,7 @@ const EmbeddableExercise = ({
     setEvaluation(newEvaluation);
     setIsEvaluated(true);
     
-    const totalScore = Object.values(newEvaluation).reduce((sum, eval) => sum + eval.score, 0);
+    const totalScore = Object.values(newEvaluation).reduce((sum, evalResult) => sum + evalResult.score, 0);
     const averageScore = criteria.length > 0 ? (totalScore / criteria.length) * 100 : 0;
     onComplete?.(averageScore);
   };
@@ -273,10 +273,10 @@ const EmbeddableExercise = ({
 
   const criteria = currentExercise.criteria || currentExercise.evaluationCriteria || [];
   const evaluationEntries = Object.entries(evaluation);
-  const completedCriteria = evaluationEntries.filter(([_, eval]) => eval.met).length;
+  const completedCriteria = evaluationEntries.filter(([_, evalResult]) => evalResult.met).length;
   const totalCriteria = criteria.length;
   const averageScore = evaluationEntries.length > 0 
-    ? (evaluationEntries.reduce((sum, [_, eval]) => sum + eval.score, 0) / evaluationEntries.length) * 100
+    ? (evaluationEntries.reduce((sum, [_, evalResult]) => sum + evalResult.score, 0) / evaluationEntries.length) * 100
     : 0;
 
   const difficultyColor = {
@@ -513,12 +513,12 @@ const EmbeddableExercise = ({
             <div className="space-y-2">
               <h4 className="font-semibold text-sm">{t('criteria.evaluation')}</h4>
               {criteria.map((criterion, index) => {
-                const eval = evaluation[criterion];
+                const evalResult = evaluation[criterion];
                 return (
                   <div key={index} className="p-3 rounded border text-sm">
                     <div className="flex items-start space-x-2 mb-2">
                       {isEvaluated ? (
-                        eval?.met ? (
+                        evalResult?.met ? (
                           <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
                         ) : (
                           <XCircle className="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
@@ -529,24 +529,24 @@ const EmbeddableExercise = ({
                       <div className="flex-1">
                         <span className={
                           isEvaluated 
-                            ? eval?.met 
+                            ? evalResult?.met 
                               ? 'text-green-800 font-medium' 
                               : 'text-red-800'
                             : 'text-gray-700'
                         }>
                           {criterion}
                         </span>
-                        {isEvaluated && eval && (
+                        {isEvaluated && evalResult && (
                           <div className="mt-1">
                             <div className="text-xs text-gray-600">
-                              Score: {Math.round(eval.score * 100)}%
+                              Score: {Math.round(evalResult.score * 100)}%
                             </div>
                             {showDebug && (
                               <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
                                 <strong>Debug info:</strong><br />
-                                {eval.feedback}<br />
-                                {eval.matchedKeywords.length > 0 && (
-                                  <>Gevonden termen: {eval.matchedKeywords.join(', ')}</>
+                                {evalResult.feedback}<br />
+                                {evalResult.matchedKeywords.length > 0 && (
+                                  <>Gevonden termen: {evalResult.matchedKeywords.join(', ')}</>
                                 )}
                               </div>
                             )}
