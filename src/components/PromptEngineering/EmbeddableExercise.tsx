@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, XCircle, Lightbulb, Target, RotateCcw } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CheckCircle, XCircle, Lightbulb, Target, RotateCcw, Bug, BookOpen } from 'lucide-react';
 import PromptHighlighter from './PromptHighlighter';
 import PromptLegend from './PromptLegend';
 import ExerciseNavigator from './ExerciseNavigator';
@@ -21,6 +22,13 @@ interface EmbeddableExerciseProps {
   language?: 'en' | 'nl';
 }
 
+interface CriterionEvaluation {
+  met: boolean;
+  score: number;
+  matchedKeywords: string[];
+  feedback: string;
+}
+
 const EmbeddableExercise = ({ 
   exercise, 
   showHeader = true,
@@ -33,11 +41,13 @@ const EmbeddableExercise = ({
   const [userPrompt, setUserPrompt] = useState("");
   const [showHints, setShowHints] = useState(false);
   const [currentHint, setCurrentHint] = useState(0);
-  const [evaluation, setEvaluation] = useState<{ [key: string]: boolean }>({});
+  const [evaluation, setEvaluation] = useState<{ [key: string]: CriterionEvaluation }>({});
   const [isEvaluated, setIsEvaluated] = useState(false);
   const [currentExercise, setCurrentExercise] = useState(exercise);
   const [currentLevel, setCurrentLevel] = useState<'beginner' | 'intermediate' | 'advanced'>(exercise.difficulty);
   const [allExercises, setAllExercises] = useState<Exercise[]>([]);
+  const [showDebug, setShowDebug] = useState(false);
+  const [activeTab, setActiveTab] = useState('hints');
 
   // Load exercises when level changes
   useEffect(() => {
@@ -72,6 +82,9 @@ const EmbeddableExercise = ({
         'show.hints': 'Show Hints',
         'hide.hints': 'Hide Hints',
         'hints': 'Hints',
+        'tips': 'Tips',
+        'solution': 'Solution',
+        'debug': 'Debug',
         'results': 'Results',
         'criteria.evaluation': 'Evaluation Criteria:',
         'sample.solution': 'Sample Solution:',
@@ -88,6 +101,9 @@ const EmbeddableExercise = ({
         'show.hints': 'Toon Hints',
         'hide.hints': 'Verberg Hints',
         'hints': 'Hints',
+        'tips': 'Tips',
+        'solution': 'Oplossing',
+        'debug': 'Debug',
         'results': 'Resultaten',
         'criteria.evaluation': 'Evaluatiecriteria:',
         'sample.solution': 'Voorbeeldoplossing:',
@@ -98,29 +114,142 @@ const EmbeddableExercise = ({
       }
     };
     
-    return translations[language]?.[key] || translations.en[key] || key;
+    return translations[language]?.[key] || translations.nl[key] || key;
   };
 
   const evaluatePrompt = () => {
     const criteria = currentExercise.criteria || currentExercise.evaluationCriteria || [];
-    const newEvaluation: { [key: string]: boolean } = {};
+    const newEvaluation: { [key: string]: CriterionEvaluation } = {};
     
     criteria.forEach(criterion => {
-      const keywords = criterion.toLowerCase().split(/[^\w]+/).filter(word => word.length > 2);
-      const userText = userPrompt.toLowerCase();
-      
-      const hasKeywords = keywords.some(keyword => userText.includes(keyword));
-      const hasContext = userPrompt.length > 50;
-      const hasStructure = userPrompt.includes('\n') || userPrompt.includes(':') || userPrompt.includes('-');
-      
-      newEvaluation[criterion] = hasKeywords && hasContext && hasStructure;
+      const result = evaluateCriterion(criterion, userPrompt);
+      newEvaluation[criterion] = result;
     });
     
     setEvaluation(newEvaluation);
     setIsEvaluated(true);
     
-    const score = Object.values(newEvaluation).filter(Boolean).length / criteria.length * 100;
-    onComplete?.(score);
+    const totalScore = Object.values(newEvaluation).reduce((sum, eval) => sum + eval.score, 0);
+    const averageScore = criteria.length > 0 ? (totalScore / criteria.length) * 100 : 0;
+    onComplete?.(averageScore);
+  };
+
+  const evaluateCriterion = (criterion: string, userText: string): CriterionEvaluation => {
+    const lowerCriterion = criterion.toLowerCase();
+    const lowerUserText = userText.toLowerCase();
+    
+    // Extract key concepts from the criterion
+    const keyPhrases = extractKeyPhrases(lowerCriterion);
+    const matchedKeywords: string[] = [];
+    let conceptScore = 0;
+    
+    // Check for concept matches
+    keyPhrases.forEach(phrase => {
+      if (lowerUserText.includes(phrase)) {
+        matchedKeywords.push(phrase);
+        conceptScore += 1;
+      }
+    });
+    
+    // Length and structure checks
+    const hasMinimumLength = userText.length > 30;
+    const hasStructure = userText.includes(':') || userText.includes('-') || userText.includes('\n') || userText.includes('1.') || userText.includes('•');
+    const hasContext = userText.length > 100;
+    
+    // Calculate final score
+    let finalScore = 0;
+    let feedback = "";
+    
+    if (conceptScore > 0) {
+      finalScore += 0.4; // 40% for having relevant concepts
+      feedback += `✓ Relevante concepten gevonden (${matchedKeywords.join(', ')}). `;
+    } else {
+      feedback += `✗ Geen relevante concepten gevonden voor dit criterium. `;
+    }
+    
+    if (hasMinimumLength) {
+      finalScore += 0.2; // 20% for minimum length
+      feedback += `✓ Voldoende lengte. `;
+    } else {
+      feedback += `✗ Te kort (${userText.length} karakters). `;
+    }
+    
+    if (hasStructure) {
+      finalScore += 0.2; // 20% for structure
+      feedback += `✓ Goede structuur. `;
+    } else {
+      feedback += `✗ Meer structuur nodig (gebruik : - of nummering). `;
+    }
+    
+    if (hasContext) {
+      finalScore += 0.2; // 20% for context
+      feedback += `✓ Uitgebreide context. `;
+    } else {
+      feedback += `✗ Meer context en details nodig. `;
+    }
+    
+    const met = finalScore >= 0.5; // 50% threshold for success
+    
+    return {
+      met,
+      score: finalScore,
+      matchedKeywords,
+      feedback: feedback.trim()
+    };
+  };
+
+  const extractKeyPhrases = (text: string): string[] => {
+    // Extract meaningful phrases and keywords from criteria
+    const phrases: string[] = [];
+    
+    // Common Dutch prompt engineering terms and their synonyms
+    const termMappings: { [key: string]: string[] } = {
+      'rol': ['rol', 'persona', 'karakter', 'expert', 'specialist'],
+      'context': ['context', 'achtergrond', 'situatie', 'omgeving'],
+      'taak': ['taak', 'opdracht', 'doel', 'assignment', 'instructie'],
+      'structuur': ['structuur', 'opbouw', 'format', 'indeling', 'organisatie'],
+      'voorbeeld': ['voorbeeld', 'sample', 'illustratie', 'demo'],
+      'specificeer': ['specificeer', 'detail', 'precies', 'exact', 'concreet'],
+      'uitvoer': ['uitvoer', 'output', 'resultaat', 'antwoord'],
+      'format': ['format', 'structuur', 'opmaak', 'vorm'],
+      'redenering': ['redenering', 'logica', 'stappen', 'proces']
+    };
+    
+    // Extract base terms from the criterion
+    Object.keys(termMappings).forEach(baseterm => {
+      termMappings[baseterm].forEach(synonym => {
+        if (text.includes(synonym)) {
+          phrases.push(synonym);
+          // Also add the base term if not already included
+          if (!phrases.includes(baseterm)) {
+            phrases.push(baseterm);
+          }
+        }
+      });
+    });
+    
+    // Extract quoted terms
+    const quotedTerms = text.match(/"([^"]+)"/g);
+    if (quotedTerms) {
+      quotedTerms.forEach(term => phrases.push(term.replace(/"/g, '')));
+    }
+    
+    // Extract capitalized terms (likely to be important)
+    const capitalizedWords = text.match(/\b[A-Z][a-z]+\b/g);
+    if (capitalizedWords) {
+      phrases.push(...capitalizedWords.map(w => w.toLowerCase()));
+    }
+    
+    // Split criterion into meaningful chunks and extract key terms
+    const words = text.split(/\s+/);
+    const importantWords = words.filter(word => 
+      word.length > 4 && 
+      !['heeft', 'moet', 'zijn', 'wordt', 'kunnen', 'zouden', 'wanneer', 'omdat'].includes(word)
+    );
+    
+    phrases.push(...importantWords);
+    
+    return [...new Set(phrases)]; // Remove duplicates
   };
 
   const resetExercise = () => {
@@ -129,6 +258,8 @@ const EmbeddableExercise = ({
     setIsEvaluated(false);
     setShowHints(false);
     setCurrentHint(0);
+    setShowDebug(false);
+    setActiveTab('hints');
   };
 
   const handleExerciseChange = (newExercise: Exercise) => {
@@ -141,9 +272,12 @@ const EmbeddableExercise = ({
   };
 
   const criteria = currentExercise.criteria || currentExercise.evaluationCriteria || [];
-  const completedCriteria = Object.values(evaluation).filter(Boolean).length;
+  const evaluationEntries = Object.entries(evaluation);
+  const completedCriteria = evaluationEntries.filter(([_, eval]) => eval.met).length;
   const totalCriteria = criteria.length;
-  const score = isEvaluated ? (completedCriteria / totalCriteria) * 100 : 0;
+  const averageScore = evaluationEntries.length > 0 
+    ? (evaluationEntries.reduce((sum, [_, eval]) => sum + eval.score, 0) / evaluationEntries.length) * 100
+    : 0;
 
   const difficultyColor = {
     beginner: 'bg-green-100 text-green-800',
@@ -251,46 +385,102 @@ const EmbeddableExercise = ({
                 </Button>
               </div>
               
-              <Button
-                variant="outline"
-                onClick={() => setShowHints(!showHints)}
-                className="bg-yellow-50 border-yellow-300 hover:bg-yellow-100"
-                size={compact ? "sm" : "default"}
-              >
-                <Lightbulb className="h-4 w-4 mr-1" />
-                {showHints ? t('hide.hints') : t('show.hints')}
-              </Button>
+              <div className="flex space-x-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowHints(!showHints)}
+                  className="bg-yellow-50 border-yellow-300 hover:bg-yellow-100"
+                  size={compact ? "sm" : "default"}
+                >
+                  <Lightbulb className="h-4 w-4 mr-1" />
+                  {showHints ? t('hide.hints') : t('show.hints')}
+                </Button>
+                
+                {isEvaluated && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowDebug(!showDebug)}
+                    className="bg-blue-50 border-blue-300 hover:bg-blue-100"
+                    size={compact ? "sm" : "default"}
+                  >
+                    <Bug className="h-4 w-4 mr-1" />
+                    {t('debug')}
+                  </Button>
+                )}
+              </div>
             </div>
 
-            {showHints && currentExercise.hints && (
+            {showHints && (
               <Card className="bg-yellow-50 border-2 border-yellow-300">
                 <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold text-yellow-900 text-sm">
-                      💡 {t('hints')} {currentHint + 1} {t('hint.of')} {currentExercise.hints.length}
-                    </h4>
-                    <div className="flex space-x-1">
-                      {currentHint > 0 && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setCurrentHint(currentHint - 1)}
-                        >
-                          ←
-                        </Button>
+                  <Tabs value={activeTab} onValueChange={setActiveTab}>
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="hints">
+                        <Lightbulb className="h-4 w-4 mr-1" />
+                        {t('hints')}
+                      </TabsTrigger>
+                      <TabsTrigger value="tips">💡 {t('tips')}</TabsTrigger>
+                      <TabsTrigger value="solution">
+                        <BookOpen className="h-4 w-4 mr-1" />
+                        {t('solution')}
+                      </TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="hints" className="space-y-4 mt-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-semibold text-yellow-900 text-sm">
+                          💡 {t('hints')} {currentHint + 1} {t('hint.of')} {currentExercise.hints.length}
+                        </h4>
+                        <div className="flex space-x-1">
+                          {currentHint > 0 && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setCurrentHint(currentHint - 1)}
+                            >
+                              ←
+                            </Button>
+                          )}
+                          {currentHint < currentExercise.hints.length - 1 && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setCurrentHint(currentHint + 1)}
+                            >
+                              →
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      <p className="text-yellow-800 text-sm">{currentExercise.hints[currentHint]}</p>
+                    </TabsContent>
+                    
+                    <TabsContent value="tips" className="mt-4">
+                      <div className="space-y-2">
+                        <h5 className="font-semibold text-yellow-900 text-sm">💡 Algemene Tips:</h5>
+                        <ul className="text-yellow-800 text-sm space-y-1">
+                          <li>• Begin met een duidelijke rol of persona definitie</li>
+                          <li>• Geef specifieke context en achtergrond informatie</li>
+                          <li>• Gebruik concrete voorbeelden om je bedoeling te verduidelijken</li>
+                          <li>• Specificeer het gewenste uitvoerformaat en structuur</li>
+                          <li>• Test en verfijn je prompt stap voor stap</li>
+                        </ul>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="solution" className="mt-4">
+                      {currentExercise.solution ? (
+                        <div className="space-y-3">
+                          <h5 className="font-semibold text-yellow-900 text-sm">✨ {t('sample.solution')}</h5>
+                          <div className="bg-white p-4 rounded border border-yellow-200 max-h-60 overflow-y-auto">
+                            <PromptHighlighter text={currentExercise.solution} className="text-sm leading-relaxed" />
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-yellow-800 text-sm">Geen voorbeeldoplossing beschikbaar voor deze oefening.</p>
                       )}
-                      {currentHint < currentExercise.hints.length - 1 && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setCurrentHint(currentHint + 1)}
-                        >
-                          →
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                  <p className="text-yellow-800 text-sm">{currentExercise.hints[currentHint]}</p>
+                    </TabsContent>
+                  </Tabs>
                 </CardContent>
               </Card>
             )}
@@ -308,52 +498,66 @@ const EmbeddableExercise = ({
             {isEvaluated && (
               <div className="text-center p-3 bg-gray-50 rounded-lg">
                 <div className={`text-2xl font-bold ${
-                  score >= 80 ? 'text-green-600' : 
-                  score >= 60 ? 'text-yellow-600' : 'text-red-600'
+                  averageScore >= 80 ? 'text-green-600' : 
+                  averageScore >= 60 ? 'text-yellow-600' : 'text-red-600'
                 }`}>
-                  {Math.round(score)}%
+                  {Math.round(averageScore)}%
                 </div>
                 <div className="text-sm text-gray-600">
                   {completedCriteria} {t('hint.of')} {totalCriteria} {t('criteria.met')}
                 </div>
-                <Progress value={score} className="h-2 mt-2" />
+                <Progress value={averageScore} className="h-2 mt-2" />
               </div>
             )}
 
             <div className="space-y-2">
               <h4 className="font-semibold text-sm">{t('criteria.evaluation')}</h4>
-              {criteria.map((criterion, index) => (
-                <div key={index} className="flex items-start space-x-2 p-2 rounded border text-sm">
-                  {isEvaluated ? (
-                    evaluation[criterion] ? (
-                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
-                    ) : (
-                      <XCircle className="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
-                    )
-                  ) : (
-                    <div className="w-4 h-4 border border-gray-300 rounded-full mt-0.5 flex-shrink-0"></div>
-                  )}
-                  <span className={
-                    isEvaluated 
-                      ? evaluation[criterion] 
-                        ? 'text-green-800 font-medium' 
-                        : 'text-red-800'
-                      : 'text-gray-700'
-                  }>
-                    {criterion}
-                  </span>
-                </div>
-              ))}
+              {criteria.map((criterion, index) => {
+                const eval = evaluation[criterion];
+                return (
+                  <div key={index} className="p-3 rounded border text-sm">
+                    <div className="flex items-start space-x-2 mb-2">
+                      {isEvaluated ? (
+                        eval?.met ? (
+                          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
+                        )
+                      ) : (
+                        <div className="w-4 h-4 border border-gray-300 rounded-full mt-0.5 flex-shrink-0"></div>
+                      )}
+                      <div className="flex-1">
+                        <span className={
+                          isEvaluated 
+                            ? eval?.met 
+                              ? 'text-green-800 font-medium' 
+                              : 'text-red-800'
+                            : 'text-gray-700'
+                        }>
+                          {criterion}
+                        </span>
+                        {isEvaluated && eval && (
+                          <div className="mt-1">
+                            <div className="text-xs text-gray-600">
+                              Score: {Math.round(eval.score * 100)}%
+                            </div>
+                            {showDebug && (
+                              <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
+                                <strong>Debug info:</strong><br />
+                                {eval.feedback}<br />
+                                {eval.matchedKeywords.length > 0 && (
+                                  <>Gevonden termen: {eval.matchedKeywords.join(', ')}</>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-
-            {isEvaluated && !compact && currentExercise.solution && (
-              <div className="bg-gray-50 p-3 rounded border mt-4">
-                <h4 className="font-semibold mb-2 text-sm">✨ {t('sample.solution')}</h4>
-                <div className="bg-white p-3 rounded border max-h-40 overflow-y-auto">
-                  <PromptHighlighter text={currentExercise.solution} className="text-xs leading-relaxed" />
-                </div>
-              </div>
-            )}
           </CardContent>
         </Card>
       </div>
