@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -138,57 +137,77 @@ const EmbeddableExercise = ({
     const lowerCriterion = criterion.toLowerCase();
     const lowerUserText = userText.toLowerCase();
     
-    // Extract key concepts from the criterion
+    // Extract key concepts and required elements from the criterion
+    const requiredElements = extractRequiredElements(lowerCriterion);
     const keyPhrases = extractKeyPhrases(lowerCriterion);
     const matchedKeywords: string[] = [];
-    let conceptScore = 0;
+    let contentScore = 0;
     
-    // Check for concept matches
-    keyPhrases.forEach(phrase => {
-      if (lowerUserText.includes(phrase)) {
-        matchedKeywords.push(phrase);
-        conceptScore += 1;
+    // Content relevance evaluation (60% weight)
+    let relevantMatches = 0;
+    const totalRequiredElements = Math.max(requiredElements.length, keyPhrases.length, 3);
+    
+    // Check for required elements
+    requiredElements.forEach(element => {
+      if (lowerUserText.includes(element.toLowerCase())) {
+        matchedKeywords.push(element);
+        relevantMatches += 1;
       }
     });
     
-    // Length and structure checks
-    const hasMinimumLength = userText.length > 30;
-    const hasStructure = userText.includes(':') || userText.includes('-') || userText.includes('\n') || userText.includes('1.') || userText.includes('•');
-    const hasContext = userText.length > 100;
+    // Check for key phrases with context
+    keyPhrases.forEach(phrase => {
+      if (lowerUserText.includes(phrase) && hasContextAroundPhrase(lowerUserText, phrase)) {
+        if (!matchedKeywords.includes(phrase)) {
+          matchedKeywords.push(phrase);
+          relevantMatches += 1;
+        }
+      }
+    });
     
-    // Calculate final score
-    let finalScore = 0;
-    let feedback = "";
+    // Content score based on percentage of required elements found
+    contentScore = Math.min(relevantMatches / totalRequiredElements, 1.0) * 0.6;
     
-    if (conceptScore > 0) {
-      finalScore += 0.4; // 40% for having relevant concepts
-      feedback += `✓ Relevante concepten gevonden (${matchedKeywords.join(', ')}). `;
-    } else {
-      feedback += `✗ Geen relevante concepten gevonden voor dit criterium. `;
-    }
+    // Structure and clarity evaluation (20% weight)
+    let structureScore = 0;
+    const hasGoodStructure = userText.includes(':') || userText.includes('\n') || 
+                           userText.includes('1.') || userText.includes('•') || 
+                           userText.includes('-');
+    const hasClearSections = (userText.match(/\n/g) || []).length >= 2;
+    const hasProperFormatting = userText.includes(':') && userText.length > 100;
     
-    if (hasMinimumLength) {
-      finalScore += 0.2; // 20% for minimum length
-      feedback += `✓ Voldoende lengte. `;
-    } else {
-      feedback += `✗ Te kort (${userText.length} karakters). `;
-    }
+    if (hasGoodStructure) structureScore += 0.1;
+    if (hasClearSections) structureScore += 0.05;
+    if (hasProperFormatting) structureScore += 0.05;
     
-    if (hasStructure) {
-      finalScore += 0.2; // 20% for structure
-      feedback += `✓ Goede structuur. `;
-    } else {
-      feedback += `✗ Meer structuur nodig (gebruik : - of nummering). `;
-    }
+    // Length and completeness evaluation (10% weight)
+    let lengthScore = 0;
+    if (userText.length > 50) lengthScore += 0.03;
+    if (userText.length > 150) lengthScore += 0.04;
+    if (userText.length > 300) lengthScore += 0.03;
     
-    if (hasContext) {
-      finalScore += 0.2; // 20% for context
-      feedback += `✓ Uitgebreide context. `;
-    } else {
-      feedback += `✗ Meer context en details nodig. `;
-    }
+    // Creativity and originality evaluation (10% weight)
+    let creativityScore = 0;
+    const hasExamples = userText.toLowerCase().includes('voorbeeld') || 
+                       userText.toLowerCase().includes('bijvoorbeeld') ||
+                       userText.toLowerCase().includes('zoals');
+    const hasPersona = userText.toLowerCase().includes('rol') || 
+                      userText.toLowerCase().includes('persona') ||
+                      userText.toLowerCase().includes('expert');
+    const hasSpecificInstructions = userText.split('.').length > 3;
     
-    const met = finalScore >= 0.5; // 50% threshold for success
+    if (hasExamples) creativityScore += 0.03;
+    if (hasPersona) creativityScore += 0.04;
+    if (hasSpecificInstructions) creativityScore += 0.03;
+    
+    const finalScore = contentScore + structureScore + lengthScore + creativityScore;
+    const met = finalScore >= 0.6; // 60% threshold for success
+    
+    // Generate detailed feedback
+    let feedback = generateDetailedFeedback(
+      contentScore, structureScore, lengthScore, creativityScore,
+      matchedKeywords, userText.length, totalRequiredElements
+    );
     
     return {
       met,
@@ -196,6 +215,91 @@ const EmbeddableExercise = ({
       matchedKeywords,
       feedback: feedback.trim()
     };
+  };
+
+  const extractRequiredElements = (criterion: string): string[] => {
+    const elements: string[] = [];
+    
+    // Look for specific requirements in the criterion
+    const requirementPatterns = [
+      /moet\s+(\w+)/g,
+      /bevat\s+(\w+)/g,
+      /gebruik\s+(\w+)/g,
+      /specificeer\s+(\w+)/g,
+      /definieer\s+(\w+)/g,
+      /beschrijf\s+(\w+)/g
+    ];
+    
+    requirementPatterns.forEach(pattern => {
+      let match;
+      while ((match = pattern.exec(criterion)) !== null) {
+        elements.push(match[1]);
+      }
+    });
+    
+    return elements;
+  };
+
+  const hasContextAroundPhrase = (text: string, phrase: string): boolean => {
+    const index = text.indexOf(phrase);
+    if (index === -1) return false;
+    
+    const before = text.substring(Math.max(0, index - 20), index);
+    const after = text.substring(index + phrase.length, Math.min(text.length, index + phrase.length + 20));
+    
+    // Check if there's meaningful context around the phrase
+    const contextWords = (before + after).split(/\s+/).filter(word => word.length > 3);
+    return contextWords.length >= 3;
+  };
+
+  const generateDetailedFeedback = (
+    contentScore: number, 
+    structureScore: number, 
+    lengthScore: number, 
+    creativityScore: number,
+    matchedKeywords: string[],
+    textLength: number,
+    totalRequired: number
+  ): string => {
+    let feedback = "";
+    
+    // Content feedback (most important)
+    if (contentScore >= 0.4) {
+      feedback += `✓ Goede inhoudelijke relevantie (${matchedKeywords.length}/${totalRequired} elementen gevonden). `;
+    } else if (contentScore >= 0.2) {
+      feedback += `◐ Gedeeltelijk relevante inhoud (${matchedKeywords.length}/${totalRequired} elementen). Meer specifieke details nodig. `;
+    } else {
+      feedback += `✗ Onvoldoende relevante inhoud (${matchedKeywords.length}/${totalRequired} elementen). Focus op de kernelementen. `;
+    }
+    
+    // Structure feedback
+    if (structureScore >= 0.15) {
+      feedback += `✓ Uitstekende structuur en opmaak. `;
+    } else if (structureScore >= 0.1) {
+      feedback += `◐ Redelijke structuur, kan verbeterd worden. `;
+    } else {
+      feedback += `✗ Betere structuur nodig (gebruik : - nummering). `;
+    }
+    
+    // Length feedback
+    if (lengthScore >= 0.08) {
+      feedback += `✓ Uitgebreide en complete prompt. `;
+    } else if (lengthScore >= 0.05) {
+      feedback += `◐ Redelijke lengte (${textLength} karakters). `;
+    } else {
+      feedback += `✗ Te beknopt (${textLength} karakters), meer detail nodig. `;
+    }
+    
+    // Creativity feedback
+    if (creativityScore >= 0.08) {
+      feedback += `✓ Creatief en specifiek uitgewerkt. `;
+    } else if (creativityScore >= 0.05) {
+      feedback += `◐ Redelijk uitgewerkt, meer voorbeelden helpen. `;
+    } else {
+      feedback += `✗ Meer specificiteit en voorbeelden nodig. `;
+    }
+    
+    return feedback;
   };
 
   const extractKeyPhrases = (text: string): string[] => {
