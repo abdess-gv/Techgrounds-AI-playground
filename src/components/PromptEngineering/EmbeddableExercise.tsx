@@ -24,7 +24,6 @@ interface EmbeddableExerciseProps {
 
 interface CriterionEvaluation {
   met: boolean;
-  score: number;
   feedback: string;
   keywordsFound: string[];
 }
@@ -117,7 +116,7 @@ const EmbeddableExercise = ({
     return translations[language]?.[key] || translations.nl[key] || key;
   };
 
-  // New simplified evaluation logic
+  // Simple Dutch keyword matching
   const evaluatePrompt = () => {
     const criteria = currentExercise.criteria || currentExercise.evaluationCriteria || [];
     const newEvaluation: { [key: string]: CriterionEvaluation } = {};
@@ -130,100 +129,86 @@ const EmbeddableExercise = ({
     setEvaluation(newEvaluation);
     setIsEvaluated(true);
     
-    const totalScore = Object.values(newEvaluation).reduce((sum, evalResult) => sum + evalResult.score, 0);
-    const averageScore = criteria.length > 0 ? (totalScore / criteria.length) * 100 : 0;
-    onComplete?.(averageScore);
+    const completedCount = Object.values(newEvaluation).filter(evalResult => evalResult.met).length;
+    const score = (completedCount / criteria.length) * 100;
+    onComplete?.(score);
   };
 
-  // Simplified criterion evaluation
+  // Simple keyword matching for Dutch
   const evaluateCriterionSimple = (criterion: string, userText: string): CriterionEvaluation => {
     const lowerCriterion = criterion.toLowerCase();
     const lowerUserText = userText.toLowerCase();
     
-    // Define key concepts to look for based on common prompt engineering terms
-    const keyConceptMaps: { [key: string]: string[] } = {
-      'rol': ['rol', 'persona', 'expert', 'specialist', 'je bent', 'act as', 'gedrag'],
-      'context': ['context', 'achtergrond', 'situatie', 'omgeving', 'scenario'],
-      'taak': ['taak', 'opdracht', 'doel', 'moet', 'wil', 'vraag', 'help'],
-      'structuur': ['structuur', 'format', 'opmaak', 'indeling', 'stappen', 'lijst'],
-      'voorbeeld': ['voorbeeld', 'zoals', 'bijvoorbeeld', 'demo', 'illustratie'],
+    // Define Dutch keywords for common prompt engineering concepts
+    const dutchKeywords: { [key: string]: string[] } = {
+      'rol': ['rol', 'persona', 'expert', 'specialist', 'je bent', 'gedraag je als', 'act als'],
+      'context': ['context', 'achtergrond', 'situatie', 'omgeving', 'scenario', 'omstandigheden'],
+      'taak': ['taak', 'opdracht', 'doel', 'vraag', 'help', 'maak', 'schrijf', 'creëer'],
+      'format': ['format', 'opmaak', 'structuur', 'indeling', 'vorm', 'stijl'],
+      'voorbeeld': ['voorbeeld', 'zoals', 'bijvoorbeeld', 'illustratie', 'demo'],
+      'specificatie': ['specificeer', 'detail', 'precies', 'exact', 'concreet', 'duidelijk'],
       'output': ['output', 'uitvoer', 'resultaat', 'antwoord', 'response'],
-      'specificatie': ['specificeer', 'detail', 'precies', 'exact', 'concreet'],
-      'instructie': ['instructie', 'regel', 'voorwaarde', 'constraint', 'let op']
+      'instructie': ['instructie', 'regel', 'voorwaarde', 'constraint', 'beperk', 'let op']
     };
     
-    // Extract relevant keywords from the criterion
-    const relevantKeywords: string[] = [];
-    Object.entries(keyConceptMaps).forEach(([concept, synonyms]) => {
-      if (synonyms.some(synonym => lowerCriterion.includes(synonym))) {
-        relevantKeywords.push(...synonyms);
-      }
-    });
+    // Find relevant keywords based on criterion content
+    let relevantKeywords: string[] = [];
     
-    // If no specific keywords found, extract words from the criterion itself
+    // Check which category this criterion belongs to
+    for (const [category, keywords] of Object.entries(dutchKeywords)) {
+      if (keywords.some(keyword => lowerCriterion.includes(keyword))) {
+        relevantKeywords = keywords;
+        break;
+      }
+    }
+    
+    // If no category match, extract key words from the criterion itself
     if (relevantKeywords.length === 0) {
       const words = lowerCriterion.split(/\s+/).filter(word => 
         word.length > 3 && 
-        !['moet', 'heeft', 'zijn', 'wordt', 'kunnen', 'zouden', 'waar', 'deze', 'voor'].includes(word)
+        !['moet', 'heeft', 'zijn', 'wordt', 'kunnen', 'zouden', 'waar', 'deze', 'voor', 'een', 'het', 'de'].includes(word)
       );
-      relevantKeywords.push(...words);
+      relevantKeywords = words.slice(0, 3); // Take max 3 key words
     }
     
-    // Count keyword matches in user text
+    // Find matching keywords in user text
     const foundKeywords: string[] = [];
-    let keywordScore = 0;
-    
     relevantKeywords.forEach(keyword => {
       if (lowerUserText.includes(keyword)) {
         foundKeywords.push(keyword);
-        keywordScore += 1;
       }
     });
     
-    // Calculate content score (0-70%)
-    const maxKeywords = Math.max(relevantKeywords.length, 3);
-    const contentPercentage = Math.min((keywordScore / maxKeywords) * 0.7, 0.7);
+    // Simple pass/fail logic
+    const hasBasicLength = userText.length >= 20;
+    const hasKeywords = foundKeywords.length > 0;
+    const hasMinimumContent = userText.trim().split(/\s+/).length >= 5;
     
-    // Basic structure check (0-15%)
-    let structureScore = 0;
-    if (userText.length > 50) structureScore += 0.05;
-    if (userText.includes(':') || userText.includes('\n')) structureScore += 0.05;
-    if (userText.includes('-') || userText.includes('•') || userText.includes('1.')) structureScore += 0.05;
+    const met = hasBasicLength && (hasKeywords || hasMinimumContent);
     
-    // Length bonus (0-10%)
-    let lengthScore = 0;
-    if (userText.length > 100) lengthScore += 0.05;
-    if (userText.length > 200) lengthScore += 0.05;
-    
-    // Engagement/effort bonus (0-5%)
-    let effortScore = 0;
-    const sentences = userText.split(/[.!?]+/).filter(s => s.trim().length > 10);
-    if (sentences.length >= 2) effortScore += 0.05;
-    
-    const finalScore = contentPercentage + structureScore + lengthScore + effortScore;
-    const met = finalScore >= 0.3; // 30% threshold
-    
-    // Generate feedback
-    let feedback = generateSimpleFeedback(finalScore, foundKeywords.length, maxKeywords, userText.length);
+    // Generate simple feedback
+    let feedback = '';
+    if (met) {
+      if (foundKeywords.length > 0) {
+        feedback = `✓ Criterium behaald! Gevonden: ${foundKeywords.join(', ')}`;
+      } else {
+        feedback = `✓ Criterium behaald! Voldoende inhoud aanwezig.`;
+      }
+    } else {
+      if (!hasBasicLength) {
+        feedback = '✗ Te kort. Schrijf een uitgebreidere prompt.';
+      } else if (!hasKeywords && !hasMinimumContent) {
+        feedback = '✗ Relevante inhoud ontbreekt. Probeer meer details toe te voegen.';
+      } else {
+        feedback = '✗ Criterium niet behaald. Controleer de vereisten.';
+      }
+    }
     
     return {
       met,
-      score: finalScore,
       feedback,
       keywordsFound: foundKeywords
     };
-  };
-
-  const generateSimpleFeedback = (score: number, foundKeywords: number, totalKeywords: number, textLength: number): string => {
-    if (score >= 0.7) {
-      return `Uitstekend! Je prompt bevat ${foundKeywords}/${totalKeywords} belangrijke elementen en is goed uitgewerkt.`;
-    } else if (score >= 0.5) {
-      return `Goed bezig! Je prompt heeft ${foundKeywords}/${totalKeywords} elementen. Probeer meer specifieke details toe te voegen.`;
-    } else if (score >= 0.3) {
-      return `Redelijk begin. Je hebt ${foundKeywords}/${totalKeywords} elementen, maar je prompt kan uitgebreider en specifieker.`;
-    } else {
-      return `Je prompt mist nog belangrijke elementen (${foundKeywords}/${totalKeywords} gevonden). Probeer meer context en specifieke instructies toe te voegen.`;
-    }
   };
 
   const resetExercise = () => {
@@ -249,9 +234,7 @@ const EmbeddableExercise = ({
   const evaluationEntries = Object.entries(evaluation);
   const completedCriteria = evaluationEntries.filter(([_, evalResult]) => evalResult.met).length;
   const totalCriteria = criteria.length;
-  const averageScore = evaluationEntries.length > 0 
-    ? (evaluationEntries.reduce((sum, [_, evalResult]) => sum + evalResult.score, 0) / evaluationEntries.length) * 100
-    : 0;
+  const progressPercentage = totalCriteria > 0 ? (completedCriteria / totalCriteria) * 100 : 0;
 
   const difficultyColor = {
     beginner: 'bg-green-100 text-green-800',
@@ -471,17 +454,15 @@ const EmbeddableExercise = ({
           <CardContent className={`space-y-4 ${compact ? 'p-4' : 'pt-6'}`}>
             {isEvaluated && (
               <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <div className={`text-2xl font-bold ${
-                  averageScore >= 70 ? 'text-green-600' : 
-                  averageScore >= 50 ? 'text-yellow-600' : 
-                  averageScore >= 30 ? 'text-orange-600' : 'text-red-600'
-                }`}>
-                  {Math.round(averageScore)}%
-                </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-lg font-bold text-gray-800">
                   {completedCriteria} {t('hint.of')} {totalCriteria} {t('criteria.met')}
                 </div>
-                <Progress value={averageScore} className="h-2 mt-2" />
+                <Progress value={progressPercentage} className="h-2 mt-2" />
+                <div className="text-sm text-gray-600 mt-1">
+                  {completedCriteria === totalCriteria ? 'Alle criteria behaald! 🎉' : 
+                   completedCriteria > totalCriteria / 2 ? 'Goed bezig! 👍' : 
+                   'Nog werk te doen 💪'}
+                </div>
               </div>
             )}
 
@@ -513,10 +494,7 @@ const EmbeddableExercise = ({
                         </span>
                         {isEvaluated && evalResult && (
                           <div className="mt-1">
-                            <div className="text-xs text-gray-600">
-                              Score: {Math.round(evalResult.score * 100)}%
-                            </div>
-                            <div className="text-xs text-gray-700 mt-1">
+                            <div className="text-xs text-gray-700">
                               {evalResult.feedback}
                             </div>
                             {showDebug && evalResult.keywordsFound.length > 0 && (
