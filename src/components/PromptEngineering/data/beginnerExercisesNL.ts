@@ -1,127 +1,158 @@
-
 import { Exercise } from '../types/Exercise';
+import { additionalBeginnerExercisesNL } from './additionalExercisesNL';
 
 export const beginnerExercisesNL: Exercise[] = [
   {
-    id: 'basic-prompting',
-    title: 'Basis Prompt Structuur',
-    description: 'Leer de fundamentele componenten van effectieve prompts',
+    id: 'pe-nl-001',
+    title: 'Eenvoudige Vraag Stellen',
+    description: 'Leer de basis van het stellen van duidelijke en specifieke vragen aan AI.',
     difficulty: 'beginner',
-    category: 'Fundamenten',
-    type: 'hands-on',
-    estimatedTime: '15 min',
-    prompt: 'Maak een duidelijke, specifieke prompt voor een creatieve schrijftaak.',
-    solution: `**Taak**: Schrijf een prompt voor een AI om een kort verhaal te maken over een mysterieus bos.
+    category: 'Basis Prompting',
+    estimatedTime: '5 minuten',
+    prompt: 'Stel een vraag aan AI om een eenvoudige uitleg te krijgen over fotosynthese voor een 10-jarig kind.',
+    solution: `Kun je fotosynthese uitleggen voor een 10-jarig kind? 
 
-**Goede Prompt Structuur**:
-"Schrijf een kort verhaal van 300 woorden over een wandelaar die iets onverwachts ontdekt in een oud bos. Voeg toe:
-- Een specifieke ontdekking (niet alleen 'iets magisch')
-- De emotionele reactie van de wandelaar
-- Zintuiglijke details over het bos
-- Een duidelijk begin, midden en einde
-Stijl: Mysterieus maar geen horror
-Toon: Verwondering en nieuwsgierigheid"
-
-**Waarom dit werkt**:
-- Specifieke lengte (300 woorden)
-- Duidelijk onderwerp (wandelaar, bos, ontdekking)
-- Gedetailleerde vereisten (emotionele reactie, zintuiglijke details)
-- Structuur begeleiding (begin, midden, einde)
-- Stijl en toon specificaties`,
-    criteria: [
-      'Prompt is specifiek en duidelijk',
-      'Bevat lengte/bereik parameters',
-      'Definieert stijl en toon',
-      'Geeft structurele begeleiding',
-      'Vermijdt dubbelzinnige taal'
-    ],
+Gebruik eenvoudige woorden en geef een praktisch voorbeeld dat kinderen kunnen begrijpen. Houd de uitleg kort (ongeveer 100 woorden) en maak het interessant.`,
     hints: [
-      'Wees specifiek over wat je wilt',
-      'Voeg lengte of bereik vereisten toe',
-      'Specificeer de stijl en toon',
-      'Verdeel complexe verzoeken in onderdelen'
+      'Specificeer de doelgroep (10-jarig kind)',
+      'Vraag om eenvoudige taal',
+      'Geef een gewenste lengte aan',
+      'Vraag om praktische voorbeelden'
     ],
     tips: [
-      'Goede prompts elimineren giswerk',
-      'Specifieke beperkingen leiden vaak tot betere resultaten',
-      'Voeg altijd context toe wanneer nodig',
-      'Test je prompts en verfijn ze'
+      'Specifieke doelgroepen leiden tot betere antwoorden',
+      'Lengte specificaties helpen bij gestructureerde antwoorden',
+      'Voorbeelden maken complexe onderwerpen toegankelijker'
+    ],
+    evaluationCriteria: [
+      'Duidelijke doelgroep specificatie',
+      'Verzoek om eenvoudige taal',
+      'Lengte indicator',
+      'Vraag om voorbeelden of praktische toepassingen'
     ],
     resources: [
-      {
-        title: 'Prompt Engineering Gids',
-        type: 'article',
-        url: 'https://example.com/prompt-guide',
-        description: 'Uitgebreide gids voor het schrijven van effectieve prompts'
-      }
-    ],
-    examples: {
-      good: 'Schrijf een productbeschrijving van 200 woorden voor milieuvriendelijke yogamatten gericht op drukbezette professionals.',
-      bad: 'Schrijf iets over yogamatten.',
-      explanation: 'Het goede voorbeeld is specifiek over lengte, product, doelgroep en context.'
-    }
+      'Basics of AI Communication',
+      'Age-appropriate Content Creation'
+    ]
   },
   {
-    id: 'role-definition',
-    title: 'Rol Definitie',
-    description: 'Beheers de kunst van het definiëren van AI-rollen voor betere antwoorden',
+    id: 'pe-nl-002',
+    title: 'Context Toevoegen',
+    description: 'Leer hoe je context geeft aan AI voor betere, meer relevante antwoorden.',
     difficulty: 'beginner',
-    category: 'Fundamenten',
-    type: 'hands-on',
-    estimatedTime: '20 min',
-    prompt: 'Maak een rol-gebaseerde prompt voor het krijgen van marketing advies.',
-    solution: `**Rol-Gebaseerde Prompt**:
-"Je bent een senior marketing strateeg met 10+ jaar ervaring in digitale marketing voor kleine bedrijven. Je specialiseert je in social media marketing en hebt meer dan 100 bedrijven geholpen hun online aanwezigheid te laten groeien.
+    category: 'Context Setting',
+    estimatedTime: '8 minuten',
+    prompt: 'Vraag AI om advies voor een presentatie, waarbij je relevante context geeft over je situatie.',
+    solution: `Ik ben een marketing manager bij een technologie startup met 50 medewerkers. Volgende week moet ik een 15-minuten presentatie geven aan onze investeerders over onze groei in het laatste kwartaal.
 
-Jouw taak: Geef een uitgebreide social media strategie voor een lokale bakkerij die meer voetverkeer en online bestellingen wil.
+Kun je me helpen met:
+1. Een duidelijke structuur voor de presentatie
+2. Welke key metrics ik moet highlighten
+3. Hoe ik de presentatie kan afsluiten met een sterke call-to-action
 
-Voeg toe:
-- Platform aanbevelingen met redenen
-- Content strategie voor elk platform
-- Suggesties voor posting frequentie
-- Budget overwegingen voor een klein bedrijf
-- Meetbare doelen en KPI's
-
-Gebruik je ervaring om praktisch, uitvoerbaar advies te geven dat een drukbezette bakker realistisch kan implementeren."
-
-**Waarom dit werkt**:
-- Specifiek expertise niveau (10+ jaar)
-- Relevante specialisatie (kleine bedrijven, social media)
-- Geloofwaardigheid indicatoren (100+ bedrijven geholpen)
-- Duidelijke taak definitie  
-- Gedetailleerde leverbaar vereisten
-- Context over de klant (lokale bakkerij)`,
-    criteria: [
-      'Definieert specifiek expertise niveau',
-      'Bevat relevante ervaring details',
-      'Stelt duidelijke verwachtingen voor het antwoord',
-      'Geeft context over de situatie',
-      'Specificeert gewenst uitvoer formaat'
-    ],
+De investeerders zijn vooral geïnteresseerd in user growth en revenue ontwikkeling.`,
     hints: [
-      'Wees specifiek over de expertise van de rol',
-      'Voeg jaren ervaring of kwalificaties toe',
-      'Vermeld relevante specialisaties',
-      'Stel context voor het benodigde advies'
+      'Geef je rol en bedrijfscontext',
+      'Specificeer de presentatie details (tijd, publiek)',
+      'Deel specifieke vragen of behoeften',
+      'Vermeld wat belangrijk is voor je publiek'
     ],
     tips: [
-      'Rollen helpen AI de juiste toon en expertise aan te nemen',
-      'Specifieke rollen leiden tot meer gericht advies',
-      'Voeg context toe over wie de hulp nodig heeft',
-      'Definieer het bereik van de rol duidelijk'
+      'Context helpt AI relevante en praktische adviezen te geven',
+      'Specifieke vragen leiden tot gestructureerde antwoorden',
+      'Publiek-specifieke informatie verbetert de kwaliteit van adviezen'
+    ],
+    evaluationCriteria: [
+      'Duidelijke rol en bedrijfscontext',
+      'Specifieke presentatie parameters',
+      'Concrete vragen of behoeften',
+      'Publiek-specifieke informatie'
     ],
     resources: [
-      {
-        title: 'Rol-Gebaseerde Prompting',
-        type: 'article',
-        url: 'https://example.com/role-prompting',
-        description: 'Hoe effectieve rol definities voor AI te maken'
-      }
+      'Context Setting in AI Prompts',
+      'Business Communication Best Practices'
+    ]
+  },
+  {
+    id: 'pe-nl-003',
+    title: 'Rolgebaseerde Prompts',
+    description: 'Leer hoe je AI een specifieke rol geeft voor expertise-gerichte antwoorden.',
+    difficulty: 'beginner',
+    category: 'Role Playing',
+    estimatedTime: '10 minuten',
+    prompt: 'Laat AI de rol van een expert aannemen om advies te geven over een specifiek onderwerp.',
+    solution: `Je bent een ervaren voedingsdeskundige met 15 jaar ervaring in het helpen van mensen met het ontwikkelen van gezonde eetgewoonten.
+
+Een 35-jarige kantoorwerker vraagt om advies voor gezonde lunch opties die:
+- Makkelijk zijn om mee te nemen naar kantoor
+- Binnen 10 minuten te bereiden zijn
+- Energie geven voor de middag
+- Budget-vriendelijk zijn (max €5 per lunch)
+
+Geef 5 concrete lunch ideeën met een korte uitleg waarom elke optie gezond en praktisch is.`,
+    hints: [
+      'Definieer een specifieke expert rol',
+      'Geef de expert relevante ervaring',
+      'Stel een duidelijke situatie voor',
+      'Specificeer concrete criteria en beperkingen'
     ],
-    examples: {
-      good: 'Je bent een gecertificeerde voedingsdeskundige met expertise in maaltijdplanning voor drukke gezinnen.',
-      bad: 'Je bent een expert.',
-      explanation: 'Het goede voorbeeld specificeert het type expert, kwalificaties en specialisatiegebied.'
-    }
-  }
+    tips: [
+      'Specifieke expertise rollen geven gerichtere antwoorden',
+      'Ervaring toevoegen verhoogt de geloofwaardigheid',
+      'Concrete criteria helpen bij praktische antwoorden'
+    ],
+    evaluationCriteria: [
+      'Duidelijke expert rol definitie',
+      'Relevante ervaring/credentials',
+      'Specifieke situatie context',
+      'Concrete criteria en beperkingen'
+    ],
+    resources: [
+      'Role-based AI Interactions',
+      'Expert Persona Development'
+    ]
+  },
+  {
+    id: 'pe-nl-004',
+    title: 'Stap-voor-Stap Instructies',
+    description: 'Leer hoe je AI vraagt om gestructureerde, stap-voor-stap uitleg te geven.',
+    difficulty: 'beginner',
+    category: 'Structured Output',
+    estimatedTime: '12 minuten',
+    prompt: 'Vraag AI om een stap-voor-stap gids te maken voor een praktische taak.',
+    solution: `Maak een beginner-vriendelijke, stap-voor-stap gids voor het opzetten van een Instagram business account.
+
+**Format:**
+- Gebruik genummerde stappen
+- Elke stap max 2 zinnen
+- Voeg praktische tips toe waar relevant
+- Eindig met een checklist voor verificatie
+
+**Doelgroep:** Kleine ondernemers zonder social media ervaring
+**Doel:** Een professioneel Instagram business profiel dat klaar is voor marketing
+
+Begin met wat ze nodig hebben (telefoon, email adres, etc.) en eindig met de eerste post suggestie.`,
+    hints: [
+      'Specificeer het gewenste format (genummerde stappen)',
+      'Geef lengte richtlijnen per stap',
+      'Definieer de doelgroep duidelijk',
+      'Vraag om een duidelijk begin en einde'
+    ],
+    tips: [
+      'Gestructureerde output is gemakkelijker te volgen',
+      'Doelgroep specificatie verbetert de toon en detail niveau',
+      'Begin en einde punten maken gidsen completer'
+    ],
+    evaluationCriteria: [
+      'Duidelijk format verzoek',
+      'Specifieke lengte/structuur richtlijnen',
+      'Doelgroep definitie',
+      'Begin en einde specificaties'
+    ],
+    resources: [
+      'Structured Content Creation',
+      'Step-by-step Guide Writing'
+    ]
+  },
+  ...additionalBeginnerExercisesNL
 ];

@@ -1,399 +1,273 @@
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookOpen, Code, Lightbulb, Target, Zap, Users, Brain, Database } from "lucide-react";
+import { BookOpen, Target, Play, Users, Code, Lightbulb, ArrowRight } from 'lucide-react';
+import FrameworkExercisePlayer from './FrameworkExercisePlayer';
+import { frameworkExercisesNL } from './data/frameworkExercisesNL';
 
 const FrameworkLibrary = () => {
-  const frameworks = {
-    basic: [
-      {
-        name: "CLEAR Framework",
-        description: "A simple structure for writing effective prompts",
-        acronym: {
-          C: "Context - Provide relevant background information",
-          L: "Length - Specify desired output length",
-          E: "Examples - Include sample inputs/outputs",
-          A: "Audience - Define target audience",
-          R: "Role - Assign a specific role to the AI"
-        },
-        example: `Role: Act as a professional email writer
-Context: Writing a follow-up email after a job interview
-Audience: Hiring manager at a tech company
-Length: Keep it under 150 words
-Examples: Thank them for their time, reiterate interest, mention specific discussion points`,
-        useCase: "General prompting, content creation, business communication",
-        difficulty: "Beginner"
-      },
-      {
-        name: "STAR Method",
-        description: "Structure responses using Situation, Task, Action, Result",
-        acronym: {
-          S: "Situation - Set the context and background",
-          T: "Task - Describe what needed to be accomplished",
-          A: "Action - Explain the specific actions taken",
-          R: "Result - Share the outcomes and lessons learned"
-        },
-        example: `Please analyze this business case using the STAR method:
+  const [selectedFrameworkExercise, setSelectedFrameworkExercise] = useState(null);
+  const [activeTab, setActiveTab] = useState('overview');
 
-Situation: [Describe the business context]
-Task: [What needed to be achieved]
-Action: [Steps taken to address the challenge]
-Result: [Outcomes and metrics]`,
-        useCase: "Business analysis, case studies, project evaluation",
-        difficulty: "Beginner"
-      }
-    ],
-    intermediate: [
-      {
-        name: "Chain-of-Thought (CoT)",
-        description: "Enable step-by-step reasoning for complex problems",
-        structure: "Problem → Reasoning Steps → Conclusion",
-        example: `Solve this step-by-step:
-
-Problem: A company's revenue grew from $100k to $150k in one year. What was the percentage increase?
-
-Let me think through this step by step:
-1. Initial revenue: $100,000
-2. Final revenue: $150,000
-3. Increase amount: $150,000 - $100,000 = $50,000
-4. Percentage increase: ($50,000 ÷ $100,000) × 100% = 50%
-
-Therefore, the revenue increased by 50%.`,
-        useCase: "Mathematical problems, logical reasoning, complex analysis",
-        difficulty: "Intermediate"
-      },
-      {
-        name: "ReAct Framework",
-        description: "Combine Reasoning and Acting for dynamic problem-solving",
-        structure: "Thought → Action → Observation → Thought → Action...",
-        example: `Task: Find the current population of Tokyo
-
-Thought 1: I need to search for the most recent population data for Tokyo
-Action 1: Search for "Tokyo population 2024"
-Observation 1: Found data showing Tokyo metropolitan area has about 37.4 million people
-
-Thought 2: I should verify this is the most current data and clarify if this is city proper or metropolitan area
-Action 2: Search for "Tokyo city proper vs metropolitan area population"
-Observation 2: Tokyo city proper has about 14 million, metropolitan area has 37.4 million
-
-Answer: Tokyo city proper has approximately 14 million people, while the Greater Tokyo Area (metropolitan area) has about 37.4 million people as of 2024.`,
-        useCase: "Research tasks, fact-finding, multi-step processes",
-        difficulty: "Intermediate"
-      }
-    ],
-    advanced: [
-      {
-        name: "Constitutional AI",
-        description: "Self-correcting prompts with built-in safety and quality checks",
-        structure: "Initial Response → Self-Critique → Revision → Final Output",
-        example: `Generate a marketing strategy, then review and improve it:
-
-Initial Strategy: [Generate marketing plan]
-
-Self-Critique:
-- Is this strategy ethical and honest?
-- Does it consider diverse audiences?
-- Are the tactics realistic and measurable?
-- What potential negative consequences could arise?
-
-Revised Strategy: [Improve based on critique]
-
-Final Review: [Confirm the strategy meets quality and ethical standards]`,
-        useCase: "Content review, ethical AI applications, quality assurance",
-        difficulty: "Advanced"
-      },
-      {
-        name: "Tree of Thoughts",
-        description: "Explore multiple reasoning paths before converging on solution",
-        structure: "Problem → Multiple Paths → Evaluation → Best Solution",
-        example: `Problem: Design a sustainable transportation system for a city
-
-Path 1: Electric public transit focus
-- Pros: Reduces emissions, cost-effective for users
-- Cons: High infrastructure investment, charging needs
-
-Path 2: Bike-sharing and walkability
-- Pros: Healthy, minimal infrastructure, flexible
-- Cons: Weather dependent, limited range
-
-Path 3: Mixed modal approach
-- Pros: Flexibility, gradual transition, diverse needs
-- Cons: Complex coordination, higher planning costs
-
-Evaluation: Consider cost, environmental impact, user adoption, scalability
-
-Best Solution: Mixed modal approach with phased implementation starting with bike infrastructure and electric buses, then expanding to rail systems.`,
-        useCase: "Strategic planning, complex decision-making, system design",
-        difficulty: "Advanced"
-      }
-    ]
-  };
-
-  const promptPatterns = [
+  const frameworks = [
     {
-      name: "Few-Shot Learning",
-      description: "Provide examples to guide AI behavior",
-      template: `Here are some examples of [TASK]:
-
-Example 1:
-Input: [EXAMPLE_INPUT_1]
-Output: [EXAMPLE_OUTPUT_1]
-
-Example 2:
-Input: [EXAMPLE_INPUT_2]
-Output: [EXAMPLE_OUTPUT_2]
-
-Now, please do the same for:
-Input: [YOUR_INPUT]
-Output:`,
-      icon: Lightbulb
+      name: 'STAR Framework',
+      description: 'Een methode om gestructureerd ervaringsverhalen te vertellen in sollicitatiegesprekken.',
+      components: [
+        { letter: 'S', name: 'Situation', description: 'De context en achtergrond van de situatie' },
+        { letter: 'T', name: 'Task', description: 'De specifieke taak of uitdaging' },
+        { letter: 'A', name: 'Action', description: 'De concrete acties die je ondernam' },
+        { letter: 'R', name: 'Result', description: 'Het resultaat en de impact van je acties' }
+      ],
+      link: 'https://www.thebalancecareers.com/what-is-the-star-interview-method-2061629'
     },
     {
-      name: "Role-Based Prompting",
-      description: "Assign specific expertise and perspective",
-      template: `You are a [ROLE] with [YEARS] years of experience in [FIELD]. 
-
-Your expertise includes:
-- [SKILL_1]
-- [SKILL_2]
-- [SKILL_3]
-
-Please [TASK] while maintaining your professional perspective and using industry-standard practices.`,
-      icon: Users
+      name: 'RACE Framework',
+      description: 'Een digitale marketing framework voor customer lifecycle management.',
+      components: [
+        { letter: 'R', name: 'Reach', description: 'Nieuwe prospects bereiken en merkbekendheid creëren' },
+        { letter: 'A', name: 'Act', description: 'Prospects stimuleren tot interactie met je merk' },
+        { letter: 'C', name: 'Convert', description: 'Prospects omzetten naar betalende klanten' },
+        { letter: 'E', name: 'Engage', description: 'Klanten behouden en loyaliteit opbouwen' }
+      ],
+      link: 'https://www.smartinsights.com/digital-marketing-strategy/race-a-practical-framework-to-improve-your-digital-marketing/'
     },
     {
-      name: "Constraint-Based",
-      description: "Set clear boundaries and requirements",
-      template: `Please [TASK] with the following constraints:
-
-Requirements:
-- [REQUIREMENT_1]
-- [REQUIREMENT_2]
-- [REQUIREMENT_3]
-
-Limitations:
-- Do not [LIMITATION_1]
-- Avoid [LIMITATION_2]
-- Must stay within [BOUNDARY]
-
-Format your response as: [FORMAT_SPECIFICATION]`,
-      icon: Target
+      name: 'AIDA Model',
+      description: 'Een marketingmodel dat de stappen beschrijft die een klant doorloopt tijdens het koopproces.',
+      components: [
+        { letter: 'A', name: 'Awareness', description: 'Aandacht trekken van de doelgroep' },
+        { letter: 'I', name: 'Interest', description: 'Interesse wekken voor het product of de dienst' },
+        { letter: 'D', name: 'Desire', description: 'Verlangen creëren om het product of de dienst te bezitten' },
+        { letter: 'A', name: 'Action', description: 'De klant aanzetten tot actie (aankoop)' }
+      ],
+      link: 'https://www.investopedia.com/terms/a/aida.asp'
+    },
+    {
+      name: '5W2H Methode',
+      description: 'Een techniek om een probleem of project volledig te analyseren door zeven vragen te beantwoorden.',
+      components: [
+        { letter: 'W', name: 'Who', description: 'Wie is betrokken bij het probleem of project?' },
+        { letter: 'W', name: 'What', description: 'Wat is het probleem of project?' },
+        { letter: 'W', name: 'When', description: 'Wanneer vindt het plaats of moet het voltooid zijn?' },
+        { letter: 'W', name: 'Where', description: 'Waar vindt het plaats?' },
+        { letter: 'W', name: 'Why', description: 'Waarom is het nodig of belangrijk?' },
+        { letter: 'H', name: 'How', description: 'Hoe wordt het uitgevoerd?' },
+        { letter: 'H', name: 'How much', description: 'Hoeveel kost het?' }
+      ],
+      link: 'https://www.mindtools.com/aupjdc1/the-5ws-and-1h'
+    },
+    {
+      name: 'Situation-Complication-Question-Answer (SCQA)',
+      description: 'Een storytelling framework om een boodschap helder en overtuigend over te brengen.',
+      components: [
+        { letter: 'S', name: 'Situation', description: 'Beschrijf de huidige situatie' },
+        { letter: 'C', name: 'Complication', description: 'Introduceer een probleem of uitdaging' },
+        { letter: 'Q', name: 'Question', description: 'Formuleer een vraag die om een oplossing vraagt' },
+        { letter: 'A', name: 'Answer', description: 'Geef het antwoord of de oplossing' }
+      ],
+      link: 'https://www.mckinsey.com/featured-insights/storytelling/scqa-the-one-secret-to-persuasive-communication'
+    },
+    {
+      name: 'Problem-Agitation-Solution (PAS)',
+      description: 'Een copywriting formule om een probleem te identificeren, de impact te vergroten en een oplossing aan te bieden.',
+      components: [
+        { letter: 'P', name: 'Problem', description: 'Identificeer het probleem van de doelgroep' },
+        { letter: 'A', name: 'Agitation', description: 'Vergroot de pijn en frustratie rond het probleem' },
+        { letter: 'S', name: 'Solution', description: 'Bied de oplossing aan (jouw product of dienst)' }
+      ],
+      link: 'https://optinmonster.com/problem-agitate-solution-copywriting-formula/'
+    },
+    {
+      name: 'Before-After-Bridge (BAB)',
+      description: 'Een copywriting techniek die contrasteert hoe het leven er nu uitziet met hoe het eruit zou kunnen zien na het gebruik van een product.',
+      components: [
+        { letter: 'B', name: 'Before', description: 'Beschrijf de huidige situatie (het probleem)' },
+        { letter: 'A', name: 'After', description: 'Beschrijf de gewenste situatie (de oplossing)' },
+        { letter: 'B', name: 'Bridge', description: 'Leg uit hoe je van de huidige naar de gewenste situatie komt' }
+      ],
+      link: 'https://copyblogger.com/before-after-bridge/'
+    },
+    {
+      name: '4P’s Marketing Mix',
+      description: 'Een framework dat de belangrijkste elementen van een marketingstrategie omvat.',
+      components: [
+        { letter: 'P', name: 'Product', description: 'Wat wordt er verkocht?' },
+        { letter: 'P', name: 'Price', description: 'Hoeveel kost het?' },
+        { letter: 'P', name: 'Place', description: 'Waar wordt het verkocht?' },
+        { letter: 'P', name: 'Promotion', description: 'Hoe wordt het gepromoot?' }
+      ],
+      link: 'https://www.smartinsights.com/marketing-mix/what-is-the-marketing-mix/'
+    },
+    {
+      name: 'REAN Model',
+      description: 'Een framework voor het analyseren en optimaliseren van de customer journey.',
+      components: [
+        { letter: 'R', name: 'Reach', description: 'Hoe trek je bezoekers aan?' },
+        { letter: 'E', name: 'Engage', description: 'Hoe zorg je ervoor dat bezoekers betrokken raken?' },
+        { letter: 'A', name: 'Activate', description: 'Hoe zet je bezoekers om in klanten?' },
+        { letter: 'N', name: 'Nurture', description: 'Hoe behoud je klanten en stimuleer je herhaalaankopen?' }
+      ],
+      link: 'https://www.smartinsights.com/customer-relationship-management/customer-engagement/rean-model/'
     }
   ];
 
+  if (selectedFrameworkExercise) {
+    return (
+      <FrameworkExercisePlayer
+        exercise={selectedFrameworkExercise}
+        onBack={() => setSelectedFrameworkExercise(null)}
+        showHeader={true}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-3xl font-bold mb-2">Framework Library</h2>
-        <p className="text-gray-600">
-          Master proven frameworks and patterns for effective prompt engineering
-        </p>
-      </div>
+      <Card className="border-2 border-blue-200">
+        <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+          <CardTitle className="flex items-center space-x-2 text-blue-900">
+            <Target className="h-6 w-6" />
+            <span>AI Prompt Frameworks Bibliotheek</span>
+          </CardTitle>
+          <p className="text-blue-700">
+            Ontdek bewezen frameworks voor effectieve prompt constructie, inclusief interactieve oefeningen
+          </p>
+        </CardHeader>
+      </Card>
 
-      <Tabs defaultValue="frameworks" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="frameworks">Frameworks</TabsTrigger>
-          <TabsTrigger value="patterns">Prompt Patterns</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="overview">Framework Overzicht</TabsTrigger>
+          <TabsTrigger value="exercises">Interactieve Oefeningen</TabsTrigger>
+          <TabsTrigger value="examples">Voorbeelden</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="frameworks" className="space-y-8">
-          {/* Beginner Frameworks */}
-          <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <Users className="h-6 w-6 text-green-600" />
-              <h3 className="text-2xl font-bold">Beginner Frameworks</h3>
-              <Badge variant="default">Easy to Learn</Badge>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {frameworks.basic.map((framework, index) => (
-                <Card key={index} className="h-full">
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <span>{framework.name}</span>
-                      <Badge variant="default">{framework.difficulty}</Badge>
-                    </CardTitle>
-                    <CardDescription>{framework.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {'acronym' in framework && (
-                      <div>
-                        <h4 className="font-semibold mb-2">Structure:</h4>
-                        <div className="space-y-2">
-                          {Object.entries(framework.acronym).map(([letter, meaning]) => (
-                            <div key={letter} className="flex">
-                              <span className="font-bold text-blue-600 w-6">{letter}:</span>
-                              <span className="text-sm">{meaning}</span>
-                            </div>
-                          ))}
-                        </div>
+        <TabsContent value="overview" className="space-y-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {frameworks.map((framework, index) => (
+              <Card key={index} className="hover:shadow-lg transition-all duration-200 border-2 border-gray-200">
+                <CardHeader>
+                  <CardTitle className="text-lg leading-tight">
+                    {framework.name}
+                  </CardTitle>
+                  <p className="text-sm text-gray-600">
+                    {framework.description}
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                      <h4 className="font-semibold text-gray-900 text-sm mb-2">
+                        Componenten
+                      </h4>
+                      <div className="flex flex-wrap gap-1">
+                        {framework.components.map((component, idx) => (
+                          <span key={idx} className="text-xs bg-gray-200 text-gray-800 px-2 py-1 rounded">
+                            {component.letter}: {component.name}
+                          </span>
+                        ))}
                       </div>
-                    )}
-                    
-                    <div>
-                      <h4 className="font-semibold mb-2">Example:</h4>
-                      <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto whitespace-pre-wrap">
-                        {framework.example}
-                      </pre>
                     </div>
-                    
-                    <div>
-                      <h4 className="font-semibold mb-1">Best for:</h4>
-                      <p className="text-sm text-gray-600">{framework.useCase}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
 
-          {/* Intermediate Frameworks */}
-          <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <Brain className="h-6 w-6 text-blue-600" />
-              <h3 className="text-2xl font-bold">Intermediate Frameworks</h3>
-              <Badge variant="secondary">Moderate Complexity</Badge>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {frameworks.intermediate.map((framework, index) => (
-                <Card key={index} className="h-full">
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <span>{framework.name}</span>
-                      <Badge variant="secondary">{framework.difficulty}</Badge>
-                    </CardTitle>
-                    <CardDescription>{framework.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold mb-2">Structure:</h4>
-                      <p className="text-sm bg-blue-50 p-2 rounded">{framework.structure}</p>
+                    <div className="flex items-center justify-between text-sm text-gray-600">
+                      <span className="flex items-center">
+                        <Users className="h-3 w-3 mr-1" />
+                        Veel gebruikt in Marketing
+                      </span>
+                      <a href={framework.link} target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-blue-500">
+                        Meer info
+                        <ArrowRight className="h-3 w-3 ml-1" />
+                      </a>
                     </div>
-                    
-                    <div>
-                      <h4 className="font-semibold mb-2">Example:</h4>
-                      <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto whitespace-pre-wrap">
-                        {framework.example}
-                      </pre>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-semibold mb-1">Best for:</h4>
-                      <p className="text-sm text-gray-600">{framework.useCase}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Advanced Frameworks */}
-          <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <Database className="h-6 w-6 text-purple-600" />
-              <h3 className="text-2xl font-bold">Advanced Frameworks</h3>
-              <Badge variant="destructive">Expert Level</Badge>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {frameworks.advanced.map((framework, index) => (
-                <Card key={index} className="h-full">
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <span>{framework.name}</span>
-                      <Badge variant="destructive">{framework.difficulty}</Badge>
-                    </CardTitle>
-                    <CardDescription>{framework.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold mb-2">Structure:</h4>
-                      <p className="text-sm bg-purple-50 p-2 rounded">{framework.structure}</p>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-semibold mb-2">Example:</h4>
-                      <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto whitespace-pre-wrap">
-                        {framework.example}
-                      </pre>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-semibold mb-1">Best for:</h4>
-                      <p className="text-sm text-gray-600">{framework.useCase}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </TabsContent>
 
-        <TabsContent value="patterns" className="space-y-6">
-          <div className="grid md:grid-cols-3 gap-6">
-            {promptPatterns.map((pattern, index) => {
-              const IconComponent = pattern.icon;
-              return (
-                <Card key={index} className="h-full">
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <IconComponent className="h-5 w-5 text-blue-600" />
-                      <span>{pattern.name}</span>
-                    </CardTitle>
-                    <CardDescription>{pattern.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div>
-                      <h4 className="font-semibold mb-2">Template:</h4>
-                      <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto whitespace-pre-wrap">
-                        {pattern.template}
-                      </pre>
-                    </div>
-                    <Button variant="outline" size="sm" className="w-full mt-4">
-                      <Code className="h-4 w-4 mr-2" />
-                      Use Template
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
+        <TabsContent value="exercises" className="space-y-6">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Framework-gebaseerde Oefeningen
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Oefen met echte frameworks en krijg percentage-gebaseerde feedback op de compleetheid van je prompts.
+            </p>
           </div>
 
-          {/* Quick Reference */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <BookOpen className="h-5 w-5" />
-                <span>Quick Reference Guide</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-semibold mb-3">When to Use Each Pattern:</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li><strong>Few-Shot:</strong> When you need consistent formatting or style</li>
-                    <li><strong>Role-Based:</strong> For domain-specific expertise and perspective</li>
-                    <li><strong>Constraint-Based:</strong> When output must meet specific requirements</li>
-                    <li><strong>Chain-of-Thought:</strong> For complex reasoning and problem-solving</li>
-                    <li><strong>ReAct:</strong> For research and multi-step tasks</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-3">Combining Patterns:</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li><strong>Role + Few-Shot:</strong> Expert with consistent examples</li>
-                    <li><strong>CoT + Constraints:</strong> Structured reasoning with boundaries</li>
-                    <li><strong>ReAct + Role:</strong> Expert research with verification</li>
-                    <li><strong>Constitutional + Any:</strong> Add self-correction to any pattern</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {frameworkExercisesNL.map((exercise) => (
+              <Card key={exercise.id} className="hover:shadow-lg transition-all duration-200 border-2 border-purple-200">
+                <CardHeader>
+                  <div className="flex items-start justify-between mb-2">
+                    <Badge className="bg-purple-100 text-purple-800">
+                      {exercise.framework.acronym} Framework
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      {exercise.difficulty === 'beginner' ? 'Beginner' : 
+                       exercise.difficulty === 'intermediate' ? 'Gemiddeld' : 'Gevorderd'}
+                    </Badge>
+                  </div>
+                  <CardTitle className="text-lg leading-tight">
+                    {exercise.title}
+                  </CardTitle>
+                  <p className="text-sm text-gray-600">
+                    {exercise.description}
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
+                      <h4 className="font-semibold text-purple-900 text-sm mb-2">
+                        {exercise.framework.name}
+                      </h4>
+                      <div className="flex flex-wrap gap-1">
+                        {exercise.framework.components.map((component, idx) => (
+                          <span key={idx} className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">
+                            {component.letter}: {component.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm text-gray-600">
+                      <span className="flex items-center">
+                        <Target className="h-3 w-3 mr-1" />
+                        Framework Oefening
+                      </span>
+                      <span className="flex items-center">
+                        <BookOpen className="h-3 w-3 mr-1" />
+                        {exercise.estimatedTime}
+                      </span>
+                    </div>
+
+                    <Button 
+                      onClick={() => setSelectedFrameworkExercise(exercise)}
+                      className="w-full bg-purple-600 hover:bg-purple-700"
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      Start Framework Oefening
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="examples">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Voorbeelden
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Binnenkort meer voorbeelden...
+            </p>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
