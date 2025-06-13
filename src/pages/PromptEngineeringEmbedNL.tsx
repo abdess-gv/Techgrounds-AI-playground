@@ -1,6 +1,6 @@
 
 import { useSearchParams } from 'react-router-dom';
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 import EmbeddableExercise from '@/components/PromptEngineering/EmbeddableExercise';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,20 +19,34 @@ const PromptEngineeringEmbedNL = () => {
   const [searchParams] = useSearchParams();
   
   const exerciseId = searchParams.get('exercise') || '';
-  const level = searchParams.get('level') || 'beginner';
+  const level = (searchParams.get('level') as 'beginner' | 'intermediate' | 'advanced') || 'beginner';
   const compact = searchParams.get('compact') === 'true';
   const showHeader = searchParams.get('header') !== 'false';
   const showLegend = searchParams.get('legend') !== 'false';
+  const showNavigator = searchParams.get('navigator') !== 'false';
 
-  const exerciseDatabase = getExerciseDatabase('nl');
-  const allExercises = [
-    ...exerciseDatabase.beginner,
-    ...exerciseDatabase.intermediate, 
-    ...exerciseDatabase.advanced
-  ];
-  const exercise = exerciseId 
-    ? allExercises.find(ex => ex.id === exerciseId) || exerciseDatabase.beginner[0]
-    : exerciseDatabase.beginner[0];
+  const exercise = useMemo(() => {
+    const exerciseDatabase = getExerciseDatabase('nl');
+    
+    // Get exercises for the specified level
+    const levelExercises = exerciseDatabase[level] || [];
+    
+    // If specific exercise ID is provided, find it across all levels
+    if (exerciseId) {
+      const allExercises = [
+        ...exerciseDatabase.beginner,
+        ...exerciseDatabase.intermediate,
+        ...exerciseDatabase.advanced
+      ];
+      const foundExercise = allExercises.find(ex => ex.id === exerciseId);
+      if (foundExercise) {
+        return foundExercise;
+      }
+    }
+    
+    // Return first exercise of the level
+    return levelExercises[0];
+  }, [level, exerciseId]);
 
   if (!exercise) {
     return (

@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +8,8 @@ import { Progress } from "@/components/ui/progress";
 import { CheckCircle, XCircle, Lightbulb, Target, RotateCcw } from 'lucide-react';
 import PromptHighlighter from './PromptHighlighter';
 import PromptLegend from './PromptLegend';
-import { Exercise } from './ExerciseData';
+import ExerciseNavigator from './ExerciseNavigator';
+import { Exercise, getExerciseDatabase } from './ExerciseData';
 
 interface EmbeddableExerciseProps {
   exercise: Exercise;
@@ -27,13 +28,38 @@ const EmbeddableExercise = ({
   compact = false,
   onComplete,
   className = "",
-  language = 'en'
+  language = 'nl'
 }: EmbeddableExerciseProps) => {
   const [userPrompt, setUserPrompt] = useState("");
   const [showHints, setShowHints] = useState(false);
   const [currentHint, setCurrentHint] = useState(0);
   const [evaluation, setEvaluation] = useState<{ [key: string]: boolean }>({});
   const [isEvaluated, setIsEvaluated] = useState(false);
+  const [currentExercise, setCurrentExercise] = useState(exercise);
+  const [currentLevel, setCurrentLevel] = useState<'beginner' | 'intermediate' | 'advanced'>(exercise.difficulty);
+  const [allExercises, setAllExercises] = useState<Exercise[]>([]);
+
+  // Load exercises when level changes
+  useEffect(() => {
+    const exerciseDatabase = getExerciseDatabase(language);
+    const exercises = exerciseDatabase[currentLevel] || [];
+    setAllExercises(exercises);
+    
+    // If current exercise is not in the new level, switch to first exercise
+    if (!exercises.find(ex => ex.id === currentExercise.id)) {
+      if (exercises.length > 0) {
+        setCurrentExercise(exercises[0]);
+        resetExercise();
+      }
+    }
+  }, [currentLevel, language]);
+
+  // Initialize exercises on component mount
+  useEffect(() => {
+    const exerciseDatabase = getExerciseDatabase(language);
+    const exercises = exerciseDatabase[currentLevel] || [];
+    setAllExercises(exercises);
+  }, []);
 
   // Dutch translations
   const t = (key: string) => {
@@ -76,9 +102,10 @@ const EmbeddableExercise = ({
   };
 
   const evaluatePrompt = () => {
+    const criteria = currentExercise.criteria || currentExercise.evaluationCriteria || [];
     const newEvaluation: { [key: string]: boolean } = {};
     
-    exercise.criteria.forEach(criterion => {
+    criteria.forEach(criterion => {
       const keywords = criterion.toLowerCase().split(/[^\w]+/).filter(word => word.length > 2);
       const userText = userPrompt.toLowerCase();
       
@@ -92,7 +119,7 @@ const EmbeddableExercise = ({
     setEvaluation(newEvaluation);
     setIsEvaluated(true);
     
-    const score = Object.values(newEvaluation).filter(Boolean).length / exercise.criteria.length * 100;
+    const score = Object.values(newEvaluation).filter(Boolean).length / criteria.length * 100;
     onComplete?.(score);
   };
 
@@ -104,8 +131,18 @@ const EmbeddableExercise = ({
     setCurrentHint(0);
   };
 
+  const handleExerciseChange = (newExercise: Exercise) => {
+    setCurrentExercise(newExercise);
+    resetExercise();
+  };
+
+  const handleLevelChange = (newLevel: 'beginner' | 'intermediate' | 'advanced') => {
+    setCurrentLevel(newLevel);
+  };
+
+  const criteria = currentExercise.criteria || currentExercise.evaluationCriteria || [];
   const completedCriteria = Object.values(evaluation).filter(Boolean).length;
-  const totalCriteria = exercise.criteria?.length || 0;
+  const totalCriteria = criteria.length;
   const score = isEvaluated ? (completedCriteria / totalCriteria) * 100 : 0;
 
   const difficultyColor = {
@@ -131,6 +168,19 @@ const EmbeddableExercise = ({
     <div className={`embeddable-exercise space-y-4 ${className}`}>
       {showLegend && !compact && <PromptLegend />}
       
+      {/* Exercise Navigator */}
+      {!compact && allExercises.length > 1 && (
+        <ExerciseNavigator
+          exercises={allExercises}
+          currentExercise={currentExercise}
+          onExerciseChange={handleExerciseChange}
+          level={currentLevel}
+          onLevelChange={handleLevelChange}
+          compact={compact}
+          language={language}
+        />
+      )}
+      
       {showHeader && (
         <Card className="border-2 border-purple-200">
           <CardHeader className={compact ? "p-4" : "bg-gradient-to-r from-purple-50 to-blue-50"}>
@@ -138,17 +188,17 @@ const EmbeddableExercise = ({
               <div>
                 <CardTitle className={`flex items-center space-x-2 ${compact ? 'text-lg' : ''}`}>
                   <Target className={`${compact ? 'h-4 w-4' : 'h-6 w-6'} text-purple-600`} />
-                  <span className="text-purple-900">{exercise.title}</span>
+                  <span className="text-purple-900">{currentExercise.title}</span>
                 </CardTitle>
                 {!compact && (
-                  <p className="text-purple-700 mt-2">{exercise.description}</p>
+                  <p className="text-purple-700 mt-2">{currentExercise.description}</p>
                 )}
               </div>
               <div className="flex items-center space-x-2">
-                <Badge className={difficultyColor[exercise.difficulty]}>
-                  {difficultyLabels[language][exercise.difficulty]}
+                <Badge className={difficultyColor[currentExercise.difficulty]}>
+                  {difficultyLabels[language][currentExercise.difficulty]}
                 </Badge>
-                <Badge variant="outline">{exercise.category}</Badge>
+                <Badge variant="outline">{currentExercise.category}</Badge>
               </div>
             </div>
           </CardHeader>
@@ -156,7 +206,7 @@ const EmbeddableExercise = ({
             <CardContent className="pt-6">
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                 <h4 className="font-semibold text-blue-900 mb-2">📋 {t('exercise.prompt')}</h4>
-                <p className="text-blue-800">{exercise.prompt}</p>
+                <p className="text-blue-800">{currentExercise.prompt}</p>
               </div>
             </CardContent>
           )}
@@ -212,12 +262,12 @@ const EmbeddableExercise = ({
               </Button>
             </div>
 
-            {showHints && exercise.hints && (
+            {showHints && currentExercise.hints && (
               <Card className="bg-yellow-50 border-2 border-yellow-300">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-semibold text-yellow-900 text-sm">
-                      💡 {t('hints')} {currentHint + 1} {t('hint.of')} {exercise.hints.length}
+                      💡 {t('hints')} {currentHint + 1} {t('hint.of')} {currentExercise.hints.length}
                     </h4>
                     <div className="flex space-x-1">
                       {currentHint > 0 && (
@@ -229,7 +279,7 @@ const EmbeddableExercise = ({
                           ←
                         </Button>
                       )}
-                      {currentHint < exercise.hints.length - 1 && (
+                      {currentHint < currentExercise.hints.length - 1 && (
                         <Button
                           size="sm"
                           variant="outline"
@@ -240,7 +290,7 @@ const EmbeddableExercise = ({
                       )}
                     </div>
                   </div>
-                  <p className="text-yellow-800 text-sm">{exercise.hints[currentHint]}</p>
+                  <p className="text-yellow-800 text-sm">{currentExercise.hints[currentHint]}</p>
                 </CardContent>
               </Card>
             )}
@@ -272,7 +322,7 @@ const EmbeddableExercise = ({
 
             <div className="space-y-2">
               <h4 className="font-semibold text-sm">{t('criteria.evaluation')}</h4>
-              {exercise.criteria?.map((criterion, index) => (
+              {criteria.map((criterion, index) => (
                 <div key={index} className="flex items-start space-x-2 p-2 rounded border text-sm">
                   {isEvaluated ? (
                     evaluation[criterion] ? (
@@ -293,14 +343,14 @@ const EmbeddableExercise = ({
                     {criterion}
                   </span>
                 </div>
-              )) || []}
+              ))}
             </div>
 
-            {isEvaluated && !compact && exercise.solution && (
+            {isEvaluated && !compact && currentExercise.solution && (
               <div className="bg-gray-50 p-3 rounded border mt-4">
                 <h4 className="font-semibold mb-2 text-sm">✨ {t('sample.solution')}</h4>
                 <div className="bg-white p-3 rounded border max-h-40 overflow-y-auto">
-                  <PromptHighlighter text={exercise.solution} className="text-xs leading-relaxed" />
+                  <PromptHighlighter text={currentExercise.solution} className="text-xs leading-relaxed" />
                 </div>
               </div>
             )}

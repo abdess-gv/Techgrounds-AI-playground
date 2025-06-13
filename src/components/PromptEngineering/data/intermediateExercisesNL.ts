@@ -131,6 +131,12 @@ Analyseer dit bedrijf: [FINANCIËLE_DATA]`,
 4. **Actieplan**: Geef 3 concrete, prioriteit-gerangschikte aanbevelingen met verwachte impact
 
 Gebruik cijfers en redenering bij elke stap. Leg uit waarom elke aanbeveling logisch volgt uit je analyse.`,
+    criteria: [
+      'Stap-voor-stap analyse structuur',
+      'Concrete cijfers en data',
+      'Logische redenering per stap',
+      'Geprioriteerde actionable aanbevelingen'
+    ],
     hints: [
       'Vraag om stap-voor-stap analyse',
       'Geef concrete cijfers om mee te werken',
@@ -141,12 +147,6 @@ Gebruik cijfers en redenering bij elke stap. Leg uit waarom elke aanbeveling log
       'Complexe problemen vereisen gestructureerde benadering',
       'Concrete data maakt analyse mogelijk',
       'Prioritering helpt bij implementatie'
-    ],
-    evaluationCriteria: [
-      'Stap-voor-stap analyse structuur',
-      'Concrete cijfers en data',
-      'Logische redenering per stap',
-      'Geprioriteerde actionable aanbevelingen'
     ],
     resources: [
       {
@@ -198,6 +198,12 @@ Gebruik cijfers en redenering bij elke stap. Leg uit waarom elke aanbeveling log
 
 **Sluit af met:**
 Een uitgebalanceerde synthese die een hybride model voorstelt met concrete implementatie richtlijnen die alle perspectieven respecteert.`,
+    criteria: [
+      'Meerdere duidelijk gedefinieerde perspectieven',
+      'Onderbouwing met data/trends',
+      'Praktische implicaties per perspectief',
+      'Uitgebalanceerde synthese/conclusie'
+    ],
     hints: [
       'Vraag om meerdere, specifieke perspectieven',
       'Vraag om onderbouwing met data/trends',
@@ -208,12 +214,6 @@ Een uitgebalanceerde synthese die een hybride model voorstelt met concrete imple
       'Multiple perspectieven geven genuanceerde analyses',
       'Data onderbouwing maakt argumenten sterker', 
       'Synthese toont begrip van complexiteit'
-    ],
-    evaluationCriteria: [
-      'Meerdere duidelijk gedefinieerde perspectieven',
-      'Onderbouwing met data/trends',
-      'Praktische implicaties per perspectief',
-      'Uitgebalanceerde synthese/conclusie'
     ],
     resources: [
       {
@@ -264,6 +264,12 @@ Een uitgebalanceerde synthese die een hybride model voorstelt met concrete imple
 - **Vroege signalen**: Platform fee increases, marketplace policy changes
 
 **Actieplan**: Ontwikkel een adaptieve strategie die elementen van alle scenario's integreert, met mijlpalen om strategy aan te passen based on emerging trends.`,
+    criteria: [
+      'Meerdere concrete scenario\'s met waarschijnlijkheden',
+      'Trends, implicaties en strategieën per scenario',
+      'Risico analyse en vroege signalen',
+      'Adaptieve overall strategie'
+    ],
     hints: [
       'Vraag om meerdere concrete scenario\'s met waarschijnlijkheden',
       'Include trends, implicaties en strategieën per scenario',
@@ -274,12 +280,6 @@ Een uitgebalanceerde synthese die een hybride model voorstelt met concrete imple
       'Scenario planning helpt bij strategische flexibiliteit',
       'Waarschijnlijkheden maken scenario\'s praktischer',
       'Vroege signalen helpen bij tijdige aanpassingen'
-    ],
-    evaluationCriteria: [
-      'Meerdere concrete scenario\'s met waarschijnlijkheden',
-      'Trends, implicaties en strategieën per scenario',
-      'Risico analyse en vroege signalen',
-      'Adaptieve overall strategie'
     ],
     resources: [
       {
