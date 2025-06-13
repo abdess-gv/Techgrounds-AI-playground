@@ -1,4 +1,3 @@
-
 import { Exercise } from '../types/Exercise';
 import { additionalAdvancedExercisesNL } from './additionalExercisesNL';
 
@@ -66,9 +65,24 @@ Alle outputs moeten consistent messaging hebben maar aangepast zijn voor verschi
       'Audience-specific aanpassingen'
     ],
     resources: [
-      'Multi-Modal Data Analysis',
-      'Enterprise Business Intelligence',
-      'Cross-Source Data Validation'
+      {
+        title: 'Multi-Modal Data Analysis',
+        type: 'article',
+        url: 'https://example.com/multi-modal-analysis',
+        description: 'Gids voor het integreren van meerdere data bronnen'
+      },
+      {
+        title: 'Enterprise Business Intelligence',
+        type: 'article',
+        url: 'https://example.com/enterprise-bi',
+        description: 'Best practices voor enterprise-level business intelligence'
+      },
+      {
+        title: 'Cross-Source Data Validation',
+        type: 'tool',
+        url: 'https://example.com/data-validation',
+        description: 'Tools en technieken voor data validatie'
+      }
     ]
   },
   {

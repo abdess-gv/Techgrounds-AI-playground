@@ -1,4 +1,3 @@
-
 import { Exercise } from '../types/Exercise';
 
 export const additionalBeginnerExercisesNL: Exercise[] = [
@@ -43,8 +42,18 @@ Zorg ervoor dat het verhaal zowel technisch interessant als emotioneel aangrijpe
       'Toon en stijl instructies'
     ],
     resources: [
-      'Creative Writing Prompts',
-      'Storytelling Frameworks'
+      {
+        title: 'Creative Writing Prompts',
+        type: 'article',
+        url: 'https://example.com/creative-writing',
+        description: 'Inspiratie en technieken voor creatief schrijven'
+      },
+      {
+        title: 'Storytelling Frameworks',
+        type: 'article',
+        url: 'https://example.com/storytelling',
+        description: 'Gestructureerde benaderingen voor verhalen vertellen'
+      }
     ]
   },
   {
@@ -300,47 +309,47 @@ export const additionalAdvancedExercisesNL: Exercise[] = [
 - Huidige state assessment
 - Target architecture design  
 - Technology stack aanbevelingen
-- Integration challenges en oplossingen
-- Security en compliance overwegingen
+- Integration challenges and solutions
+- Security and compliance considerations
 
 **3. Implementation Roadmap** (voor Operations)
 - Fase-gebaseerd implementatie plan (3 fases over 3 jaar)
 - Resource requirements per fase
-- Training en change management plan
-- Key milestones en success metrics
+- Training and change management plan
+- Key milestones and success metrics
 - Risk mitigation strategies
 
 **4. Department Impact Analysis** (voor Department Heads)
 - Per department: huidige processen vs toekomstige
 - Voordelen voor elke afdeling
 - Verwachte veranderingen in workflows
-- Support en training die beschikbaar komt
+- Support and training that will be available
 
 **Schrijfregels**:
 - Elke sectie moet standalone leesbaar zijn
 - Gebruik verschillende detail niveaus per stakeholder
-- Include concrete ROI calculaties en implementatie tijdlijnen
-- Balanceer technische accuraatheid met business duidelijkheid
+- Include concrete ROI calculations and implementation timelines
+- Balance technical accuracy with business clarity
 
-**Deliverables**: 8-12 pagina document met executive summary, detailed plans, en appendices
+**Deliverables**: 8-12 pagina document met executive summary, detailed plans, and appendices
 
 Zorg ervoor dat elke stakeholder hun specifieke vragen beantwoord krijgt terwijl het geheel coherent blijft.`,
     hints: [
       'Positioneer de AI als senior consultant met bewezen track record',
       'Geef rijke organisatie context en stakeholder mapping',
       'Vraag om gelaagde content voor verschillende audiences',
-      'Specificeer concrete deliverables en business metrics'
+      'Specificeer concrete deliverables and business metrics'
     ],
     tips: [
       'Strategische documenten moeten multiple perspectives bedienen',
       'Concrete financiële cijfers maken plannen geloofwaardig',
-      'Implementation details zijn net zo belangrijk als visie'
+      'Implementation details are just as important as vision'
     ],
     evaluationCriteria: [
-      'Senior consultant expertise en ervaring',
+      'Senior consultant expertise and experience',
       'Rijke organisationele context',
-      'Multi-stakeholder gelaagde benadering',
-      'Concrete business metrics en ROI'
+      'Multi-stakeholder layered approach',
+      'Concrete business metrics and ROI'
     ],
     resources: [
       'Digital Transformation Frameworks',

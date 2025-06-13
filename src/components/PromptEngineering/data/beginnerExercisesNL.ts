@@ -1,3 +1,4 @@
+
 import { Exercise } from '../types/Exercise';
 import { additionalBeginnerExercisesNL } from './additionalExercisesNL';
 
@@ -31,8 +32,18 @@ Gebruik eenvoudige woorden en geef een praktisch voorbeeld dat kinderen kunnen b
       'Vraag om voorbeelden of praktische toepassingen'
     ],
     resources: [
-      'Basics of AI Communication',
-      'Age-appropriate Content Creation'
+      {
+        title: 'Basics of AI Communication',
+        type: 'article',
+        url: 'https://example.com/ai-basics',
+        description: 'Leer de grondbeginselen van effectieve AI communicatie'
+      },
+      {
+        title: 'Age-appropriate Content Creation',
+        type: 'article',
+        url: 'https://example.com/age-appropriate',
+        description: 'Gids voor het maken van leeftijdsgerichte content'
+      }
     ]
   },
   {
@@ -69,8 +80,18 @@ De investeerders zijn vooral geïnteresseerd in user growth en revenue ontwikkel
       'Publiek-specifieke informatie'
     ],
     resources: [
-      'Context Setting in AI Prompts',
-      'Business Communication Best Practices'
+      {
+        title: 'Context Setting in AI Prompts',
+        type: 'article',
+        url: 'https://example.com/context-setting',
+        description: 'Leer hoe je effectieve context geeft in AI prompts'
+      },
+      {
+        title: 'Business Communication Best Practices',
+        type: 'article',
+        url: 'https://example.com/business-comm',
+        description: 'Gids voor professionele zakelijke communicatie'
+      }
     ]
   },
   {
@@ -108,8 +129,18 @@ Geef 5 concrete lunch ideeën met een korte uitleg waarom elke optie gezond en p
       'Concrete criteria en beperkingen'
     ],
     resources: [
-      'Role-based AI Interactions',
-      'Expert Persona Development'
+      {
+        title: 'Role-based AI Interactions',
+        type: 'article',
+        url: 'https://example.com/role-based',
+        description: 'Gids voor effectieve rol-gebaseerde AI interacties'
+      },
+      {
+        title: 'Expert Persona Development',
+        type: 'article',
+        url: 'https://example.com/expert-persona',
+        description: 'Leer hoe je overtuigende expert persona\'s ontwikkelt'
+      }
     ]
   },
   {
@@ -150,8 +181,18 @@ Begin met wat ze nodig hebben (telefoon, email adres, etc.) en eindig met de eer
       'Begin en einde specificaties'
     ],
     resources: [
-      'Structured Content Creation',
-      'Step-by-step Guide Writing'
+      {
+        title: 'Structured Content Creation',
+        type: 'article',
+        url: 'https://example.com/structured-content',
+        description: 'Leer hoe je gestructureerde content maakt'
+      },
+      {
+        title: 'Step-by-step Guide Writing',
+        type: 'article',
+        url: 'https://example.com/step-by-step',
+        description: 'Best practices voor het schrijven van stap-voor-stap gidsen'
+      }
     ]
   },
   ...additionalBeginnerExercisesNL

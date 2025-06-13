@@ -1,4 +1,3 @@
-
 import { Exercise } from '../types/Exercise';
 
 export interface FrameworkExercise extends Exercise {
@@ -99,8 +98,18 @@ Zorg ervoor dat elk STAR-element duidelijk aanwezig is en logisch op elkaar voor
       'Meetbare resultaten'
     ],
     resources: [
-      'STAR Interview Method',
-      'Behavioral Interview Preparation'
+      {
+        title: 'STAR Interview Method',
+        type: 'article',
+        url: 'https://example.com/star-method',
+        description: 'Complete gids voor de STAR interview methode'
+      },
+      {
+        title: 'Behavioral Interview Preparation',
+        type: 'article',
+        url: 'https://example.com/behavioral-interviews',
+        description: 'Voorbereiding voor gedragsgerichte interviews'
+      }
     ]
   },
   {
@@ -194,8 +203,18 @@ Elke RACE fase moet concrete tactieken, tijdlijnen en KPI's bevatten.`,
       'Meetbare KPI\'s en tijdlijnen'
     ],
     resources: [
-      'RACE Digital Marketing Framework',
-      'Customer Lifecycle Marketing'
+      {
+        title: 'RACE Digital Marketing Framework',
+        type: 'article',
+        url: 'https://example.com/race-framework',
+        description: 'Uitgebreide gids voor het RACE marketing framework'
+      },
+      {
+        title: 'Customer Lifecycle Marketing',
+        type: 'article',
+        url: 'https://example.com/customer-lifecycle',
+        description: 'Strategieën voor customer lifecycle marketing'
+      }
     ]
   },
   {
@@ -289,8 +308,18 @@ Elke SMART component moet duidelijk herkenbaar zijn in de doelformulering.`,
       'Duidelijke tijdslijnen en deadlines'
     ],
     resources: [
-      'SMART Goals Setting Guide',
-      'Project Management Best Practices'
+      {
+        title: 'SMART Goals Setting Guide',
+        type: 'article',
+        url: 'https://example.com/smart-goals',
+        description: 'Praktische gids voor het stellen van SMART doelen'
+      },
+      {
+        title: 'Project Management Best Practices',
+        type: 'article',
+        url: 'https://example.com/project-management',
+        description: 'Best practices voor effectief project management'
+      }
     ]
   }
 ];
