@@ -1,3 +1,4 @@
+
 import { Exercise } from '../types/Exercise';
 import { additionalAdvancedExercisesNL } from './additionalExercisesNL';
 
@@ -174,9 +175,24 @@ System moet 3 conversation branches simultaan kunnen tracken en naadloos kunnen 
       'Seamless transition en context preservation design'
     ],
     resources: [
-      'Conversational AI Design',
-      'Adaptive User Interface Patterns',
-      'Customer Service Automation'
+      {
+        title: 'Conversational AI Design',
+        type: 'article',
+        url: 'https://example.com/conversational-ai',
+        description: 'Best practices voor conversational AI design'
+      },
+      {
+        title: 'Adaptive User Interface Patterns',
+        type: 'article',
+        url: 'https://example.com/adaptive-ui',
+        description: 'Patronen voor adaptieve gebruikersinterfaces'
+      },
+      {
+        title: 'Customer Service Automation',
+        type: 'article',
+        url: 'https://example.com/customer-service-automation',
+        description: 'Strategieën voor klantenservice automatisering'
+      }
     ]
   },
   {
@@ -295,10 +311,30 @@ Provide structured recommendation met ethical justification, implementation road
       'Practical implementation en monitoring protocols'
     ],
     resources: [
-      'Business Ethics Frameworks',
-      'AI Ethics in Practice',
-      'Stakeholder Theory Applications',
-      'Ethical Decision Making Models'
+      {
+        title: 'Business Ethics Frameworks',
+        type: 'article',
+        url: 'https://example.com/business-ethics',
+        description: 'Frameworks voor business ethiek en besluitvorming'
+      },
+      {
+        title: 'AI Ethics in Practice',
+        type: 'article',
+        url: 'https://example.com/ai-ethics-practice',
+        description: 'Praktische toepassingen van AI ethiek'
+      },
+      {
+        title: 'Stakeholder Theory Applications',
+        type: 'article',
+        url: 'https://example.com/stakeholder-theory',
+        description: 'Toepassingen van stakeholder theorie'
+      },
+      {
+        title: 'Ethical Decision Making Models',
+        type: 'article',
+        url: 'https://example.com/ethical-decision-models',
+        description: 'Modellen voor ethische besluitvorming'
+      }
     ]
   },
   ...additionalAdvancedExercisesNL

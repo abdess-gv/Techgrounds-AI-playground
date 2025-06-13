@@ -1,3 +1,4 @@
+
 import { Exercise } from '../types/Exercise';
 import { additionalIntermediateExercisesNL } from './additionalExercisesNL';
 
@@ -148,8 +149,18 @@ Gebruik cijfers en redenering bij elke stap. Leg uit waarom elke aanbeveling log
       'Geprioriteerde actionable aanbevelingen'
     ],
     resources: [
-      'Business Problem Solving',
-      'Financial Analysis Techniques'
+      {
+        title: 'Business Problem Solving',
+        type: 'article',
+        url: 'https://example.com/business-problem-solving',
+        description: 'Methodieken voor effectieve business probleemoplossing'
+      },
+      {
+        title: 'Financial Analysis Techniques',
+        type: 'article',
+        url: 'https://example.com/financial-analysis-techniques',
+        description: 'Technieken voor financiële analyse en evaluatie'
+      }
     ]
   },
   {
@@ -205,8 +216,18 @@ Een uitgebalanceerde synthese die een hybride model voorstelt met concrete imple
       'Uitgebalanceerde synthese/conclusie'
     ],
     resources: [
-      'Multi-perspective Analysis',
-      'Critical Thinking Frameworks'
+      {
+        title: 'Multi-perspective Analysis',
+        type: 'article',
+        url: 'https://example.com/multi-perspective-analysis',
+        description: 'Technieken voor multi-perspectief analyse'
+      },
+      {
+        title: 'Critical Thinking Frameworks',
+        type: 'article',
+        url: 'https://example.com/critical-thinking',
+        description: 'Frameworks voor kritisch denken en analyse'
+      }
     ]
   },
   {
@@ -242,7 +263,7 @@ Een uitgebalanceerde synthese die een hybride model voorstelt met concrete imple
 - **Risico's**: Afhankelijkheid van platforms, margereductie
 - **Vroege signalen**: Platform fee increases, marketplace policy changes
 
-**Actieplan**: Ontwikkel een adaptieve strategie die elementen van alle scenario's integreert, met mijlpaalen om strategy aan te passen based op emerging trends.`,
+**Actieplan**: Ontwikkel een adaptieve strategie die elementen van alle scenario's integreert, met mijlpalen om strategy aan te passen based on emerging trends.`,
     hints: [
       'Vraag om meerdere concrete scenario\'s met waarschijnlijkheden',
       'Include trends, implicaties en strategieën per scenario',
@@ -261,8 +282,18 @@ Een uitgebalanceerde synthese die een hybride model voorstelt met concrete imple
       'Adaptieve overall strategie'
     ],
     resources: [
-      'Scenario Planning Methodology',
-      'Strategic Foresight Techniques'
+      {
+        title: 'Scenario Planning Methodology',
+        type: 'article',
+        url: 'https://example.com/scenario-planning',
+        description: 'Methoden voor effectieve scenario planning'
+      },
+      {
+        title: 'Strategic Foresight Techniques',
+        type: 'article',
+        url: 'https://example.com/strategic-foresight',
+        description: 'Technieken voor strategische toekomstverkenning'
+      }
     ]
   },
   ...additionalIntermediateExercisesNL

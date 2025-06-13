@@ -1,3 +1,4 @@
+
 import { Exercise } from '../types/Exercise';
 
 export const additionalBeginnerExercisesNL: Exercise[] = [
@@ -101,8 +102,18 @@ Zorg ervoor dat de e-mail het vertrouwen van de klant behoudt en een positieve k
       'Checklist van verplichte elementen'
     ],
     resources: [
-      'Business Email Writing',
-      'Customer Service Communication'
+      {
+        title: 'Business Email Writing',
+        type: 'article',
+        url: 'https://example.com/business-email',
+        description: 'Gids voor professionele e-mail communicatie'
+      },
+      {
+        title: 'Customer Service Communication',
+        type: 'article',
+        url: 'https://example.com/customer-service',
+        description: 'Best practices voor klantenservice communicatie'
+      }
     ]
   },
   {
@@ -155,8 +166,18 @@ Zorg ervoor dat de content de lokale gemeenschap aanspreekt en engagement stimul
       'Praktische implementatie details'
     ],
     resources: [
-      'Social Media Marketing',
-      'Restaurant Marketing Strategies'
+      {
+        title: 'Social Media Marketing',
+        type: 'article',
+        url: 'https://example.com/social-media-marketing',
+        description: 'Strategieën voor effectieve sociale media marketing'
+      },
+      {
+        title: 'Restaurant Marketing Strategies',
+        type: 'article',
+        url: 'https://example.com/restaurant-marketing',
+        description: 'Marketing technieken specifiek voor restaurants'
+      }
     ]
   }
 ];
@@ -211,8 +232,18 @@ Zorg ervoor dat een nieuwe gebruiker binnen 10 minuten de feature kan begrijpen 
       'Specifieke schrijfstijl instructies'
     ],
     resources: [
-      'Technical Writing Best Practices',
-      'User Documentation Guidelines'
+      {
+        title: 'Technical Writing Best Practices',
+        type: 'article',
+        url: 'https://example.com/technical-writing',
+        description: 'Best practices voor effectieve technische documentatie'
+      },
+      {
+        title: 'User Documentation Guidelines',
+        type: 'article',
+        url: 'https://example.com/user-documentation',
+        description: 'Richtlijnen voor gebruikersvriendelijke documentatie'
+      }
     ]
   },
   {
@@ -275,8 +306,18 @@ Maak het rapport geschikt voor zowel management (executive summary) als operatio
       'Focus op actionable insights'
     ],
     resources: [
-      'Business Intelligence Reporting',
-      'Data Storytelling Techniques'
+      {
+        title: 'Business Intelligence Reporting',
+        type: 'article',
+        url: 'https://example.com/business-intelligence',
+        description: 'Strategieën voor effectieve business intelligence rapportage'
+      },
+      {
+        title: 'Data Storytelling Techniques',
+        type: 'article',
+        url: 'https://example.com/data-storytelling',
+        description: 'Technieken voor het vertellen van verhalen met data'
+      }
     ]
   }
 ];
@@ -352,9 +393,24 @@ Zorg ervoor dat elke stakeholder hun specifieke vragen beantwoord krijgt terwijl
       'Concrete business metrics and ROI'
     ],
     resources: [
-      'Digital Transformation Frameworks',
-      'Multi-Stakeholder Communication',
-      'Change Management Strategies'
+      {
+        title: 'Digital Transformation Frameworks',
+        type: 'article',
+        url: 'https://example.com/digital-transformation',
+        description: 'Frameworks voor effectieve digitale transformatie'
+      },
+      {
+        title: 'Multi-Stakeholder Communication',
+        type: 'article',
+        url: 'https://example.com/multi-stakeholder',
+        description: 'Strategieën voor communicatie met meerdere stakeholders'
+      },
+      {
+        title: 'Change Management Strategies',
+        type: 'article',
+        url: 'https://example.com/change-management',
+        description: 'Best practices voor change management'
+      }
     ]
   }
 ];
