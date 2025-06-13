@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,8 +25,8 @@ interface EmbeddableExerciseProps {
 interface CriterionEvaluation {
   met: boolean;
   score: number;
-  matchedKeywords: string[];
   feedback: string;
+  keywordsFound: string[];
 }
 
 const EmbeddableExercise = ({ 
@@ -116,12 +117,13 @@ const EmbeddableExercise = ({
     return translations[language]?.[key] || translations.nl[key] || key;
   };
 
+  // New simplified evaluation logic
   const evaluatePrompt = () => {
     const criteria = currentExercise.criteria || currentExercise.evaluationCriteria || [];
     const newEvaluation: { [key: string]: CriterionEvaluation } = {};
     
     criteria.forEach(criterion => {
-      const result = evaluateCriterion(criterion, userPrompt);
+      const result = evaluateCriterionSimple(criterion, userPrompt);
       newEvaluation[criterion] = result;
     });
     
@@ -133,227 +135,95 @@ const EmbeddableExercise = ({
     onComplete?.(averageScore);
   };
 
-  const evaluateCriterion = (criterion: string, userText: string): CriterionEvaluation => {
+  // Simplified criterion evaluation
+  const evaluateCriterionSimple = (criterion: string, userText: string): CriterionEvaluation => {
     const lowerCriterion = criterion.toLowerCase();
     const lowerUserText = userText.toLowerCase();
     
-    // Extract key concepts and required elements from the criterion
-    const requiredElements = extractRequiredElements(lowerCriterion);
-    const keyPhrases = extractKeyPhrases(lowerCriterion);
-    const matchedKeywords: string[] = [];
-    let contentScore = 0;
+    // Define key concepts to look for based on common prompt engineering terms
+    const keyConceptMaps: { [key: string]: string[] } = {
+      'rol': ['rol', 'persona', 'expert', 'specialist', 'je bent', 'act as', 'gedrag'],
+      'context': ['context', 'achtergrond', 'situatie', 'omgeving', 'scenario'],
+      'taak': ['taak', 'opdracht', 'doel', 'moet', 'wil', 'vraag', 'help'],
+      'structuur': ['structuur', 'format', 'opmaak', 'indeling', 'stappen', 'lijst'],
+      'voorbeeld': ['voorbeeld', 'zoals', 'bijvoorbeeld', 'demo', 'illustratie'],
+      'output': ['output', 'uitvoer', 'resultaat', 'antwoord', 'response'],
+      'specificatie': ['specificeer', 'detail', 'precies', 'exact', 'concreet'],
+      'instructie': ['instructie', 'regel', 'voorwaarde', 'constraint', 'let op']
+    };
     
-    // Content relevance evaluation (60% weight)
-    let relevantMatches = 0;
-    const totalRequiredElements = Math.max(requiredElements.length, keyPhrases.length, 3);
-    
-    // Check for required elements
-    requiredElements.forEach(element => {
-      if (lowerUserText.includes(element.toLowerCase())) {
-        matchedKeywords.push(element);
-        relevantMatches += 1;
+    // Extract relevant keywords from the criterion
+    const relevantKeywords: string[] = [];
+    Object.entries(keyConceptMaps).forEach(([concept, synonyms]) => {
+      if (synonyms.some(synonym => lowerCriterion.includes(synonym))) {
+        relevantKeywords.push(...synonyms);
       }
     });
     
-    // Check for key phrases with context
-    keyPhrases.forEach(phrase => {
-      if (lowerUserText.includes(phrase) && hasContextAroundPhrase(lowerUserText, phrase)) {
-        if (!matchedKeywords.includes(phrase)) {
-          matchedKeywords.push(phrase);
-          relevantMatches += 1;
-        }
+    // If no specific keywords found, extract words from the criterion itself
+    if (relevantKeywords.length === 0) {
+      const words = lowerCriterion.split(/\s+/).filter(word => 
+        word.length > 3 && 
+        !['moet', 'heeft', 'zijn', 'wordt', 'kunnen', 'zouden', 'waar', 'deze', 'voor'].includes(word)
+      );
+      relevantKeywords.push(...words);
+    }
+    
+    // Count keyword matches in user text
+    const foundKeywords: string[] = [];
+    let keywordScore = 0;
+    
+    relevantKeywords.forEach(keyword => {
+      if (lowerUserText.includes(keyword)) {
+        foundKeywords.push(keyword);
+        keywordScore += 1;
       }
     });
     
-    // Content score based on percentage of required elements found
-    contentScore = Math.min(relevantMatches / totalRequiredElements, 1.0) * 0.6;
+    // Calculate content score (0-70%)
+    const maxKeywords = Math.max(relevantKeywords.length, 3);
+    const contentPercentage = Math.min((keywordScore / maxKeywords) * 0.7, 0.7);
     
-    // Structure and clarity evaluation (20% weight)
+    // Basic structure check (0-15%)
     let structureScore = 0;
-    const hasGoodStructure = userText.includes(':') || userText.includes('\n') || 
-                           userText.includes('1.') || userText.includes('•') || 
-                           userText.includes('-');
-    const hasClearSections = (userText.match(/\n/g) || []).length >= 2;
-    const hasProperFormatting = userText.includes(':') && userText.length > 100;
+    if (userText.length > 50) structureScore += 0.05;
+    if (userText.includes(':') || userText.includes('\n')) structureScore += 0.05;
+    if (userText.includes('-') || userText.includes('•') || userText.includes('1.')) structureScore += 0.05;
     
-    if (hasGoodStructure) structureScore += 0.1;
-    if (hasClearSections) structureScore += 0.05;
-    if (hasProperFormatting) structureScore += 0.05;
-    
-    // Length and completeness evaluation (10% weight)
+    // Length bonus (0-10%)
     let lengthScore = 0;
-    if (userText.length > 50) lengthScore += 0.03;
-    if (userText.length > 150) lengthScore += 0.04;
-    if (userText.length > 300) lengthScore += 0.03;
+    if (userText.length > 100) lengthScore += 0.05;
+    if (userText.length > 200) lengthScore += 0.05;
     
-    // Creativity and originality evaluation (10% weight)
-    let creativityScore = 0;
-    const hasExamples = userText.toLowerCase().includes('voorbeeld') || 
-                       userText.toLowerCase().includes('bijvoorbeeld') ||
-                       userText.toLowerCase().includes('zoals');
-    const hasPersona = userText.toLowerCase().includes('rol') || 
-                      userText.toLowerCase().includes('persona') ||
-                      userText.toLowerCase().includes('expert');
-    const hasSpecificInstructions = userText.split('.').length > 3;
+    // Engagement/effort bonus (0-5%)
+    let effortScore = 0;
+    const sentences = userText.split(/[.!?]+/).filter(s => s.trim().length > 10);
+    if (sentences.length >= 2) effortScore += 0.05;
     
-    if (hasExamples) creativityScore += 0.03;
-    if (hasPersona) creativityScore += 0.04;
-    if (hasSpecificInstructions) creativityScore += 0.03;
+    const finalScore = contentPercentage + structureScore + lengthScore + effortScore;
+    const met = finalScore >= 0.3; // 30% threshold
     
-    const finalScore = contentScore + structureScore + lengthScore + creativityScore;
-    const met = finalScore >= 0.6; // 60% threshold for success
-    
-    // Generate detailed feedback
-    let feedback = generateDetailedFeedback(
-      contentScore, structureScore, lengthScore, creativityScore,
-      matchedKeywords, userText.length, totalRequiredElements
-    );
+    // Generate feedback
+    let feedback = generateSimpleFeedback(finalScore, foundKeywords.length, maxKeywords, userText.length);
     
     return {
       met,
       score: finalScore,
-      matchedKeywords,
-      feedback: feedback.trim()
+      feedback,
+      keywordsFound: foundKeywords
     };
   };
 
-  const extractRequiredElements = (criterion: string): string[] => {
-    const elements: string[] = [];
-    
-    // Look for specific requirements in the criterion
-    const requirementPatterns = [
-      /moet\s+(\w+)/g,
-      /bevat\s+(\w+)/g,
-      /gebruik\s+(\w+)/g,
-      /specificeer\s+(\w+)/g,
-      /definieer\s+(\w+)/g,
-      /beschrijf\s+(\w+)/g
-    ];
-    
-    requirementPatterns.forEach(pattern => {
-      let match;
-      while ((match = pattern.exec(criterion)) !== null) {
-        elements.push(match[1]);
-      }
-    });
-    
-    return elements;
-  };
-
-  const hasContextAroundPhrase = (text: string, phrase: string): boolean => {
-    const index = text.indexOf(phrase);
-    if (index === -1) return false;
-    
-    const before = text.substring(Math.max(0, index - 20), index);
-    const after = text.substring(index + phrase.length, Math.min(text.length, index + phrase.length + 20));
-    
-    // Check if there's meaningful context around the phrase
-    const contextWords = (before + after).split(/\s+/).filter(word => word.length > 3);
-    return contextWords.length >= 3;
-  };
-
-  const generateDetailedFeedback = (
-    contentScore: number, 
-    structureScore: number, 
-    lengthScore: number, 
-    creativityScore: number,
-    matchedKeywords: string[],
-    textLength: number,
-    totalRequired: number
-  ): string => {
-    let feedback = "";
-    
-    // Content feedback (most important)
-    if (contentScore >= 0.4) {
-      feedback += `✓ Goede inhoudelijke relevantie (${matchedKeywords.length}/${totalRequired} elementen gevonden). `;
-    } else if (contentScore >= 0.2) {
-      feedback += `◐ Gedeeltelijk relevante inhoud (${matchedKeywords.length}/${totalRequired} elementen). Meer specifieke details nodig. `;
+  const generateSimpleFeedback = (score: number, foundKeywords: number, totalKeywords: number, textLength: number): string => {
+    if (score >= 0.7) {
+      return `Uitstekend! Je prompt bevat ${foundKeywords}/${totalKeywords} belangrijke elementen en is goed uitgewerkt.`;
+    } else if (score >= 0.5) {
+      return `Goed bezig! Je prompt heeft ${foundKeywords}/${totalKeywords} elementen. Probeer meer specifieke details toe te voegen.`;
+    } else if (score >= 0.3) {
+      return `Redelijk begin. Je hebt ${foundKeywords}/${totalKeywords} elementen, maar je prompt kan uitgebreider en specifieker.`;
     } else {
-      feedback += `✗ Onvoldoende relevante inhoud (${matchedKeywords.length}/${totalRequired} elementen). Focus op de kernelementen. `;
+      return `Je prompt mist nog belangrijke elementen (${foundKeywords}/${totalKeywords} gevonden). Probeer meer context en specifieke instructies toe te voegen.`;
     }
-    
-    // Structure feedback
-    if (structureScore >= 0.15) {
-      feedback += `✓ Uitstekende structuur en opmaak. `;
-    } else if (structureScore >= 0.1) {
-      feedback += `◐ Redelijke structuur, kan verbeterd worden. `;
-    } else {
-      feedback += `✗ Betere structuur nodig (gebruik : - nummering). `;
-    }
-    
-    // Length feedback
-    if (lengthScore >= 0.08) {
-      feedback += `✓ Uitgebreide en complete prompt. `;
-    } else if (lengthScore >= 0.05) {
-      feedback += `◐ Redelijke lengte (${textLength} karakters). `;
-    } else {
-      feedback += `✗ Te beknopt (${textLength} karakters), meer detail nodig. `;
-    }
-    
-    // Creativity feedback
-    if (creativityScore >= 0.08) {
-      feedback += `✓ Creatief en specifiek uitgewerkt. `;
-    } else if (creativityScore >= 0.05) {
-      feedback += `◐ Redelijk uitgewerkt, meer voorbeelden helpen. `;
-    } else {
-      feedback += `✗ Meer specificiteit en voorbeelden nodig. `;
-    }
-    
-    return feedback;
-  };
-
-  const extractKeyPhrases = (text: string): string[] => {
-    // Extract meaningful phrases and keywords from criteria
-    const phrases: string[] = [];
-    
-    // Common Dutch prompt engineering terms and their synonyms
-    const termMappings: { [key: string]: string[] } = {
-      'rol': ['rol', 'persona', 'karakter', 'expert', 'specialist'],
-      'context': ['context', 'achtergrond', 'situatie', 'omgeving'],
-      'taak': ['taak', 'opdracht', 'doel', 'assignment', 'instructie'],
-      'structuur': ['structuur', 'opbouw', 'format', 'indeling', 'organisatie'],
-      'voorbeeld': ['voorbeeld', 'sample', 'illustratie', 'demo'],
-      'specificeer': ['specificeer', 'detail', 'precies', 'exact', 'concreet'],
-      'uitvoer': ['uitvoer', 'output', 'resultaat', 'antwoord'],
-      'format': ['format', 'structuur', 'opmaak', 'vorm'],
-      'redenering': ['redenering', 'logica', 'stappen', 'proces']
-    };
-    
-    // Extract base terms from the criterion
-    Object.keys(termMappings).forEach(baseterm => {
-      termMappings[baseterm].forEach(synonym => {
-        if (text.includes(synonym)) {
-          phrases.push(synonym);
-          // Also add the base term if not already included
-          if (!phrases.includes(baseterm)) {
-            phrases.push(baseterm);
-          }
-        }
-      });
-    });
-    
-    // Extract quoted terms
-    const quotedTerms = text.match(/"([^"]+)"/g);
-    if (quotedTerms) {
-      quotedTerms.forEach(term => phrases.push(term.replace(/"/g, '')));
-    }
-    
-    // Extract capitalized terms (likely to be important)
-    const capitalizedWords = text.match(/\b[A-Z][a-z]+\b/g);
-    if (capitalizedWords) {
-      phrases.push(...capitalizedWords.map(w => w.toLowerCase()));
-    }
-    
-    // Split criterion into meaningful chunks and extract key terms
-    const words = text.split(/\s+/);
-    const importantWords = words.filter(word => 
-      word.length > 4 && 
-      !['heeft', 'moet', 'zijn', 'wordt', 'kunnen', 'zouden', 'wanneer', 'omdat'].includes(word)
-    );
-    
-    phrases.push(...importantWords);
-    
-    return [...new Set(phrases)]; // Remove duplicates
   };
 
   const resetExercise = () => {
@@ -602,8 +472,9 @@ const EmbeddableExercise = ({
             {isEvaluated && (
               <div className="text-center p-3 bg-gray-50 rounded-lg">
                 <div className={`text-2xl font-bold ${
-                  averageScore >= 80 ? 'text-green-600' : 
-                  averageScore >= 60 ? 'text-yellow-600' : 'text-red-600'
+                  averageScore >= 70 ? 'text-green-600' : 
+                  averageScore >= 50 ? 'text-yellow-600' : 
+                  averageScore >= 30 ? 'text-orange-600' : 'text-red-600'
                 }`}>
                   {Math.round(averageScore)}%
                 </div>
@@ -645,13 +516,12 @@ const EmbeddableExercise = ({
                             <div className="text-xs text-gray-600">
                               Score: {Math.round(evalResult.score * 100)}%
                             </div>
-                            {showDebug && (
+                            <div className="text-xs text-gray-700 mt-1">
+                              {evalResult.feedback}
+                            </div>
+                            {showDebug && evalResult.keywordsFound.length > 0 && (
                               <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
-                                <strong>Debug info:</strong><br />
-                                {evalResult.feedback}<br />
-                                {evalResult.matchedKeywords.length > 0 && (
-                                  <>Gevonden termen: {evalResult.matchedKeywords.join(', ')}</>
-                                )}
+                                <strong>Gevonden termen:</strong> {evalResult.keywordsFound.join(', ')}
                               </div>
                             )}
                           </div>
