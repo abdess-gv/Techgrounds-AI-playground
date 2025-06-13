@@ -1,7 +1,7 @@
 
 import { useSearchParams } from 'react-router-dom';
 import { Suspense } from 'react';
-import EmbeddableSecurityModule from '@/components/PromptEngineering/EmbeddableSecurityModule';
+import EnhancedSecurityModule from '@/components/PromptEngineering/EnhancedSecurityModule';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -9,7 +9,7 @@ const LoadingFallback = () => (
   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
     <div className="text-center">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
-      <p className="text-gray-600">AI Veiligheid module wordt geladen...</p>
+      <p className="text-gray-600">AI Veiligheid & Ethiek module wordt geladen...</p>
     </div>
   </div>
 );
@@ -26,7 +26,7 @@ const SecurityEmbedNL = () => {
       <div className="min-h-screen bg-gray-50 p-4">
         <div className="max-w-7xl mx-auto">
           <Suspense fallback={<LoadingFallback />}>
-            <EmbeddableSecurityModule
+            <EnhancedSecurityModule
               compact={compact}
               showHeader={showHeader}
               showLegend={showLegend}
@@ -34,10 +34,10 @@ const SecurityEmbedNL = () => {
             />
           </Suspense>
           
-          <Card className="mt-8 border-blue-200">
+          <Card className="mt-8 border-red-200">
             <CardContent className="p-4 text-center">
-              <p className="text-sm text-blue-600">
-                Aangedreven door <strong>Techgrounds AI-Playground</strong> - Nederlands AI Educatieplatform
+              <p className="text-sm text-red-600">
+                Aangedreven door <strong>Techgrounds AI-Playground</strong> - Nederlands AI Veiligheid & Ethiek Platform
               </p>
             </CardContent>
           </Card>
