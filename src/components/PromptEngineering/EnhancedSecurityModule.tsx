@@ -1,13 +1,11 @@
 
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Eye, Users, Brain, Target, Award, TrendingUp, BookOpen } from 'lucide-react';
+import { Shield, Eye, Users, AlertTriangle, BookOpen } from 'lucide-react';
 import PrivacyDetectionExercise from './PrivacyDetectionExercise';
 import EthicsScenarioPlayer from './EthicsScenarioPlayer';
-import SecurityExercisePlayer from './SecurityExercisePlayer';
 
 interface EnhancedSecurityModuleProps {
   compact?: boolean;
@@ -16,336 +14,237 @@ interface EnhancedSecurityModuleProps {
   language?: 'en' | 'nl';
 }
 
+type ExerciseType = 'privacy' | 'ethics' | 'overview';
+type Level = 'beginner' | 'intermediate' | 'advanced';
+
 const EnhancedSecurityModule = ({ 
   compact = false, 
   showHeader = true, 
   showLegend = true,
   language = 'nl'
 }: EnhancedSecurityModuleProps) => {
-  const [selectedLevel, setSelectedLevel] = useState<"beginner" | "intermediate" | "advanced">("beginner");
-  const [activeExerciseType, setActiveExerciseType] = useState<"traditional" | "privacy" | "ethics">("traditional");
+  const [selectedExercise, setSelectedExercise] = useState<ExerciseType>('overview');
+  const [selectedLevel, setSelectedLevel] = useState<Level>('beginner');
 
-  const levelInfo = {
-    beginner: {
-      title: "Beginner Niveau",
-      description: "Leer de basisprincipes van veilig en ethisch AI gebruik",
-      color: "bg-green-100 text-green-800",
-      exercises: 6
-    },
-    intermediate: {
-      title: "Gemiddeld Niveau", 
-      description: "Ontwikkel geavanceerde AI veiligheids- en ethiekvaardigheden",
-      color: "bg-yellow-100 text-yellow-800",
-      exercises: 8
-    },
-    advanced: {
-      title: "Gevorderd Niveau",
-      description: "Beheers complexe AI governance, privacy en ethische vraagstukken",
-      color: "bg-red-100 text-red-800",
-      exercises: 10
-    }
-  };
-
-  const exerciseTypes = [
+  const exercises = [
     {
-      id: "traditional",
-      title: "AI Veiligheid Basis",
-      description: "Fundamentele veiligheidsprincipes",
-      icon: Shield,
-      color: "text-red-600"
+      type: 'privacy' as ExerciseType,
+      title: 'Privacy Detectie',
+      description: 'Herken en verwijder persoonsgegevens uit prompts',
+      icon: <Eye className="h-6 w-6" />,
+      color: 'bg-red-100 text-red-800 border-red-300',
+      levels: 3
     },
     {
-      id: "privacy",
-      title: "Privacy Detectie",
-      description: "Herken en bescherm gevoelige gegevens",
-      icon: Eye,
-      color: "text-purple-600"
-    },
-    {
-      id: "ethics",
-      title: "Ethische Scenario's",
-      description: "Navigeer complexe ethische situaties",
-      icon: Users,
-      color: "text-blue-600"
+      type: 'ethics' as ExerciseType,
+      title: 'Ethische Scenario\'s',
+      description: 'Navigeer door complexe ethische AI situaties',
+      icon: <Users className="h-6 w-6" />,
+      color: 'bg-blue-100 text-blue-800 border-blue-300',
+      levels: 3
     }
   ];
 
-  const securityPrinciples = [
-    {
-      icon: Shield,
-      title: "Privacy First",
-      description: "Bescherm altijd persoonlijke en gevoelige informatie bij AI gebruik",
-      level: "kritiek",
-      tips: ["Gebruik placeholders", "Controleer data minimalisatie", "Vraag toestemming"]
-    },
-    {
-      icon: Eye,
-      title: "Transparantie & Verificatie", 
-      description: "Wees open over AI gebruik en controleer altijd de output",
-      level: "belangrijk",
-      tips: ["Vermeld AI hulp", "Dubbelcheck feiten", "Gebruik bronvermelding"]
-    },
-    {
-      icon: Users,
-      title: "Ethische Overwegingen",
-      description: "Denk na over impact op verschillende stakeholders",
-      level: "ethisch",
-      tips: ["Overweeg alle betrokkenen", "Voorkom discriminatie", "Respecteer autonomie"]
-    },
-    {
-      icon: Brain,
-      title: "Verantwoord Beslissen",
-      description: "Maak weloverwogen keuzes over wanneer en hoe AI te gebruiken",
-      level: "strategisch",
-      tips: ["Evalueer alternatieven", "Documenteer overwegingen", "Plan voor risico's"]
-    }
-  ];
-
-  const levelColors = {
-    kritiek: "bg-red-100 text-red-800 border-red-200",
-    belangrijk: "bg-yellow-100 text-yellow-800 border-yellow-200", 
-    ethisch: "bg-blue-100 text-blue-800 border-blue-200",
-    strategisch: "bg-purple-100 text-purple-800 border-purple-200"
+  const levelLabels = {
+    beginner: 'Beginner',
+    intermediate: 'Gemiddeld',
+    advanced: 'Gevorderd'
   };
+
+  if (selectedExercise === 'privacy') {
+    return (
+      <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center space-x-2">
+                <Eye className="h-5 w-5 text-red-600" />
+                <span>Privacy Detectie Training</span>
+              </CardTitle>
+              <Button 
+                variant="outline" 
+                onClick={() => setSelectedExercise('overview')}
+                size="sm"
+              >
+                ← Terug naar overzicht
+              </Button>
+            </div>
+          </CardHeader>
+        </Card>
+        
+        <PrivacyDetectionExercise
+          level={selectedLevel}
+          compact={compact}
+          showHeader={false}
+          showLegend={showLegend}
+          language={language}
+        />
+      </div>
+    );
+  }
+
+  if (selectedExercise === 'ethics') {
+    return (
+      <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center space-x-2">
+                <Users className="h-5 w-5 text-blue-600" />
+                <span>Ethische Scenario Training</span>
+              </CardTitle>
+              <Button 
+                variant="outline" 
+                onClick={() => setSelectedExercise('overview')}
+                size="sm"
+              >
+                ← Terug naar overzicht
+              </Button>
+            </div>
+          </CardHeader>
+        </Card>
+        
+        <EthicsScenarioPlayer
+          level={selectedLevel}
+          compact={compact}
+          showHeader={false}
+          showLegend={showLegend}
+          language={language}
+        />
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
+    <div className={`space-y-6 ${compact ? 'max-w-5xl' : 'max-w-7xl'} mx-auto`}>
       {showHeader && (
-        <div className="text-center">
-          <div className="flex justify-center mb-4">
-            <Shield className="h-16 w-16 text-red-600" />
-          </div>
-          <h1 className="text-4xl font-bold text-red-900 mb-4">
-            AI Veiligheid & Ethische Overwegingen
-          </h1>
-          <p className="text-lg text-gray-600 max-w-4xl mx-auto">
-            Leer hoe je AI-tools veilig, verantwoord en ethisch kunt gebruiken. Van privacybescherming tot complexe ethische besluitvorming.
-          </p>
-        </div>
+        <Card className="border-2 border-red-200">
+          <CardHeader className="bg-gradient-to-r from-red-50 to-orange-50">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center space-x-2 text-red-900">
+                  <Shield className="h-6 w-6" />
+                  <span>AI Veiligheid & Ethische Overwegingen</span>
+                </CardTitle>
+                <p className="text-red-700 mt-2">Leer veilig en verantwoord omgaan met AI-systemen</p>
+              </div>
+            </div>
+          </CardHeader>
+        </Card>
       )}
 
-      <Tabs defaultValue="exercises" className="w-full">
-        <TabsList className={`grid w-full ${compact ? 'grid-cols-2' : 'grid-cols-4'}`}>
-          <TabsTrigger value="exercises">Oefeningen</TabsTrigger>
-          <TabsTrigger value="principles">Principes</TabsTrigger>
-          {!compact && <TabsTrigger value="scenarios">Scenario's</TabsTrigger>}
-          {!compact && <TabsTrigger value="progress">Voortgang</TabsTrigger>}
-        </TabsList>
-
-        <TabsContent value="exercises" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Target className="h-5 w-5" />
-                <span>Interactieve AI Veiligheid & Ethiek Oefeningen</span>
-              </CardTitle>
-              <CardDescription>
-                Kies je niveau en type oefening om praktijkervaring op te doen
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Level Selection */}
-              <div>
-                <h4 className="font-semibold mb-3">Kies je niveau:</h4>
-                <div className="grid md:grid-cols-3 gap-4">
-                  {Object.entries(levelInfo).map(([level, info]) => (
-                    <Card 
-                      key={level}
-                      className={`cursor-pointer transition-all ${
-                        selectedLevel === level 
-                          ? 'border-red-500 bg-red-50' 
-                          : 'hover:border-red-300'
-                      }`}
-                      onClick={() => setSelectedLevel(level as "beginner" | "intermediate" | "advanced")}
-                    >
-                      <CardContent className="p-4 text-center">
-                        <Badge className={`${info.color} mb-2`}>
-                          {info.title}
-                        </Badge>
-                        <p className="text-sm text-gray-600 mb-2">{info.description}</p>
-                        <div className="flex items-center justify-center space-x-1 text-xs text-gray-500">
-                          <BookOpen className="h-3 w-3" />
-                          <span>{info.exercises} oefeningen</span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {/* Exercise Type Selection */}
-              <div>
-                <h4 className="font-semibold mb-3">Kies oefening type:</h4>
-                <div className="grid md:grid-cols-3 gap-4">
-                  {exerciseTypes.map((type) => (
-                    <Card 
-                      key={type.id}
-                      className={`cursor-pointer transition-all ${
-                        activeExerciseType === type.id 
-                          ? 'border-blue-500 bg-blue-50' 
-                          : 'hover:border-blue-300'
-                      }`}
-                      onClick={() => setActiveExerciseType(type.id as "traditional" | "privacy" | "ethics")}
-                    >
-                      <CardContent className="p-4 text-center">
-                        <type.icon className={`h-8 w-8 ${type.color} mx-auto mb-2`} />
-                        <h5 className="font-semibold mb-1">{type.title}</h5>
-                        <p className="text-sm text-gray-600">{type.description}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {/* Exercise Content */}
-              <div className="border-t pt-6">
-                {activeExerciseType === "traditional" && (
-                  <SecurityExercisePlayer level={selectedLevel} language={language} />
-                )}
-                {activeExerciseType === "privacy" && (
-                  <PrivacyDetectionExercise level={selectedLevel} />
-                )}
-                {activeExerciseType === "ethics" && (
-                  <EthicsScenarioPlayer level={selectedLevel} />
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="principles" className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            {securityPrinciples.map((principle, index) => (
-              <Card key={index} className={`border-2 ${levelColors[principle.level]}`}>
-                <CardHeader>
-                  <div className="flex items-center space-x-3">
-                    <principle.icon className="h-8 w-8 text-current" />
-                    <div>
-                      <CardTitle className="text-lg">{principle.title}</CardTitle>
-                      <Badge variant="outline" className="mt-1 text-xs">
-                        {principle.level}
-                      </Badge>
-                    </div>
+      {/* Level Selection */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Kies je Niveau</CardTitle>
+          <p className="text-gray-600">Selecteer het niveau dat bij jouw ervaring past</p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-3 gap-4">
+            {(Object.keys(levelLabels) as Level[]).map((level) => (
+              <Card
+                key={level}
+                onClick={() => setSelectedLevel(level)}
+                className={`cursor-pointer transition-all ${
+                  selectedLevel === level 
+                    ? 'border-red-500 bg-red-50 shadow-md' 
+                    : 'border-gray-200 hover:border-red-300 hover:shadow-sm'
+                }`}
+              >
+                <CardContent className="p-4 text-center">
+                  <div className={`text-2xl mb-2 ${
+                    level === 'beginner' ? '🌱' :
+                    level === 'intermediate' ? '🌿' : '🌳'
+                  }`}>
+                    {level === 'beginner' ? '🌱' :
+                     level === 'intermediate' ? '🌿' : '🌳'}
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-700 mb-4">{principle.description}</p>
-                  <div>
-                    <h5 className="font-semibold text-sm mb-2">Praktische Tips:</h5>
-                    <ul className="space-y-1">
-                      {principle.tips.map((tip, tipIndex) => (
-                        <li key={tipIndex} className="text-sm text-gray-600 flex items-center space-x-2">
-                          <div className="w-1.5 h-1.5 bg-current rounded-full" />
-                          <span>{tip}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <h3 className="font-semibold">{levelLabels[level]}</h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {level === 'beginner' && 'Basis concepten en eenvoudige oefeningen'}
+                    {level === 'intermediate' && 'Praktijkscenario\'s en toepassingen'}
+                    {level === 'advanced' && 'Complexe situaties en expertkennis'}
+                  </p>
                 </CardContent>
               </Card>
             ))}
           </div>
-        </TabsContent>
+        </CardContent>
+      </Card>
 
-        {!compact && (
-          <>
-            <TabsContent value="scenarios" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Realistische AI Scenario's</CardTitle>
-                  <CardDescription>
-                    Oefen met echte situaties die je in je werk kunt tegenkomen
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <EthicsScenarioPlayer level={selectedLevel} />
-                </CardContent>
-              </Card>
-            </TabsContent>
+      {/* Exercise Selection */}
+      <div className="grid md:grid-cols-2 gap-6">
+        {exercises.map((exercise) => (
+          <Card 
+            key={exercise.type}
+            className={`hover:shadow-lg transition-all duration-200 border-2 ${exercise.color}`}
+          >
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-lg bg-white">
+                    {exercise.icon}
+                  </div>
+                  <div>
+                    <CardTitle className="text-lg">{exercise.title}</CardTitle>
+                    <p className="text-sm text-gray-600 mt-1">{exercise.description}</p>
+                  </div>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {/* Exercise Details */}
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span className="flex items-center">
+                    <BookOpen className="h-3 w-3 mr-1" />
+                    {exercise.levels} Levels
+                  </span>
+                  <Badge variant="outline" className="text-xs">
+                    Interactief
+                  </Badge>
+                </div>
 
-            <TabsContent value="progress" className="space-y-6">
-              <div className="grid md:grid-cols-3 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <Award className="h-5 w-5 text-yellow-600" />
-                      <span>Voltooide Oefeningen</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-yellow-600 mb-2">12/24</div>
-                    <p className="text-sm text-gray-600">50% voltooid</p>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <TrendingUp className="h-5 w-5 text-green-600" />
-                      <span>Gemiddelde Score</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-green-600 mb-2">87%</div>
-                    <p className="text-sm text-gray-600">Uitstekend niveau</p>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <Brain className="h-5 w-5 text-blue-600" />
-                      <span>Sterke Punten</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span>Privacy Bescherming</span>
-                        <span className="font-semibold text-green-600">95%</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Ethische Overwegingen</span>
-                        <span className="font-semibold text-green-600">90%</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Bias Herkenning</span>
-                        <span className="font-semibold text-yellow-600">75%</span>
-                      </div>
+                <div className="space-y-2">
+                  <div className="text-sm font-medium">Huidige level: {levelLabels[selectedLevel]}</div>
+                  {exercise.type === 'privacy' && selectedLevel === 'beginner' && (
+                    <div className="text-xs text-blue-600 bg-blue-50 p-2 rounded">
+                      💡 Inclusief afkortingen legenda voor beginners
                     </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-          </>
-        )}
-      </Tabs>
+                  )}
+                </div>
 
-      {/* Legend */}
-      {showLegend && (
-        <Card className="bg-gray-50 border-gray-200">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-center space-x-6 text-sm text-gray-600">
-              <div className="flex items-center space-x-2">
-                <Shield className="h-4 w-4 text-red-600" />
-                <span>Veiligheid</span>
+                {/* Action Button */}
+                <Button 
+                  onClick={() => setSelectedExercise(exercise.type)}
+                  className="w-full bg-red-600 hover:bg-red-700"
+                >
+                  Start {exercise.title}
+                </Button>
               </div>
-              <div className="flex items-center space-x-2">
-                <Eye className="h-4 w-4 text-purple-600" />
-                <span>Privacy</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Users className="h-4 w-4 text-blue-600" />
-                <span>Ethiek</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Brain className="h-4 w-4 text-green-600" />
-                <span>Verantwoordelijkheid</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Getting Started Guide */}
+      <Card className="bg-blue-50 border-blue-200">
+        <CardContent className="p-6">
+          <h3 className="font-bold text-blue-900 mb-3">🚀 Aan de Slag</h3>
+          <div className="space-y-2 text-blue-800">
+            <p>• <strong>Privacy Detectie:</strong> Leer persoonsgegevens herkennen en anonimiseren</p>
+            <p>• <strong>Ethische Scenario's:</strong> Oefen met complexe ethische AI-beslissingen</p>
+            <p>• Voor beginners: Extra hulp met afkortingen en uitgebreide uitleg</p>
+            <p>• Interactieve oefeningen met directe feedback en scores</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Branding footer for embeddable version */}
+      {compact && (
+        <div className="text-center text-xs text-gray-500 border-t pt-2">
+          <span>Aangedreven door Techgrounds AI-Playground - Nederlands AI Veiligheid Platform</span>
+        </div>
       )}
     </div>
   );

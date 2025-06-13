@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertTriangle, CheckCircle, Eye, Shield, User, MapPin, Calendar } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Eye, Shield, User, MapPin, Calendar, Info } from 'lucide-react';
 
 interface PrivacyIssue {
   type: 'personal' | 'address' | 'metadata' | 'identifier';
@@ -22,6 +22,14 @@ interface PrivacyExercise {
   issues: PrivacyIssue[];
   solution: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
+}
+
+interface PrivacyDetectionExerciseProps {
+  level: 'beginner' | 'intermediate' | 'advanced';
+  compact?: boolean;
+  showHeader?: boolean;
+  showLegend?: boolean;
+  language?: 'en' | 'nl';
 }
 
 const privacyExercises: PrivacyExercise[] = [
@@ -73,7 +81,86 @@ const privacyExercises: PrivacyExercise[] = [
   }
 ];
 
-const PrivacyDetectionExercise = ({ level }: { level: 'beginner' | 'intermediate' | 'advanced' }) => {
+const PrivacyLegend = () => {
+  const legendItems = [
+    {
+      category: 'Persoonlijke Gegevens',
+      icon: <User className="h-4 w-4" />,
+      color: 'text-red-600 bg-red-100',
+      abbreviations: ['[NAAM]', '[VOORNAAM]', '[ACHTERNAAM]', '[PERSOON_ID]'],
+      examples: 'Jan de Vries, Maria Jansen'
+    },
+    {
+      category: 'Adresgegevens', 
+      icon: <MapPin className="h-4 w-4" />,
+      color: 'text-orange-600 bg-orange-100',
+      abbreviations: ['[ADRES]', '[STRAAT]', '[STAD]', '[POSTCODE]', '[LOCATIE]'],
+      examples: 'Hoofdstraat 123, Amsterdam'
+    },
+    {
+      category: 'Metadata',
+      icon: <Calendar className="h-4 w-4" />,
+      color: 'text-yellow-600 bg-yellow-100',
+      abbreviations: ['[DATUM]', '[TIJD]', '[JAAR]', '[PERIODE]'],
+      examples: '15 maart 2024, 20:00-22:00'
+    },
+    {
+      category: 'Identificeerbare Gegevens',
+      icon: <AlertTriangle className="h-4 w-4" />,
+      color: 'text-purple-600 bg-purple-100',
+      abbreviations: ['[EMAIL]', '[TELEFOON]', '[BSN]', '[BEDRIJF]', '[WEBSITE]'],
+      examples: 'jan@email.com, 06-12345678'
+    }
+  ];
+
+  return (
+    <Card className="mb-6 border-blue-200">
+      <CardHeader>
+        <CardTitle className="flex items-center space-x-2 text-blue-900">
+          <Info className="h-5 w-5" />
+          <span>Privacy Afkortingen Legenda</span>
+        </CardTitle>
+        <p className="text-blue-700 text-sm">
+          Gebruik deze afkortingen om gevoelige gegevens te vervangen in je prompts
+        </p>
+      </CardHeader>
+      <CardContent>
+        <div className="grid md:grid-cols-2 gap-4">
+          {legendItems.map((item, index) => (
+            <div key={index} className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <div className={`p-1 rounded ${item.color}`}>
+                  {item.icon}
+                </div>
+                <h4 className="font-semibold text-sm">{item.category}</h4>
+              </div>
+              <div className="ml-7 space-y-1">
+                <div className="flex flex-wrap gap-1">
+                  {item.abbreviations.map((abbr, i) => (
+                    <Badge key={i} variant="outline" className="text-xs">
+                      {abbr}
+                    </Badge>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-600">
+                  <strong>Voorbeeld:</strong> {item.examples}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+const PrivacyDetectionExercise = ({ 
+  level, 
+  compact = false,
+  showHeader = true,
+  showLegend = true,
+  language = 'nl'
+}: PrivacyDetectionExerciseProps) => {
   const [currentExercise, setCurrentExercise] = useState(0);
   const [userPrompt, setUserPrompt] = useState('');
   const [detectedIssues, setDetectedIssues] = useState<PrivacyIssue[]>([]);
@@ -136,7 +223,24 @@ const PrivacyDetectionExercise = ({ level }: { level: 'beginner' | 'intermediate
   }
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 ${compact ? 'max-w-4xl mx-auto' : ''}`}>
+      {showHeader && !compact && (
+        <Card className="border-2 border-red-200">
+          <CardHeader className="bg-gradient-to-r from-red-50 to-orange-50">
+            <CardTitle className="flex items-center space-x-2 text-red-900">
+              <Shield className="h-6 w-6" />
+              <span>Privacy Detectie Training</span>
+            </CardTitle>
+            <p className="text-red-700">
+              Leer hoe je privacy gevoelige gegevens identificeert en anonimiseert
+            </p>
+          </CardHeader>
+        </Card>
+      )}
+
+      {/* Show legend for beginners */}
+      {showLegend && level === 'beginner' && <PrivacyLegend />}
+
       <Card className="border-red-200">
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -239,6 +343,13 @@ const PrivacyDetectionExercise = ({ level }: { level: 'beginner' | 'intermediate
           )}
         </CardContent>
       </Card>
+
+      {/* Branding footer for embeddable version */}
+      {compact && (
+        <div className="text-center text-xs text-gray-500 border-t pt-2">
+          <span>Aangedreven door Techgrounds AI-Playground - Nederlands AI Veiligheid Platform</span>
+        </div>
+      )}
     </div>
   );
 };
