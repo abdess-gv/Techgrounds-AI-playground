@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -59,6 +58,38 @@ const ethicsScenarios: { [key: string]: EthicsScenario[] } = {
       category: 'Privacy',
       difficulty: 'beginner',
       estimatedTime: '4 min'
+    },
+    {
+      id: 'eth-003',
+      title: 'AI Hulp bij Huiswerk',
+      scenario: 'Je kind vraagt om hulp met wiskundeproblemen. Je overweegt AI te gebruiken om de antwoorden te geven.',
+      options: [
+        'AI geeft de antwoorden, dat is efficiënt',
+        'AI gebruiken om de stappen uit te leggen',
+        'Helemaal geen AI gebruiken',
+        'AI gebruiken maar dat niet vertellen'
+      ],
+      correctAnswer: 1,
+      explanation: 'AI kan waardevol zijn voor het leren van methoden en begrip, niet voor kant-en-klare antwoorden.',
+      category: 'Onderwijs',
+      difficulty: 'beginner',
+      estimatedTime: '3 min'
+    },
+    {
+      id: 'eth-004',
+      title: 'Social Media Content',
+      scenario: 'Je gebruikt AI om posts voor je bedrijf te maken. Moet je dit vermelden in je posts?',
+      options: [
+        'Nee, niemand hoeft dat te weten',
+        'Ja, altijd duidelijk vermelden',
+        'Alleen bij belangrijke posts',
+        'Alleen als klanten ernaar vragen'
+      ],
+      correctAnswer: 1,
+      explanation: 'Transparantie over AI-gegenereerde content bouwt vertrouwen en toont verantwoordelijk gebruik.',
+      category: 'Marketing',
+      difficulty: 'beginner',
+      estimatedTime: '3 min'
     }
   ],
   intermediate: [
@@ -77,6 +108,38 @@ const ethicsScenarios: { [key: string]: EthicsScenario[] } = {
       category: 'Fairness',
       difficulty: 'intermediate',
       estimatedTime: '6 min'
+    },
+    {
+      id: 'eth-102',
+      title: 'AI in Medische Diagnose',
+      scenario: 'Een AI-systeem suggereert een diagnose die verschilt van je medische oordeel. Wat doe je?',
+      options: [
+        'De AI-diagnose volgen, technologie is betrouwbaarder',
+        'Je eigen oordeel combineren met AI-inzichten',
+        'De AI-suggestie negeren, ervaring is belangrijker',
+        'Een tweede AI-systeem raadplegen'
+      ],
+      correctAnswer: 1,
+      explanation: 'Menselijke expertise en AI moeten samen werken, waarbij de professional eindverantwoordelijk blijft.',
+      category: 'Gezondheidszorg',
+      difficulty: 'intermediate',
+      estimatedTime: '7 min'
+    },
+    {
+      id: 'eth-103',
+      title: 'Automated Customer Service',
+      scenario: 'Je AI-chatbot geeft incorrect advies aan een klant met een complexe vraag. Wat is je prioriteit?',
+      options: [
+        'De AI-training verbeteren voor volgende keer',
+        'Direct contact opnemen met de klant om te corrigeren',
+        'Wachten tot de klant opnieuw contact opneemt',
+        'Het incident intern rapporteren'
+      ],
+      correctAnswer: 1,
+      explanation: 'Directe klantschade heeft prioriteit en vereist onmiddellijke correctie en transparantie.',
+      category: 'Klantenservice',
+      difficulty: 'intermediate',
+      estimatedTime: '5 min'
     }
   ],
   advanced: [
@@ -95,6 +158,38 @@ const ethicsScenarios: { [key: string]: EthicsScenario[] } = {
       category: 'Governance',
       difficulty: 'advanced',
       estimatedTime: '8 min'
+    },
+    {
+      id: 'eth-202',
+      title: 'AI en Intellectueel Eigendom',
+      scenario: 'Je AI genereert code die lijkt op bestaande open-source projecten. Hoe ga je om met mogelijke IP-conflicten?',
+      options: [
+        'De code gebruiken, AI kan geen auteursrecht schenden',
+        'Uitgebreide IP-audit uitvoeren voor gebruik',
+        'Alleen eigen training data gebruiken',
+        'Juridisch advies inwinnen per geval'
+      ],
+      correctAnswer: 1,
+      explanation: 'IP-rechten zijn complex bij AI; een grondige audit beschermt tegen juridische risicos.',
+      category: 'Intellectueel Eigendom',
+      difficulty: 'advanced',
+      estimatedTime: '10 min'
+    },
+    {
+      id: 'eth-203',
+      title: 'AI Algoritme Transparantie',
+      scenario: 'Klanten vragen hoe je AI-systeem beslissingen neemt die hun leningen beïnvloeden. Wat deel je?',
+      options: [
+        'Niets, algoritmes zijn bedrijfsgeheimen',
+        'Uitgebreide technische documentatie',
+        'Begrijpelijke uitleg van de belangrijkste factoren',
+        'Alleen wettelijk vereiste informatie'
+      ],
+      correctAnswer: 2,
+      explanation: 'Transparantie moet begrijpelijk zijn voor gebruikers terwijl bedrijfsbelangen beschermd blijven.',
+      category: 'Transparantie',
+      difficulty: 'advanced',
+      estimatedTime: '9 min'
     }
   ]
 };
