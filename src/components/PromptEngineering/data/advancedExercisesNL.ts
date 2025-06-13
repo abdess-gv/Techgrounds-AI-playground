@@ -1,3 +1,4 @@
+
 import { Exercise } from '../types/Exercise';
 import { additionalAdvancedExercisesNL } from './additionalExercisesNL';
 
@@ -83,7 +84,6 @@ Alle outputs moeten consistent messaging hebben maar aangepast zijn voor verschi
 **Adaptive Conversation Architecture:**
 
 **1. Initial Assessment Protocol:**
-```
 Welkom! Ik ga je helpen op de meest effectieve manier.
 
 [Persona Detection Vragen - max 2]:
@@ -94,7 +94,6 @@ Welkom! Ik ga je helpen op de meest effectieve manier.
 - Frustatie woorden → Empathische route
 - Technische termen → Expert route  
 - Tijdsdruk signalen → Efficiency route
-```
 
 **2. Dynamic Response Pathways:**
 
@@ -117,7 +116,6 @@ Welkom! Ik ga je helpen op de meest effectieve manier.
 - Community resource suggestions
 
 **3. Context Adaptation Rules:**
-```
 IF (Previous interaction < 24hrs AND unresolved) 
    THEN Skip intro, reference previous case
 
@@ -129,7 +127,6 @@ IF (Problem category = Billing AND emotion = angry)
 
 IF (Multiple failed self-service attempts detected)
    THEN Skip self-service suggestions, direct human routing
-```
 
 **4. Conversation Evolution Tracking:**
 - Monitor comprehension signals (questions, confirmations)
@@ -181,7 +178,6 @@ System moet 3 conversation branches simultaan kunnen tracken en naadloos kunnen 
 **Ethical Decision Architecture:**
 
 **1. Stakeholder Impact Mapping:**
-```
 Voor elke business beslissing, analyseer systematisch:
 
 PRIMARY STAKEHOLDERS:
@@ -195,10 +191,8 @@ SECONDARY STAKEHOLDERS:
 - Industrie: Competitive effects, standard setting
 - Toekomstige generaties: Sustainability, long-term consequences
 - Regulatory bodies: Compliance, precedent setting
-```
 
 **2. Ethical Principles Framework:**
-```
 Evalueer elke beslissing tegen core principles:
 
 AUTONOMY: Respecteert individual choice en self-determination?
@@ -220,10 +214,8 @@ JUSTICE: Distributes impacts fairly?
 - Benefit distribution across stakeholder groups
 - Burden sharing assessment
 - Procedural fairness in decision making
-```
 
 **3. Ethical Decision Matrix:**
-```
 Create weighted analysis:
 
 FOR EACH OPTION:
@@ -242,10 +234,8 @@ IMPLEMENTATION CONSIDERATIONS:
 - Feasibility (technical, financial, legal): [Score/10]
 - Timeline for full implementation: [Months]
 - Reversibility if negative consequences emerge: [Y/N]
-```
 
 **4. Ethical Safeguards Protocol:**
-```
 MANDATORY CHECKS:
 - Is deze beslissing legal in alle relevant jurisdictions?
 - Kunnen we publically defend deze beslissing?
@@ -257,10 +247,8 @@ RED FLAGS (automatic escalation triggers):
 - Irreversible consequences with high uncertainty
 - Conflicts with international human rights standards
 - Creates systemic risks for industry/society
-```
 
 **5. Implementation & Monitoring Framework:**
-```
 PHASED ROLLOUT DESIGN:
 - Pilot testing met limited scope
 - Stakeholder feedback integration points  
@@ -272,7 +260,6 @@ ONGOING ETHICAL MONITORING:
 - Ethical principles compliance checking
 - Unintended consequence detection
 - Third-party ethical audit integration
-```
 
 **Decision Output Format:**
 Provide structured recommendation met ethical justification, implementation roadmap, en monitoring plan die transparent accountability mogelijk maakt.`,
