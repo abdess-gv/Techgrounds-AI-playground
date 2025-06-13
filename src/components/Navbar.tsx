@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Brain, Menu, X, Shield } from "lucide-react";
+import { Brain, Menu, X, Shield, Zap } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +24,10 @@ const Navbar: React.FC = () => {
             </Link>
             <Link to="/embed/prompt-engineering" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
               Prompt Training
+            </Link>
+            <Link to="/embed/prompt-engineering-2" className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 transition-colors font-medium">
+              <Zap className="h-4 w-4" />
+              <span>Prompt 2.0</span>
             </Link>
             <Link to="/embed/ai-safety" className="flex items-center space-x-1 text-gray-600 hover:text-red-600 transition-colors font-medium">
               <Shield className="h-4 w-4" />
@@ -64,6 +68,14 @@ const Navbar: React.FC = () => {
                 onClick={() => setIsOpen(false)}
               >
                 Prompt Training
+              </Link>
+              <Link 
+                to="/embed/prompt-engineering-2" 
+                className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 transition-colors font-medium px-2 py-1 rounded hover:bg-gray-100"
+                onClick={() => setIsOpen(false)}
+              >
+                <Zap className="h-4 w-4" />
+                <span>Prompt 2.0</span>
               </Link>
               <Link 
                 to="/embed/ai-safety" 
