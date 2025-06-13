@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -21,6 +20,9 @@ const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center space-x-6">
             <Link to="/embed/quiz" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
               AI Quiz
+            </Link>
+            <Link to="/embed/prompt-engineering-2" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
+              Prompt Engineering 2.0
             </Link>
             <Link to="/embed/prompt-engineering" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
               Prompt Training
@@ -57,6 +59,13 @@ const Navbar: React.FC = () => {
                 onClick={() => setIsOpen(false)}
               >
                 AI Quiz
+              </Link>
+              <Link
+                to="/embed/prompt-engineering-2"
+                className="text-gray-600 hover:text-gray-900 transition-colors font-medium px-2 py-1 rounded hover:bg-gray-100"
+                onClick={() => setIsOpen(false)}
+              >
+                Prompt Engineering 2.0
               </Link>
               <Link 
                 to="/embed/prompt-engineering" 
