@@ -1,6 +1,7 @@
+
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { PromptLegend } from '@/components/PromptEngineering/PromptLegend'; // Assuming path is correct
+import PromptLegend from '@/components/PromptEngineering/PromptLegend'; // Changed to default import
 import { promptEngineering2ExercisesNL } from '@/data/promptEngineering2ExercisesNL';
 import { PromptEngineering2Exercise } from '@/types/PromptEngineering2';
 
