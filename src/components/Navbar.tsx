@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Brain, Menu, X, Shield, Zap } from "lucide-react";
+import { Brain, Menu, X, Shield, Zap, Calendar } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +19,10 @@ const Navbar: React.FC = () => {
           </Link>
           
           <div className="hidden md:flex items-center space-x-6">
+            <Link to="/rooster" className="flex items-center space-x-1 text-gray-600 hover:text-orange-600 transition-colors font-medium">
+              <Calendar className="h-4 w-4" />
+              <span>Rooster</span>
+            </Link>
             <Link to="/embed/quiz" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
               AI Quiz
             </Link>
@@ -55,6 +59,14 @@ const Navbar: React.FC = () => {
         {isOpen && (
           <div className="md:hidden py-4 border-t border-gray-200 bg-white/95">
             <div className="flex flex-col space-y-3">
+              <Link 
+                to="/rooster" 
+                className="flex items-center space-x-1 text-gray-600 hover:text-orange-600 transition-colors font-medium px-2 py-1 rounded hover:bg-gray-100"
+                onClick={() => setIsOpen(false)}
+              >
+                <Calendar className="h-4 w-4" />
+                <span>Rooster</span>
+              </Link>
               <Link 
                 to="/embed/quiz" 
                 className="text-gray-600 hover:text-gray-900 transition-colors font-medium px-2 py-1 rounded hover:bg-gray-100"

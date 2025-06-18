@@ -9,12 +9,16 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { CalendarIcon, Clock, MapPin, Copy, Settings, Users, Code, ExternalLink } from 'lucide-react';
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { CalendarIcon, Clock, MapPin, Copy, Settings, Users, Code, ExternalLink, Edit3, Info, Globe } from 'lucide-react';
 import { format, addDays, getDay, startOfWeek, addWeeks } from 'date-fns';
 import { nl } from 'date-fns/locale';
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { programTemplates, type ProgramTemplate, type AgendaEntry, type LocationType } from '@/data/techgroundsRooster';
+import { isExcludedDate } from '@/data/holidays';
+import SessionEditor from '@/components/SessionEditor';
 
 const TechgroundsRoosterEmbedNL = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,13 +33,39 @@ const TechgroundsRoosterEmbedNL = () => {
   });
   const [compact, setCompact] = useState(searchParams.get('compact') === 'true');
   const [showHeader, setShowHeader] = useState(searchParams.get('header') !== 'false');
+  const [standalone, setStandalone] = useState(searchParams.get('standalone') === 'true');
+  const [editMode, setEditMode] = useState(searchParams.get('editable') === 'true');
+  const [showInfo, setShowInfo] = useState(searchParams.get('showInfo') !== 'false');
   const [expandedEntry, setExpandedEntry] = useState<string | null>(null);
+  const [editingSession, setEditingSession] = useState<AgendaEntry | null>(null);
+  const [sessionOverrides, setSessionOverrides] = useState<Record<string, Partial<AgendaEntry>>>({});
   const { toast } = useToast();
 
   const currentProgram = programTemplates.find(p => p.id === selectedProgram) || programTemplates[0];
 
+  // Determine if we're in standalone mode (not embedded)
+  const isStandalone = standalone || window.location.pathname === '/rooster';
+
   // Calculate the actual start date (default to current Monday if not set)
   const actualStartDate = startDate || startOfWeek(new Date(), { weekStartsOn: 1 });
+
+  // Load session overrides from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem(`rooster-overrides-${selectedProgram}`);
+    if (saved) {
+      try {
+        setSessionOverrides(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to load session overrides:', e);
+      }
+    }
+  }, [selectedProgram]);
+
+  // Save session overrides to localStorage
+  const saveSessionOverrides = (overrides: Record<string, Partial<AgendaEntry>>) => {
+    setSessionOverrides(overrides);
+    localStorage.setItem(`rooster-overrides-${selectedProgram}`, JSON.stringify(overrides));
+  };
 
   // Generate agenda entries with calculated dates
   const generateAgendaEntries = (): AgendaEntry[] => {
@@ -43,24 +73,36 @@ const TechgroundsRoosterEmbedNL = () => {
     
     currentProgram.weeks.forEach((week, weekIndex) => {
       week.days.forEach((day) => {
-        day.sessions.forEach((session) => {
+        day.sessions.forEach((session, sessionIndex) => {
+          const sessionId = `${weekIndex}-${session.dayOfWeek}-${sessionIndex}`;
+          
           // Calculate the actual date
           const weekStart = addWeeks(actualStartDate, weekIndex);
-          const sessionDate = addDays(weekStart, session.dayOfWeek);
+          let sessionDate = addDays(weekStart, session.dayOfWeek);
           
-          entries.push({
-            id: `${weekIndex}-${session.dayOfWeek}-${session.startTime}`,
-            title: session.title,
-            time: `${session.startTime}-${session.endTime}`,
-            date: sessionDate,
-            dateString: format(sessionDate, 'EEEE d MMMM', { locale: nl }),
-            description: session.description,
-            location: session.location,
-            address: session.address,
-            trainer: session.trainer,
+          // Use custom date if available
+          if (session.customDate) {
+            sessionDate = new Date(session.customDate);
+          }
+          
+          // Apply session overrides
+          const override = sessionOverrides[sessionId];
+          const finalSession = {
+            id: sessionId,
+            sessionId,
+            title: override?.title || session.title,
+            time: override?.time || `${session.startTime}-${session.endTime}`,
+            date: override?.date || sessionDate,
+            dateString: override?.dateString || format(sessionDate, 'EEEE d MMMM', { locale: nl }),
+            description: override?.description || session.description,
+            location: override?.location || session.location,
+            address: override?.address || session.address,
+            trainer: override?.trainer || session.trainer,
             week: weekIndex + 1,
             dayOfWeek: session.dayOfWeek
-          });
+          };
+          
+          entries.push(finalSession);
         });
       });
     });
@@ -70,7 +112,7 @@ const TechgroundsRoosterEmbedNL = () => {
 
   const agendaEntries = generateAgendaEntries();
 
-  // Update URL when program or start date changes
+  // Update URL when parameters change
   useEffect(() => {
     const newParams = new URLSearchParams();
     newParams.set('program', selectedProgram);
@@ -79,8 +121,11 @@ const TechgroundsRoosterEmbedNL = () => {
     }
     if (compact) newParams.set('compact', 'true');
     if (!showHeader) newParams.set('header', 'false');
+    if (standalone) newParams.set('standalone', 'true');
+    if (editMode) newParams.set('editable', 'true');
+    if (!showInfo) newParams.set('showInfo', 'false');
     setSearchParams(newParams);
-  }, [selectedProgram, startDate, compact, showHeader, setSearchParams]);
+  }, [selectedProgram, startDate, compact, showHeader, standalone, editMode, showInfo, setSearchParams]);
 
   const getLocationColor = (location: LocationType) => {
     switch (location) {
@@ -127,6 +172,24 @@ const TechgroundsRoosterEmbedNL = () => {
     window.open(previewUrl, '_blank');
   };
 
+  const handleSessionSave = (sessionId: string, updates: Partial<AgendaEntry>) => {
+    const newOverrides = { ...sessionOverrides, [sessionId]: { ...sessionOverrides[sessionId], ...updates } };
+    saveSessionOverrides(newOverrides);
+    toast({
+      title: "Sessie bijgewerkt",
+      description: "De sessie is succesvol bijgewerkt.",
+    });
+  };
+
+  const resetCustomizations = () => {
+    setSessionOverrides({});
+    localStorage.removeItem(`rooster-overrides-${selectedProgram}`);
+    toast({
+      title: "Aanpassingen gereset",
+      description: "Alle aangepaste sessies zijn teruggezet naar de standaard waarden.",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
       <Helmet>
@@ -146,6 +209,40 @@ const TechgroundsRoosterEmbedNL = () => {
                 <p className="text-gray-600">{currentProgram.name} Programma</p>
               </div>
             </div>
+
+            {/* Program Info - only in standalone mode */}
+            {isStandalone && showInfo && (
+              <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 mb-6 max-w-4xl mx-auto">
+                <div className="flex items-start space-x-4">
+                  <Info className="h-6 w-6 text-orange-600 mt-1 flex-shrink-0" />
+                  <div className="text-left">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{currentProgram.name}</h3>
+                    <p className="text-gray-700 mb-3">{currentProgram.description}</p>
+                    <div className="flex flex-wrap gap-4 text-sm">
+                      <div className="flex items-center text-gray-600">
+                        <Clock className="h-4 w-4 mr-1" />
+                        <span>Duur: {currentProgram.duration}</span>
+                      </div>
+                      {currentProgram.websiteUrl && (
+                        <a 
+                          href={currentProgram.websiteUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center text-orange-600 hover:text-orange-700 transition-colors"
+                        >
+                          <Globe className="h-4 w-4 mr-1" />
+                          <span>Meer informatie</span>
+                          <ExternalLink className="h-3 w-3 ml-1" />
+                        </a>
+                      )}
+                    </div>
+                    {currentProgram.additionalInfo && (
+                      <p className="text-gray-600 text-sm mt-3 italic">{currentProgram.additionalInfo}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -181,12 +278,33 @@ const TechgroundsRoosterEmbedNL = () => {
                     mode="single"
                     selected={startDate}
                     onSelect={setStartDate}
-                    disabled={(date) => getDay(date) !== 1} // Only allow Mondays
-                    className="rounded-md border"
+                    disabled={(date) => getDay(date) !== 1 || isExcludedDate(date)} // Only allow Mondays that are not holidays/weekends
+                    className={cn("rounded-md border p-3 pointer-events-auto")}
                   />
                 </PopoverContent>
               </Popover>
             </div>
+
+            {/* Edit Mode Toggle - only in standalone */}
+            {isStandalone && (
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="edit-mode"
+                  checked={editMode}
+                  onCheckedChange={setEditMode}
+                />
+                <Label htmlFor="edit-mode" className="text-sm font-medium">
+                  Bewerk Mode
+                </Label>
+              </div>
+            )}
+
+            {/* Reset Button - only in edit mode */}
+            {editMode && Object.keys(sessionOverrides).length > 0 && (
+              <Button variant="outline" size="sm" onClick={resetCustomizations}>
+                Reset Aanpassingen
+              </Button>
+            )}
 
             <Dialog>
               <DialogTrigger asChild>
@@ -239,7 +357,7 @@ const TechgroundsRoosterEmbedNL = () => {
             <Card key={entry.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
-                  <div>
+                  <div className="flex-1">
                     <CardTitle className="text-lg">{entry.title}</CardTitle>
                     <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
                       <div className="flex items-center">
@@ -253,13 +371,30 @@ const TechgroundsRoosterEmbedNL = () => {
                     </div>
                   </div>
                   <div className="flex flex-col items-end space-y-2">
-                    <Badge className={cn("flex items-center space-x-1", getLocationColor(entry.location))}>
-                      {getLocationIcon(entry.location)}
-                      <span>{entry.location}</span>
-                    </Badge>
+                    <div className="flex items-center space-x-2">
+                      <Badge className={cn("flex items-center space-x-1", getLocationColor(entry.location))}>
+                        {getLocationIcon(entry.location)}
+                        <span>{entry.location}</span>
+                      </Badge>
+                      {editMode && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setEditingSession(entry)}
+                          className="h-6 w-6 p-0"
+                        >
+                          <Edit3 className="h-3 w-3" />
+                        </Button>
+                      )}
+                    </div>
                     <Badge variant="outline" className="text-xs">
                       Week {entry.week}
                     </Badge>
+                    {sessionOverrides[entry.sessionId] && (
+                      <Badge variant="secondary" className="text-xs">
+                        Aangepast
+                      </Badge>
+                    )}
                   </div>
                 </div>
               </CardHeader>
@@ -308,6 +443,14 @@ const TechgroundsRoosterEmbedNL = () => {
           </div>
         )}
       </div>
+
+      {/* Session Editor Dialog */}
+      <SessionEditor
+        session={editingSession}
+        isOpen={!!editingSession}
+        onClose={() => setEditingSession(null)}
+        onSave={handleSessionSave}
+      />
     </div>
   );
 };
