@@ -169,11 +169,11 @@ const Index = () => {
                   <DropdownMenuTrigger asChild>
                     <Button size="lg" variant="outline" className="border-indigo-600 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700">
                       <ListChecks className="h-5 w-5 mr-2" />
-                      Bekijk Rooster per Programma
+                      Agenda
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>Selecteer een Programma</DropdownMenuLabel>
+                    <DropdownMenuLabel>Kies een programma voor de agenda</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {programs.map((program) => (
                       <DropdownMenuItem key={program.id} asChild>
