@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,28 +21,204 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({ exercise, onC
   const [evaluation, setEvaluation] = useState<{ [key: string]: boolean }>({});
   const [isEvaluated, setIsEvaluated] = useState(false);
 
-  // Simple evaluation criteria based on exercise content
-  const evaluationCriteria = [
-    "Bevat duidelijke instructies",
-    "Heeft specifieke context",
-    "Gebruikt goede structuur",
-    "Geeft concrete voorbeelden"
-  ];
+  // Specific evaluation criteria per exercise
+  const getEvaluationCriteria = (exerciseId: string) => {
+    const criteriaMap: { [key: string]: string[] } = {
+      'pe2-l1-e1': [
+        'Bevat een duidelijke structuur',
+        'Specificeert de gewenste lengte (50 woorden)', 
+        'Noemt het onderwerp (verhaal over kat en ruimteschip)',
+        'Definieert de hoofdpersoon (kat)'
+      ],
+      'pe2-l1-e2': [
+        'Geeft duidelijke context (voor huiseigenaren)',
+        'Specificeert de doelgroep',
+        'Vraagt naar concrete voordelen',
+        'Is specifiek over de situatie (zonnepanelen installeren)'
+      ],
+      'pe2-l1-e3': [
+        'Wijst een specifieke rol toe (ervaren reisgids)',
+        'Vraagt om gedetailleerde informatie',
+        'Specificeert de focus (historische bezienswaardigheden)',
+        'Vraagt om praktische details (openingstijden, bezoektijd)'
+      ],
+      'pe2-l2-e1': [
+        'Bevat concrete voorbeelden (few-shot)',
+        'Toont het patroon input-output',
+        'Geeft duidelijke instructies',
+        'Specificeert het gewenste format'
+      ],
+      'pe2-l2-e2': [
+        'Specificeert het gewenste output format (JSON)',
+        'Definieert de structuur van de output',
+        'Vraagt om specifieke velden',
+        'Is precies in de formattering eisen'
+      ],
+      'pe2-l2-e3': [
+        'Specificeert wat NIET moet worden gebruikt',
+        'Definieert duidelijke beperkingen',
+        'Stimuleert creativiteit binnen grenzen',
+        'Biedt een alternatieve focus'
+      ],
+      'pe2-l3-e1': [
+        'Vraagt om stapsgewijze uitleg',
+        'Stimuleert het tonen van denkproces',
+        'Heeft een duidelijke logische structuur',
+        'Vraagt om expliciet redeneren'
+      ],
+      'pe2-l3-e2': [
+        'Definieert creatieve constraints',
+        'Specificeert de woordlimiet (maximaal 5 woorden)',
+        'Vereist het gebruik van een specifiek woord (energie)',
+        'Vraagt om meerdere varianten'
+      ],
+      'pe2-l3-e3': [
+        'Toont iteratief denken',
+        'Analyseert de vorige output',
+        'Specificeert verbeteringen per iteratie',
+        'Wordt steeds specifieker en gerichter'
+      ]
+    };
+    
+    return criteriaMap[exerciseId] || [
+      'Bevat duidelijke instructies',
+      'Heeft specifieke context', 
+      'Gebruikt goede structuur',
+      'Geeft concrete voorbeelden'
+    ];
+  };
 
   const evaluatePrompt = () => {
+    const criteria = getEvaluationCriteria(exercise.id);
     const newEvaluation: { [key: string]: boolean } = {};
     const userText = userPrompt.toLowerCase();
     
-    // Simple heuristic evaluation
-    newEvaluation["Bevat duidelijke instructies"] = userText.length > 50 && (userText.includes('schrijf') || userText.includes('maak') || userText.includes('genereer'));
-    newEvaluation["Heeft specifieke context"] = userText.includes('context') || userText.includes('voor') || userText.includes('als');
-    newEvaluation["Gebruikt goede structuur"] = userPrompt.includes('\n') || userPrompt.includes(':') || userPrompt.includes('-');
-    newEvaluation["Geeft concrete voorbeelden"] = userText.includes('bijvoorbeeld') || userText.includes('zoals') || userPrompt.length > 100;
+    // Exercise-specific evaluation logic
+    criteria.forEach(criterion => {
+      let passes = false;
+      
+      switch (exercise.id) {
+        case 'pe2-l1-e1':
+          if (criterion.includes('structuur')) {
+            passes = userPrompt.includes('\n') || userPrompt.includes(':') || userPrompt.includes('-') || userPrompt.length > 30;
+          } else if (criterion.includes('lengte')) {
+            passes = userText.includes('50') || userText.includes('vijftig');
+          } else if (criterion.includes('onderwerp')) {
+            passes = (userText.includes('kat') || userText.includes('cat')) && (userText.includes('ruimteschip') || userText.includes('ruimte'));
+          } else if (criterion.includes('hoofdpersoon')) {
+            passes = userText.includes('kat') || userText.includes('cat') || userText.includes('hoofdpersoon');
+          }
+          break;
+          
+        case 'pe2-l1-e2':
+          if (criterion.includes('context')) {
+            passes = userText.includes('huiseigenaar') || userText.includes('eigenaar') || userText.includes('woning');
+          } else if (criterion.includes('doelgroep')) {
+            passes = userText.includes('voor') || userText.includes('aan') || userText.includes('huiseigenaar');
+          } else if (criterion.includes('voordelen')) {
+            passes = userText.includes('voordeel') || userText.includes('benefit') || userText.includes('waarom');
+          } else if (criterion.includes('zonnepanelen')) {
+            passes = userText.includes('zonnepaneel') || userText.includes('installeren') || userText.includes('dak');
+          }
+          break;
+          
+        case 'pe2-l1-e3':
+          if (criterion.includes('rol')) {
+            passes = userText.includes('je bent') || userText.includes('als') || userText.includes('reisgids');
+          } else if (criterion.includes('gedetailleerd')) {
+            passes = userText.includes('gedetailleerd') || userText.includes('uitgebreid') || userText.includes('schema');
+          } else if (criterion.includes('historisch')) {
+            passes = userText.includes('historisch') || userText.includes('geschiedenis') || userText.includes('cultuur');
+          } else if (criterion.includes('praktisch')) {
+            passes = userText.includes('openingstijd') || userText.includes('tijd') || userText.includes('duur');
+          }
+          break;
+          
+        case 'pe2-l2-e1':
+          if (criterion.includes('voorbeelden')) {
+            passes = userText.includes('voorbeeld') || userText.includes('input') || userText.includes('output');
+          } else if (criterion.includes('patroon')) {
+            passes = userText.includes('input:') || userText.includes('output:') || userText.includes('-');
+          } else if (criterion.includes('instructies')) {
+            passes = userText.includes('genereer') || userText.includes('maak') || userText.includes('schrijf');
+          } else if (criterion.includes('format')) {
+            passes = userPrompt.includes(':') || userPrompt.includes('\n') || userPrompt.length > 50;
+          }
+          break;
+          
+        case 'pe2-l2-e2':
+          if (criterion.includes('JSON')) {
+            passes = userText.includes('json') || userText.includes('array') || userText.includes('object');
+          } else if (criterion.includes('structuur')) {
+            passes = userText.includes('structuur') || userText.includes('formaat') || userText.includes('format');
+          } else if (criterion.includes('velden')) {
+            passes = userText.includes('veld') || userText.includes('sleutel') || userText.includes('key');
+          } else if (criterion.includes('formattering')) {
+            passes = userText.includes('formatteer') || userText.includes('als een') || userText.includes('output');
+          }
+          break;
+          
+        case 'pe2-l2-e3':
+          if (criterion.includes('NIET')) {
+            passes = userText.includes('niet') || userText.includes('vermijd') || userText.includes('zonder');
+          } else if (criterion.includes('beperkingen')) {
+            passes = userText.includes('geen') || userText.includes('mag niet') || userText.includes('beperking');
+          } else if (criterion.includes('creativiteit')) {
+            passes = userText.includes('origineel') || userText.includes('creatief') || userText.includes('anders');
+          } else if (criterion.includes('alternatieve')) {
+            passes = userText.includes('focus') || userText.includes('alternatief') || userText.includes('anders');
+          }
+          break;
+          
+        case 'pe2-l3-e1':
+          if (criterion.includes('stapsgewijs')) {
+            passes = userText.includes('stap') || userText.includes('stappen') || userText.includes('voor stap');
+          } else if (criterion.includes('denkproces')) {
+            passes = userText.includes('denk') || userText.includes('redeneer') || userText.includes('proces');
+          } else if (criterion.includes('logisch')) {
+            passes = userText.includes('logisch') || userText.includes('order') || userText.includes('volgorde');
+          } else if (criterion.includes('redeneren')) {
+            passes = userText.includes('laat zien') || userText.includes('toon') || userText.includes('uitleg');
+          }
+          break;
+          
+        case 'pe2-l3-e2':
+          if (criterion.includes('constraints')) {
+            passes = userText.includes('maximaal') || userText.includes('beperkt') || userText.includes('constraint');
+          } else if (criterion.includes('woordlimiet')) {
+            passes = userText.includes('5 woorden') || userText.includes('vijf woorden') || userText.includes('maximaal');
+          } else if (criterion.includes('energie')) {
+            passes = userText.includes('energie');
+          } else if (criterion.includes('varianten')) {
+            passes = userText.includes('drie') || userText.includes('meerdere') || userText.includes('varianten');
+          }
+          break;
+          
+        case 'pe2-l3-e3':
+          if (criterion.includes('iteratief')) {
+            passes = userText.includes('iteratie') || userText.includes('verfijn') || userText.includes('verbeter');
+          } else if (criterion.includes('analyseert')) {
+            passes = userText.includes('analyseer') || userText.includes('bekijk') || userText.includes('evalueer');
+          } else if (criterion.includes('verbeteringen')) {
+            passes = userText.includes('verbetering') || userText.includes('beter') || userText.includes('aanpassing');
+          } else if (criterion.includes('specifieker')) {
+            passes = userText.includes('specifiek') || userText.includes('gedetailleerd') || userText.includes('precies');
+          }
+          break;
+          
+        default:
+          // Fallback evaluation
+          const keywords = criterion.toLowerCase().split(/[^\w]+/).filter(word => word.length > 2);
+          passes = keywords.some(keyword => userText.includes(keyword));
+      }
+      
+      newEvaluation[criterion] = passes;
+    });
     
     setEvaluation(newEvaluation);
     setIsEvaluated(true);
     
-    const score = Object.values(newEvaluation).filter(Boolean).length / evaluationCriteria.length * 100;
+    const score = Object.values(newEvaluation).filter(Boolean).length / criteria.length * 100;
     onComplete?.(score);
   };
 
@@ -54,9 +229,9 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({ exercise, onC
     setShowHints(false);
   };
 
+  const criteria = getEvaluationCriteria(exercise.id);
   const completedCriteria = Object.values(evaluation).filter(Boolean).length;
-  const totalCriteria = evaluationCriteria.length;
-  const score = isEvaluated ? (completedCriteria / totalCriteria) * 100 : 0;
+  const totalCriteria = criteria.length;
 
   return (
     <Card className="mb-8 border-2 border-purple-200">
@@ -81,15 +256,6 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({ exercise, onC
                 <ReactMarkdown>{exercise.instructions}</ReactMarkdown>
               </div>
             </div>
-
-            {exercise.examplePrompt && (
-              <div className="bg-gray-50 p-4 rounded-lg border">
-                <h4 className="font-semibold text-gray-700 mb-2">💡 Voorbeeld Prompt:</h4>
-                <pre className="text-sm text-gray-600 whitespace-pre-wrap font-mono">
-                  {exercise.examplePrompt}
-                </pre>
-              </div>
-            )}
 
             <Button
               variant="outline"
@@ -144,21 +310,22 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({ exercise, onC
             {isEvaluated && (
               <div className="space-y-4">
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <div className={`text-3xl font-bold ${
-                    score >= 80 ? 'text-green-600' : 
-                    score >= 60 ? 'text-yellow-600' : 'text-red-600'
-                  }`}>
-                    {Math.round(score)}%
-                  </div>
-                  <div className="text-sm text-gray-600 mt-1">
+                  <div className="text-lg font-bold text-gray-700 mb-1">
                     {completedCriteria} van {totalCriteria} criteria behaald
                   </div>
-                  <Progress value={score} className="h-2 mt-2" />
+                  <div className={`text-sm ${
+                    completedCriteria >= Math.ceil(totalCriteria * 0.75) ? 'text-green-600' : 
+                    completedCriteria >= Math.ceil(totalCriteria * 0.5) ? 'text-yellow-600' : 'text-red-600'
+                  }`}>
+                    {completedCriteria >= Math.ceil(totalCriteria * 0.75) ? 'Uitstekend!' : 
+                     completedCriteria >= Math.ceil(totalCriteria * 0.5) ? 'Goed bezig!' : 'Probeer nog eens!'}
+                  </div>
+                  <Progress value={(completedCriteria / totalCriteria) * 100} className="h-2 mt-2" />
                 </div>
 
                 <div className="space-y-2">
                   <h4 className="font-semibold text-sm">Evaluatiecriteria:</h4>
-                  {evaluationCriteria.map((criterion, index) => (
+                  {criteria.map((criterion, index) => (
                     <div key={index} className="flex items-center space-x-2 p-2 rounded border text-sm">
                       {evaluation[criterion] ? (
                         <CheckCircle className="h-4 w-4 text-green-600" />
