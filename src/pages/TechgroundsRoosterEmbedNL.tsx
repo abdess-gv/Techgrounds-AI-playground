@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -351,28 +350,29 @@ const TechgroundsRoosterEmbedNL = () => {
           </div>
         </div>
 
-        {/* Agenda */}
+        {/* Agenda - Fixed Layout */}
         <div className="space-y-4">
           {agendaEntries.map((entry) => (
             <Card key={entry.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg">{entry.title}</CardTitle>
-                    <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-lg mb-2">{entry.title}</CardTitle>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
                       <div className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        {entry.dateString}
+                        <Calendar className="h-4 w-4 mr-1 flex-shrink-0" />
+                        <span>{entry.dateString}</span>
                       </div>
                       <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-1" />
-                        {entry.time}
+                        <Clock className="h-4 w-4 mr-1 flex-shrink-0" />
+                        <span>{entry.time}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Badge className={cn("flex items-center space-x-1", getLocationColor(entry.location))}>
+                  
+                  <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center lg:items-end gap-2">
+                    <div className="flex items-center gap-2">
+                      <Badge className={cn("flex items-center gap-1 text-xs", getLocationColor(entry.location))}>
                         {getLocationIcon(entry.location)}
                         <span>{entry.location}</span>
                       </Badge>
@@ -381,20 +381,23 @@ const TechgroundsRoosterEmbedNL = () => {
                           size="sm"
                           variant="outline"
                           onClick={() => setEditingSession(entry)}
-                          className="h-6 w-6 p-0"
+                          className="h-6 w-6 p-0 flex-shrink-0"
                         >
                           <Edit3 className="h-3 w-3" />
                         </Button>
                       )}
                     </div>
-                    <Badge variant="outline" className="text-xs">
-                      Week {entry.week}
-                    </Badge>
-                    {sessionOverrides[entry.sessionId] && (
-                      <Badge variant="secondary" className="text-xs">
-                        Aangepast
+                    
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-xs whitespace-nowrap">
+                        Week {entry.week}
                       </Badge>
-                    )}
+                      {sessionOverrides[entry.sessionId] && (
+                        <Badge variant="secondary" className="text-xs">
+                          Aangepast
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                 </div>
               </CardHeader>
@@ -416,13 +419,13 @@ const TechgroundsRoosterEmbedNL = () => {
                         )}
                         {entry.trainer && (
                           <div className="flex items-center">
-                            <Users className="h-4 w-4 mr-2 text-gray-500" />
+                            <Users className="h-4 w-4 mr-2 text-gray-500 flex-shrink-0" />
                             <span className="font-medium">Trainer: {entry.trainer}</span>
                           </div>
                         )}
                         {entry.address && entry.location === 'Op locatie' && (
                           <div className="flex items-center">
-                            <MapPin className="h-4 w-4 mr-2 text-gray-500" />
+                            <MapPin className="h-4 w-4 mr-2 text-gray-500 flex-shrink-0" />
                             <span>{entry.address}</span>
                           </div>
                         )}
