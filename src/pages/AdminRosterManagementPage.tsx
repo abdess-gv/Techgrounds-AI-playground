@@ -10,7 +10,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -19,7 +18,6 @@ import {
   DialogClose
 } from '@/components/ui/dialog';
 
-// Define Supabase row types (or import them if already defined elsewhere)
 type ProgramRow = Database['public']['Tables']['programs']['Row'];
 type CycleDetailRow = Database['public']['Tables']['program_cycle_details']['Row'];
 type DateOverrideRow = Database['public']['Tables']['program_date_overrides']['Row'];
@@ -70,21 +68,18 @@ const AdminRosterManagementPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const { data: cycleData, error: cycleError } = await supabase
-          .from('program_cycle_details')
-          .select('*')
-          .eq('program_id', selectedProgramId)
-          .order('week_in_cycle')
-          .order('day_of_week');
-        if (cycleError) throw cycleError;
-        setCycleDetails(cycleData || []);
+        const [cycleResult, overrideResult] = await Promise.all([
+          supabase.from('program_cycle_details').select('*').eq('program_id', selectedProgramId).order('week_in_cycle').order('day_of_week'),
+          supabase.from('program_date_overrides').select('*').eq('program_id', selectedProgramId).order('override_date')
+        ]);
 
-        const { data: overrideData, error: overrideError } = await supabase
-          .from('program_date_overrides')
-          .select('*')
-          .eq('program_id', selectedProgramId)
-          .order('override_date');
-        if (overrideError) throw overrideError;
+        const { data: cycleData, error: cycleError } = cycleResult;
+        const { data: overrideData, error: overrideError } = overrideResult;
+
+        if (cycleError) throw new Error(`Kon cyclusdetails niet laden: ${cycleError.message}`);
+        if (overrideError) throw new Error(`Kon datumuitzonderingen niet laden: ${overrideError.message}`);
+
+        setCycleDetails(cycleData || []);
         setDateOverrides(overrideData || []);
       } catch (e: any) {
         setError('Kon details niet laden: ' + e.message); // Dutch
@@ -159,51 +154,7 @@ const AdminRosterManagementPage: React.FC = () => {
     }
   };
 
-  const handleSaveCycleDetail = async (detailInput: Partial<CycleDetailRow>) => {
-    // This function is now effectively handleCycleFormSubmit after refactor
-    // The form submit handler will call this or directly contain the logic
-    if (!selectedProgramId || detailInput.week_in_cycle === undefined || detailInput.day_of_week === undefined) return;
-
-    const detailToSave: Database['public']['Tables']['program_cycle_details']['Insert'] = {
-        id: detailInput.id,
-        program_id: selectedProgramId,
-        week_in_cycle: detailInput.week_in_cycle,
-        day_of_week: detailInput.day_of_week,
-        time_info: detailInput.time_info || "",
-        location_info: detailInput.location_info || "",
-        general_info: detailInput.general_info || "",
-        link_url: detailInput.link_url || null,
-    };
-
-
-    setFormLoading(true);
-    try {
-        const { data, error: dbError } = await supabase
-            .from('program_cycle_details')
-            .upsert(detailToSave, { onConflict: 'program_id,week_in_cycle,day_of_week' })
-            .select()
-            .single();
-
-        if (dbError) throw dbError;
-        if (data) {
-            setCycleDetails(prev => {
-                const existingIndex = prev.findIndex(cd => cd.id === data.id);
-                if (existingIndex > -1) {
-                    const updated = [...prev];
-                    updated[existingIndex] = data;
-                    return updated;
-                }
-                return [...prev, data].sort((a,b) => (a.week_in_cycle*7 + a.day_of_week) - (b.week_in_cycle*7 + b.day_of_week) );
-            });
-        }
-        setEditingCycleDetail(null); // Close form after save
-    } catch (e: any) {
-        setError('Fout bij opslaan cyclus detail: ' + e.message);
-    } finally {
-        setFormLoading(false);
-    }
-};
-
+  // Note: handleSaveCycleDetail was removed as its logic is within handleCycleFormSubmit.
 
   const handleDeleteCycleDetail = async (cycleDetailId: string) => {
     if (!confirm('Weet u zeker dat u dit cyclus item wilt verwijderen?')) return;
@@ -283,46 +234,7 @@ const AdminRosterManagementPage: React.FC = () => {
     }
   };
 
-  const handleSaveDateOverride = async (overrideInput: Partial<DateOverrideRow>) => {
-    // This function is now effectively handleDateOverrideFormSubmit after refactor
-     if (!selectedProgramId || !overrideInput.override_date) return;
-
-    const overrideToSave: Database['public']['Tables']['program_date_overrides']['Insert'] = {
-        id: overrideInput.id,
-        program_id: selectedProgramId,
-        override_date: overrideInput.override_date,
-        time_info: overrideInput.time_info || "",
-        location_info: overrideInput.location_info || "",
-        general_info: overrideInput.general_info || "",
-        link_url: overrideInput.link_url || null,
-    };
-    setFormLoading(true);
-    try {
-        const { data, error: dbError } = await supabase
-            .from('program_date_overrides')
-            .upsert(overrideToSave, { onConflict: 'program_id,override_date' })
-            .select()
-            .single();
-
-        if (dbError) throw dbError;
-        if (data) {
-            setDateOverrides(prev => {
-                const existingIndex = prev.findIndex(ov => ov.id === data.id);
-                if (existingIndex > -1) {
-                    const updated = [...prev];
-                    updated[existingIndex] = data;
-                    return updated;
-                }
-                return [...prev, data].sort((a,b) => new Date(a.override_date).getTime() - new Date(b.override_date).getTime());
-            });
-        }
-        setEditingDateOverride(null);
-    } catch (e: any) {
-        setError('Fout bij opslaan uitzondering: ' + e.message);
-    } finally {
-        setFormLoading(false);
-    }
-};
+  // Note: handleSaveDateOverride was removed as its logic is within handleDateOverrideFormSubmit.
 
   const handleDeleteDateOverride = async (overrideId: string) => {
     if (!confirm('Weet u zeker dat u deze uitzondering wilt verwijderen?')) return;
@@ -351,7 +263,7 @@ const AdminRosterManagementPage: React.FC = () => {
   };
 
 
-  if (loading && programs.length === 0) return <p>Loading programs...</p>;
+  if (loading && programs.length === 0) return <p className="text-center p-4">Programma's laden...</p>;
 
   return (
     <div className="container mx-auto p-4">
@@ -513,6 +425,7 @@ const AdminRosterManagementPage: React.FC = () => {
               <form onSubmit={handleDateOverrideFormSubmit}>
                 <DialogHeader>
                   <DialogTitle>{editingDateOverride?.id ? 'Uitzondering Bewerken' : 'Nieuwe Uitzondering'}</DialogTitle>
+                  {editingDateOverride && editingDateOverride.override_date && <DialogDescription>Datum: {editingDateOverride.override_date}</DialogDescription>}
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
