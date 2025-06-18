@@ -1,9 +1,9 @@
 // src/pages/ProgramRoosterPage.tsx
 import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
-// import { Layout } from '@/components/Layout'; // Assuming a Layout component exists
+import { Button } from "@/components/ui/button";
 
 type ProgramRow = Database['public']['Tables']['programs']['Row'];
 type CycleDetailRow = Database['public']['Tables']['program_cycle_details']['Row'];
@@ -72,31 +72,24 @@ const ProgramRoosterPage: React.FC = () => {
         };
         setProgram(currentProgram);
 
-        // 2. Fetch Cycle Details
-        const { data: cycleDetailsData, error: cycleError } = await supabase
-          .from('program_cycle_details')
-          .select('*')
-          .eq('program_id', programData.id);
-
-        if (cycleError) throw new Error(`Kon cyclusdetails niet laden: ${cycleError.message}`); // Dutch
-
-        // 3. Fetch Date Overrides for the next 6 weeks
+        // 2 & 3. Fetch Cycle Details and Date Overrides in parallel
         const todayDt = new Date();
         todayDt.setUTCHours(0, 0, 0, 0);
         const startDateRange = todayDt.toISOString().split('T')[0];
-
         const endDateDt = new Date(todayDt);
         endDateDt.setUTCDate(todayDt.getUTCDate() + 41);
         const endDateRange = endDateDt.toISOString().split('T')[0];
 
-        const { data: dateOverridesData, error: overrideError } = await supabase
-          .from('program_date_overrides')
-          .select('*')
-          .eq('program_id', programData.id)
-          .gte('override_date', startDateRange)
-          .lte('override_date', endDateRange);
+        const [cycleResult, overrideResult] = await Promise.all([
+          supabase.from('program_cycle_details').select('*').eq('program_id', programData.id),
+          supabase.from('program_date_overrides').select('*').eq('program_id', programData.id).gte('override_date', startDateRange).lte('override_date', endDateRange)
+        ]);
 
-        if (overrideError) throw new Error(`Kon datumuitzonderingen niet laden: ${overrideError.message}`); // Dutch
+        const { data: cycleDetailsData, error: cycleError } = cycleResult;
+        const { data: dateOverridesData, error: overrideError } = overrideResult;
+
+        if (cycleError) throw new Error(`Kon cyclusdetails niet laden: ${cycleError.message}`);
+        if (overrideError) throw new Error(`Kon datumuitzonderingen niet laden: ${overrideError.message}`);
 
         // 4. Calculate the 6-week roster
         // Ensure anchor_start_date (which is just YYYY-MM-DD) is parsed as UTC
@@ -155,31 +148,41 @@ const ProgramRoosterPage: React.FC = () => {
 
   const pageContent = (
     <div className="container mx-auto p-4">
-      {loading && <p>Loading roster...</p>}
+      {loading && <p>Rooster laden...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
 
       {program && !error && (
         <>
-          <h1 className="text-3xl font-bold mb-2">{program.name} Roster</h1>
-          {program.description && <p className="text-gray-600 mb-6">{program.description}</p>}
+          <h1 className="text-3xl font-bold mb-2">{program.name} Rooster</h1>
+          {program.description && <p className="text-gray-600 mb-4">{program.description}</p>}
+
+          {!isEmbed && (
+            <div className="mb-4 text-right">
+              <Link to="/admin/roster">
+                <Button variant="outline">
+                  Rooster Beheren
+                </Button>
+              </Link>
+            </div>
+          )}
 
           <div className="space-y-6">
             {roster.map((entry, index) => (
               <div key={index} className={`p-4 border rounded-lg shadow ${entry.isOverride ? 'border-orange-500 bg-orange-50' : 'border-gray-200 bg-white'}`}>
                 <h2 className="text-xl font-semibold mb-1">{entry.date}</h2>
-                <p><strong>Time:</strong> {entry.time_info || 'N/A'}</p>
-                <p><strong>Location:</strong> {entry.location_info || 'N/A'}</p>
-                <p><strong>Info:</strong> {entry.general_info || 'N/A'}</p>
+                <p><strong>Tijd:</strong> {entry.time_info || 'N/B'}</p>
+                <p><strong>Locatie:</strong> {entry.location_info || 'N/B'}</p>
+                <p><strong>Info:</strong> {entry.general_info || 'N/B'}</p>
                 {entry.link_url && (
                   <p><strong>Link:</strong> <a href={entry.link_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{entry.link_url}</a></p>
                 )}
-                {entry.isOverride && <p className="text-sm text-orange-700 font-semibold mt-1">This is an overridden session.</p>}
+                {entry.isOverride && <p className="text-sm text-orange-700 font-semibold mt-1">Dit is een gewijzigde sessie.</p>}
               </div>
             ))}
           </div>
         </>
       )}
-      {!program && !loading && !error && <p>Select a program to view its roster.</p>}
+      {!program && !loading && !error && <p>Selecteer een programma om het rooster te bekijken.</p>}
     </div>
   );
 
@@ -195,13 +198,13 @@ const ProgramRoosterPage: React.FC = () => {
     <div>
       {!isEmbed && (
         <header className="bg-gray-800 text-white p-4 text-center">
-          <p className="text-xl">Program Rosters</p>
+          <p className="text-xl">Programma Roosters</p>
         </header>
       )}
       {pageContent}
       {!isEmbed && (
         <footer className="bg-gray-200 text-gray-700 p-4 text-center mt-8">
-          <p>&copy; {new Date().getFullYear()} Your Company</p>
+          <p>&copy; {new Date().getFullYear()} Uw Bedrijf</p>
         </footer>
       )}
     </div>
