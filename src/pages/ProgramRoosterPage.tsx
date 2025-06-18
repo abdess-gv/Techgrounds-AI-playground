@@ -1,8 +1,9 @@
 // src/pages/ProgramRoosterPage.tsx
 import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
+import { Button } from "@/components/ui/button";
 
 type ProgramRow = Database['public']['Tables']['programs']['Row'];
 type CycleDetailRow = Database['public']['Tables']['program_cycle_details']['Row'];
@@ -153,7 +154,17 @@ const ProgramRoosterPage: React.FC = () => {
       {program && !error && (
         <>
           <h1 className="text-3xl font-bold mb-2">{program.name} Rooster</h1>
-          {program.description && <p className="text-gray-600 mb-6">{program.description}</p>}
+          {program.description && <p className="text-gray-600 mb-4">{program.description}</p>}
+
+          {!isEmbed && (
+            <div className="mb-4 text-right">
+              <Link to="/admin/roster">
+                <Button variant="outline">
+                  Rooster Beheren
+                </Button>
+              </Link>
+            </div>
+          )}
 
           <div className="space-y-6">
             {roster.map((entry, index) => (

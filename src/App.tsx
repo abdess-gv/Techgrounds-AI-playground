@@ -26,7 +26,7 @@ import DatabaseEmbedNL from './pages/DatabaseEmbedNL';
 import PromptEngineering2EmbedNL from "./pages/PromptEngineering2EmbedNL";
 // import TechgroundsRoosterEmbedNL from './pages/TechgroundsRoosterEmbedNL'; // Replaced by ProgramRoosterPage
 import ProgramRoosterPage from './pages/ProgramRoosterPage';
-import AdminDashboardPage from './pages/AdminDashboardPage'; // Assuming this page exists or will be created
+// import AdminDashboardPage from './pages/AdminDashboardPage'; // Deleted page
 import AdminRosterManagementPage from './pages/AdminRosterManagementPage';
 import AdminGuard from './components/AdminAuth/AdminGuard'; // Assuming this guard exists or will be created
 import AppErrorBoundary from './components/ErrorBoundary/AppErrorBoundary';
@@ -75,7 +75,7 @@ function App() {
               <Route path="/embed/quiz" element={<AITermsQuizNL />} />
 
               {/* Admin Routes */}
-              <Route path="/admin" element={<AdminGuard><AdminDashboardPage /></AdminGuard>} />
+              {/* <Route path="/admin" element={<AdminGuard><AdminDashboardPage /></AdminGuard>} /> {/* AdminDashboardPage.tsx was deleted */}
               <Route path="/admin/roster" element={<AdminGuard><AdminRosterManagementPage /></AdminGuard>} />
               
               <Route path="*" element={<NotFound />} />
