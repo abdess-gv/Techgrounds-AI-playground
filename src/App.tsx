@@ -4,6 +4,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  Navigate,
 } from "react-router-dom";
 import {
   QueryClient,
@@ -52,6 +53,8 @@ function App() {
               {/* Techgrounds AI-Playground */}
               <Route path="/playground" element={<TechgroundsPlayground />} />
               
+              {/* Redirect base /rooster to main page */}
+              <Route path="/rooster" element={<Navigate to="/" replace />} />
               {/* Techgrounds Rooster - New dynamic route */}
               <Route path="/rooster/:programId" element={<ProgramRoosterPage />} />
               {/* Old static roster route - <Route path="/rooster" element={<TechgroundsRoosterEmbedNL />} /> */}
