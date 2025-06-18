@@ -355,7 +355,7 @@ const TechgroundsRoosterEmbedNL = () => {
           {agendaEntries.map((entry) => (
             <Card key={entry.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-3">
-                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <CardTitle className="text-lg mb-2">{entry.title}</CardTitle>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
@@ -370,7 +370,7 @@ const TechgroundsRoosterEmbedNL = () => {
                     </div>
                   </div>
                   
-                  <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center lg:items-end gap-2">
+                  <div className="flex flex-col items-stretch sm:flex-row sm:items-start lg:flex-col lg:items-start gap-2">
                     <div className="flex items-center gap-2">
                       <Badge className={cn("flex items-center gap-1 text-xs", getLocationColor(entry.location))}>
                         {getLocationIcon(entry.location)}
@@ -381,7 +381,7 @@ const TechgroundsRoosterEmbedNL = () => {
                           size="sm"
                           variant="outline"
                           onClick={() => setEditingSession(entry)}
-                          className="h-6 w-6 p-0 flex-shrink-0"
+                          className="h-5 w-5 p-0 flex-shrink-0"
                         >
                           <Edit3 className="h-3 w-3" />
                         </Button>
