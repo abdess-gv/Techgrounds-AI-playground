@@ -1,17 +1,61 @@
 
 import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import type { Database } from '@/integrations/supabase/types';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Target, Database, Shield, BookOpen, Play, ArrowRight, Lightbulb, Users, Award, ChevronRight, Zap, Globe, MessageSquare, Code, Sparkles, Settings, Wrench, AlertTriangle } from 'lucide-react';
+import {
+  Brain, Target, Database as DatabaseIcon, Shield, BookOpen, Play, ArrowRight, Lightbulb, Users, Award, ChevronRight, Zap, Globe, MessageSquare, Code, Sparkles, Settings, Wrench, AlertTriangle, ListChecks
+} from 'lucide-react'; // Added ListChecks, renamed Database to DatabaseIcon to avoid conflict
 import { Link } from 'react-router-dom';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import SEO from '@/components/SEO';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Features from '@/components/Features';
 import Footer from '@/components/Footer';
 
+type ProgramRow = Database['public']['Tables']['programs']['Row'];
+
 const Index = () => {
+  const [programs, setPrograms] = useState<ProgramRow[]>([]);
+  const [loadingPrograms, setLoadingPrograms] = useState(true);
+  const [errorPrograms, setErrorPrograms] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProgramsList = async () => {
+      setLoadingPrograms(true);
+      setErrorPrograms(null);
+      try {
+        const { data, error } = await supabase
+          .from('programs')
+          .select('id, name') // Only fetch id and name
+          .order('name', { ascending: true });
+
+        if (error) {
+          throw error;
+        }
+        setPrograms(data || []);
+      } catch (e: any) {
+        console.error("Fout bij laden programma's:", e); // Dutch console error
+        setErrorPrograms("Kon programma's niet laden. Probeer het later opnieuw."); // Dutch user error
+      } finally {
+        setLoadingPrograms(false);
+      }
+    };
+
+    fetchProgramsList();
+  }, []);
+
   return (
     <>
       <SEO 
@@ -113,6 +157,35 @@ const Index = () => {
                 Open AI-Playground
               </Button>
             </Link>
+
+            <div className="mt-8">
+              {loadingPrograms && <p className="text-slate-500">Programma's laden...</p>}
+              {errorPrograms && <p className="text-red-500">{errorPrograms}</p>}
+              {!loadingPrograms && !errorPrograms && programs.length === 0 && (
+                <p className="text-slate-500">Geen programma's beschikbaar op dit moment.</p>
+              )}
+              {!loadingPrograms && !errorPrograms && programs.length > 0 && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="lg" variant="outline" className="border-indigo-600 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700">
+                      <ListChecks className="h-5 w-5 mr-2" />
+                      Bekijk Rooster per Programma
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Selecteer een Programma</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {programs.map((program) => (
+                      <DropdownMenuItem key={program.id} asChild>
+                        <Link to={`/roster/${program.id}`} className="w-full">
+                          {program.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           </div>
         </div>
         
