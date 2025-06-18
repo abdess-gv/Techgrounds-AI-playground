@@ -23,7 +23,11 @@ import SecurityEmbedNL from './pages/SecurityEmbedNL';
 import FrameworkEmbedNL from './pages/FrameworkEmbedNL';
 import DatabaseEmbedNL from './pages/DatabaseEmbedNL';
 import PromptEngineering2EmbedNL from "./pages/PromptEngineering2EmbedNL";
-import TechgroundsRoosterEmbedNL from './pages/TechgroundsRoosterEmbedNL';
+// import TechgroundsRoosterEmbedNL from './pages/TechgroundsRoosterEmbedNL'; // Replaced by ProgramRoosterPage
+import ProgramRoosterPage from './pages/ProgramRoosterPage';
+import AdminDashboardPage from './pages/AdminDashboardPage'; // Assuming this page exists or will be created
+import AdminRosterManagementPage from './pages/AdminRosterManagementPage';
+import AdminGuard from './components/AdminAuth/AdminGuard'; // Assuming this guard exists or will be created
 import AppErrorBoundary from './components/ErrorBoundary/AppErrorBoundary';
 
 const queryClient = new QueryClient({
@@ -48,8 +52,9 @@ function App() {
               {/* Techgrounds AI-Playground */}
               <Route path="/playground" element={<TechgroundsPlayground />} />
               
-              {/* Techgrounds Rooster */}
-              <Route path="/rooster" element={<TechgroundsRoosterEmbedNL />} />
+              {/* Techgrounds Rooster - New dynamic route */}
+              <Route path="/rooster/:programId" element={<ProgramRoosterPage />} />
+              {/* Old static roster route - <Route path="/rooster" element={<TechgroundsRoosterEmbedNL />} /> */}
               
               {/* Programming Learning Modules */}
               <Route path="/embed/json" element={<JSONEmbedNL />} />
@@ -65,6 +70,10 @@ function App() {
               
               {/* Quiz Module */}
               <Route path="/embed/quiz" element={<AITermsQuizNL />} />
+
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminGuard><AdminDashboardPage /></AdminGuard>} />
+              <Route path="/admin/roster" element={<AdminGuard><AdminRosterManagementPage /></AdminGuard>} />
               
               <Route path="*" element={<NotFound />} />
             </Routes>

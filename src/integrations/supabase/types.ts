@@ -350,6 +350,124 @@ export type Database = {
         }
         Relationships: []
       }
+      program_cycle_details: {
+        Row: {
+          id: string
+          program_id: string
+          week_in_cycle: number
+          day_of_week: number
+          time_info: string | null
+          location_info: string | null
+          general_info: string | null
+          link_url: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          program_id: string
+          week_in_cycle: number
+          day_of_week: number
+          time_info?: string | null
+          location_info?: string | null
+          general_info?: string | null
+          link_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          program_id?: string
+          week_in_cycle?: number
+          day_of_week?: number
+          time_info?: string | null
+          location_info?: string | null
+          general_info?: string | null
+          link_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "program_cycle_details_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      program_date_overrides: {
+        Row: {
+          id: string
+          program_id: string
+          override_date: string
+          time_info: string | null
+          location_info: string | null
+          general_info: string | null
+          link_url: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          program_id: string
+          override_date: string
+          time_info?: string | null
+          location_info?: string | null
+          general_info?: string | null
+          link_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          program_id?: string
+          override_date?: string
+          time_info?: string | null
+          location_info?: string | null
+          general_info?: string | null
+          link_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "program_date_overrides_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      programs: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          anchor_start_date: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          anchor_start_date: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          anchor_start_date?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
