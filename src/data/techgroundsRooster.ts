@@ -8,6 +8,21 @@ export interface RoosterEntry {
   link?: string;
 }
 
+// New types for the enhanced roster system
+export interface AgendaEntry {
+  sessionId: string;
+  title: string;
+  description: string;
+  date: Date;
+  dateString: string;
+  time: string;
+  location: LocationType;
+  address?: string;
+  trainer: string;
+}
+
+export type LocationType = "Online" | "Op locatie" | "Hybride";
+
 export const techgroundsRooster: RoosterEntry[] = [
   {
     date: "2024-01-08",

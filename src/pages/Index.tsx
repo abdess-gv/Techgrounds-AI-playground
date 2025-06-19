@@ -1,12 +1,12 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import type { Database } from '@/integrations/supabase/types';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Brain, Target, Database as DatabaseIcon, Shield, BookOpen, Play, ArrowRight, Lightbulb, Users, Award, ChevronRight, Zap, Globe, MessageSquare, Code, Sparkles, Settings, Wrench, AlertTriangle, ListChecks
-} from 'lucide-react'; // Added ListChecks, renamed Database to DatabaseIcon to avoid conflict
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
   DropdownMenu,
@@ -22,10 +22,14 @@ import Hero from '@/components/Hero';
 import Features from '@/components/Features';
 import Footer from '@/components/Footer';
 
-type ProgramRow = Database['public']['Tables']['programs']['Row'];
+// Simple interface for program list items
+interface ProgramListItem {
+  id: string;
+  name: string;
+}
 
 const Index = () => {
-  const [programs, setPrograms] = useState<ProgramRow[]>([]);
+  const [programs, setPrograms] = useState<ProgramListItem[]>([]);
   const [loadingPrograms, setLoadingPrograms] = useState(true);
   const [errorPrograms, setErrorPrograms] = useState<string | null>(null);
 
@@ -36,7 +40,7 @@ const Index = () => {
       try {
         const { data, error } = await supabase
           .from('programs')
-          .select('id, name') // Only fetch id and name
+          .select('id, name')
           .order('name', { ascending: true });
 
         if (error) {
@@ -44,8 +48,8 @@ const Index = () => {
         }
         setPrograms(data || []);
       } catch (e: any) {
-        console.error("Fout bij laden programma's:", e); // Dutch console error
-        setErrorPrograms("Kon programma's niet laden. Probeer het later opnieuw."); // Dutch user error
+        console.error("Fout bij laden programma's:", e);
+        setErrorPrograms("Kon programma's niet laden. Probeer het later opnieuw.");
       } finally {
         setLoadingPrograms(false);
       }
@@ -167,11 +171,11 @@ const Index = () => {
                   <DropdownMenuTrigger asChild>
                     <Button size="lg" variant="outline" className="border-indigo-600 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700">
                       <ListChecks className="h-5 w-5 mr-2" />
-                      Agenda
+                      Programma Roosters
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>Kies een programma voor de agenda</DropdownMenuLabel>
+                    <DropdownMenuLabel>Kies een programma voor het rooster</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {programs.map((program) => (
                       <DropdownMenuItem key={program.id} asChild>

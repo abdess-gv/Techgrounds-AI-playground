@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
+import { Calendar, Clock, MapPin, Link as LinkIcon, AlertCircle } from 'lucide-react';
 
 type ProgramRow = Database['public']['Tables']['programs']['Row'];
 type CycleDetailRow = Database['public']['Tables']['program_cycle_details']['Row'];
@@ -13,16 +14,18 @@ interface DisplayProgram {
   id: string;
   name: string;
   description?: string | null;
-  start_date: string | null; // Using start_date instead of anchor_start_date
+  start_date: string | null;
 }
 
 interface RosterEntry {
   date: string;
+  dateString: string;
   time_info?: string;
   location_info?: string;
   general_info?: string;
   link_url?: string;
   isOverride: boolean;
+  isEmpty: boolean;
 }
 
 const ProgramRoosterPage: React.FC = () => {
@@ -79,13 +82,13 @@ const ProgramRoosterPage: React.FC = () => {
 
         if (cycleError) throw new Error(`Kon cyclusdetails niet laden: ${cycleError.message}`);
 
-        // 3. Fetch Date Overrides for the next 6 weeks
+        // 3. Fetch Date Overrides for the next 8 weeks
         const todayDt = new Date();
         todayDt.setUTCHours(0, 0, 0, 0);
         const startDateRange = todayDt.toISOString().split('T')[0];
 
         const endDateDt = new Date(todayDt);
-        endDateDt.setUTCDate(todayDt.getUTCDate() + 41);
+        endDateDt.setUTCDate(todayDt.getUTCDate() + 55); // ~8 weeks
         const endDateRange = endDateDt.toISOString().split('T')[0];
 
         const { data: dateOverridesData, error: overrideError } = await supabase
@@ -97,14 +100,13 @@ const ProgramRoosterPage: React.FC = () => {
 
         if (overrideError) throw new Error(`Kon datumuitzonderingen niet laden: ${overrideError.message}`);
 
-        // 4. Calculate the 6-week roster
-        // Use start_date or fallback to today if not set
+        // 4. Calculate the 8-week roster
         const anchorDate = currentProgram.start_date 
           ? new Date(currentProgram.start_date + 'T00:00:00Z')
           : new Date(todayDt);
 
         const newRoster: RosterEntry[] = [];
-        for (let i = 0; i < 42; i++) {
+        for (let i = 0; i < 56; i++) { // 8 weeks
           const currentDate = new Date(todayDt);
           currentDate.setUTCDate(todayDt.getUTCDate() + i);
           const currentDateStr = currentDate.toISOString().split('T')[0];
@@ -132,13 +134,23 @@ const ProgramRoosterPage: React.FC = () => {
             }
           }
 
+          const isEmpty = !sourceInfo.time_info && !sourceInfo.general_info && !isOverride;
+
           newRoster.push({
-            date: currentDate.toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }),
+            date: currentDateStr,
+            dateString: currentDate.toLocaleDateString('nl-NL', { 
+              weekday: 'long', 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric', 
+              timeZone: 'UTC' 
+            }),
             time_info: sourceInfo.time_info || undefined,
             location_info: sourceInfo.location_info || undefined,
-            general_info: sourceInfo.general_info || (isOverride ? 'Overridden Sessie' : 'Geen geplande activiteit'),
+            general_info: sourceInfo.general_info || undefined,
             link_url: sourceInfo.link_url || undefined,
             isOverride: isOverride,
+            isEmpty: isEmpty,
           });
         }
         setRoster(newRoster);
@@ -155,50 +167,141 @@ const ProgramRoosterPage: React.FC = () => {
   }, [programId]);
 
   const pageContent = (
-    <div className="container mx-auto p-4">
-      {loading && <p>Loading roster...</p>}
-      {error && <p className="text-red-500">Error: {error}</p>}
+    <div className="container mx-auto p-6 max-w-4xl">
+      {loading && (
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+          <p className="text-gray-600">Rooster laden...</p>
+        </div>
+      )}
+      
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <p className="text-red-700 text-lg font-medium">Fout bij laden rooster</p>
+          <p className="text-red-600 mt-2">{error}</p>
+        </div>
+      )}
 
       {program && !error && (
         <>
-          <h1 className="text-3xl font-bold mb-2">{program.name} Roster</h1>
-          {program.description && <p className="text-gray-600 mb-6">{program.description}</p>}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-3">{program.name}</h1>
+            <p className="text-xl text-gray-600">Programma Rooster</p>
+            {program.description && (
+              <p className="text-gray-600 mt-2 max-w-2xl mx-auto">{program.description}</p>
+            )}
+          </div>
 
-          <div className="space-y-6">
-            {roster.map((entry, index) => (
-              <div key={index} className={`p-4 border rounded-lg shadow ${entry.isOverride ? 'border-orange-500 bg-orange-50' : 'border-gray-200 bg-white'}`}>
-                <h2 className="text-xl font-semibold mb-1">{entry.date}</h2>
-                <p><strong>Time:</strong> {entry.time_info || 'N/A'}</p>
-                <p><strong>Location:</strong> {entry.location_info || 'N/A'}</p>
-                <p><strong>Info:</strong> {entry.general_info || 'N/A'}</p>
-                {entry.link_url && (
-                  <p><strong>Link:</strong> <a href={entry.link_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{entry.link_url}</a></p>
-                )}
-                {entry.isOverride && <p className="text-sm text-orange-700 font-semibold mt-1">This is an overridden session.</p>}
+          <div className="space-y-4">
+            {roster.filter(entry => !entry.isEmpty).map((entry, index) => (
+              <div 
+                key={index} 
+                className={`p-6 rounded-xl shadow-sm border transition-all hover:shadow-md ${
+                  entry.isOverride 
+                    ? 'border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50' 
+                    : 'border-gray-200 bg-white hover:border-blue-200'
+                }`}
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <Calendar className="h-5 w-5 text-blue-600" />
+                      <h2 className="text-xl font-semibold text-gray-900 capitalize">
+                        {entry.dateString}
+                      </h2>
+                      {entry.isOverride && (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                          Uitzondering
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-gray-500" />
+                        <span className="text-gray-700 font-medium">
+                          {entry.time_info || 'Tijd niet opgegeven'}
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-gray-500" />
+                        <span className="text-gray-700">
+                          {entry.location_info || 'Locatie niet opgegeven'}
+                        </span>
+                      </div>
+                      
+                      {entry.link_url && (
+                        <div className="flex items-center gap-2">
+                          <LinkIcon className="h-4 w-4 text-gray-500" />
+                          <a 
+                            href={entry.link_url} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-blue-600 hover:text-blue-800 underline font-medium"
+                          >
+                            Deelnemen
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {entry.general_info && (
+                      <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                        <h3 className="font-medium text-gray-900 mb-1">Onderwerp:</h3>
+                        <p className="text-gray-700">{entry.general_info}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             ))}
+            
+            {roster.filter(entry => !entry.isEmpty).length === 0 && !loading && (
+              <div className="text-center py-12">
+                <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-xl font-medium text-gray-500 mb-2">Geen activiteiten gepland</h3>
+                <p className="text-gray-400">Er zijn momenteel geen roosteractiviteiten beschikbaar voor dit programma.</p>
+              </div>
+            )}
           </div>
         </>
       )}
-      {!program && !loading && !error && <p>Select a program to view its roster.</p>}
+      
+      {!program && !loading && !error && (
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">Selecteer een programma om het rooster te bekijken.</p>
+        </div>
+      )}
     </div>
   );
 
   if (isEmbed) {
-    return pageContent;
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {pageContent}
+      </div>
+    );
   }
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       {!isEmbed && (
-        <header className="bg-gray-800 text-white p-4 text-center">
-          <p className="text-xl">Program Rosters</p>
+        <header className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 className="text-2xl font-bold text-gray-900">Programma Roosters</h1>
+          </div>
         </header>
       )}
       {pageContent}
       {!isEmbed && (
-        <footer className="bg-gray-200 text-gray-700 p-4 text-center mt-8">
-          <p>&copy; {new Date().getFullYear()} Your Company</p>
+        <footer className="bg-white border-t mt-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <p className="text-center text-gray-500">
+              &copy; {new Date().getFullYear()} Techgrounds. Alle rechten voorbehouden.
+            </p>
+          </div>
         </footer>
       )}
     </div>
