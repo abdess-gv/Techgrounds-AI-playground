@@ -1,10 +1,9 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Clock, MapPin, Link as LinkIcon } from 'lucide-react';
+import { Calendar, Clock, MapPin, ExternalLink } from 'lucide-react';
+import { generateWeekDates, formatTime, getDayName, getLocationIcon } from '@/utils/rosterUtils';
 import type { RosterEntry } from '@/types/RosterTypes';
-import { formatTime, getDayName, getLocationIcon } from '@/utils/rosterUtils';
 
 interface WeeklyRosterViewProps {
   entries: RosterEntry[];
@@ -19,104 +18,108 @@ const WeeklyRosterView: React.FC<WeeklyRosterViewProps> = ({
   groupNumber,
   weekStartDate
 }) => {
-  const daysOfWeek = [1, 2, 3, 4, 5, 6, 0]; // Monday to Sunday
+  const weekDates = generateWeekDates(weekStartDate);
+  const weekEntries = entries.filter(entry => entry.week_number === weekNumber);
 
-  const getEntriesForDay = (dayOfWeek: number) => {
-    return entries
-      .filter(entry => entry.day_of_week === dayOfWeek && entry.week_number === weekNumber)
-      .sort((a, b) => a.start_time.localeCompare(b.start_time));
-  };
-
-  const getDateForDay = (dayOfWeek: number) => {
-    const date = new Date(weekStartDate);
-    const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Adjust for Sunday
-    date.setDate(weekStartDate.getDate() + diff);
-    return date;
-  };
+  if (weekEntries.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calendar className="h-5 w-5" />
+            Week {weekNumber} - Groep {groupNumber}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8">
+            <Calendar className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-500">Geen activiteiten gepland voor deze week</p>
+            <p className="text-sm text-gray-400 mt-2">
+              Voeg rooster entries toe via het admin panel
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
           Week {weekNumber} - Groep {groupNumber}
         </h2>
         <p className="text-gray-600">
           {weekStartDate.toLocaleDateString('nl-NL', { 
-            day: 'numeric', 
-            month: 'long', 
-            year: 'numeric' 
-          })} - {new Date(weekStartDate.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('nl-NL', { 
-            day: 'numeric', 
-            month: 'long', 
-            year: 'numeric' 
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })} - {weekDates[6].toLocaleDateString('nl-NL', { 
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
           })}
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {daysOfWeek.map((dayOfWeek) => {
-          const dayEntries = getEntriesForDay(dayOfWeek);
-          const dayDate = getDateForDay(dayOfWeek);
+      <div className="grid gap-4">
+        {weekDates.map((date, dayIndex) => {
+          const dayEntries = weekEntries.filter(entry => entry.day_of_week === dayIndex);
           
           return (
-            <Card key={dayOfWeek} className="min-h-[200px]">
-              <CardHeader className="pb-3">
+            <Card key={dayIndex} className="overflow-hidden">
+              <CardHeader className="bg-blue-50 py-3">
                 <CardTitle className="text-lg">
-                  {getDayName(dayOfWeek)}
+                  {getDayName(dayIndex)} - {date.toLocaleDateString('nl-NL')}
                 </CardTitle>
-                <p className="text-sm text-gray-600">
-                  {dayDate.toLocaleDateString('nl-NL', { 
-                    day: 'numeric', 
-                    month: 'short' 
-                  })}
-                </p>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {dayEntries.length > 0 ? (
-                  dayEntries.map((entry) => (
-                    <div key={entry.id} className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-lg">{getLocationIcon(entry.location_type)}</span>
-                        <h4 className="font-medium text-gray-900 text-sm">{entry.title}</h4>
-                      </div>
-                      
-                      <div className="space-y-1 text-xs">
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-3 w-3 text-gray-500" />
-                          <span>{formatTime(entry.start_time)} - {formatTime(entry.end_time)}</span>
-                        </div>
-                        
-                        <div className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3 text-gray-500" />
-                          <Badge variant="outline" className="text-xs">
-                            {entry.location_type}
-                          </Badge>
-                        </div>
-                        
-                        {entry.location_details && (
-                          <p className="text-gray-600 text-xs">{entry.location_details}</p>
-                        )}
-                        
-                        {entry.meeting_url && (
-                          <a 
-                            href={entry.meeting_url} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-xs"
-                          >
-                            <LinkIcon className="h-3 w-3" />
-                            Deelnemen
-                          </a>
-                        )}
-                        
-                        {entry.description && (
-                          <p className="text-gray-600 text-xs mt-2">{entry.description}</p>
-                        )}
-                      </div>
-                    </div>
-                  ))
+              <CardContent className="p-4">
+                {dayEntries.length === 0 ? (
+                  <p className="text-gray-500 text-center py-4">Geen activiteiten</p>
                 ) : (
-                  <p className="text-gray-400 text-sm text-center py-4">Geen activiteiten</p>
+                  <div className="space-y-3">
+                    {dayEntries.map((entry, index) => (
+                      <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-900 mb-1">{entry.title}</h4>
+                            <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-4 w-4" />
+                                {formatTime(entry.start_time)} - {formatTime(entry.end_time)}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <span>{getLocationIcon(entry.location_type)}</span>
+                                {entry.location_type}
+                              </div>
+                            </div>
+                            {entry.description && (
+                              <p className="text-gray-700 text-sm mb-2">{entry.description}</p>
+                            )}
+                            {entry.location_details && (
+                              <div className="flex items-center gap-1 text-sm text-gray-600">
+                                <MapPin className="h-4 w-4" />
+                                {entry.location_details}
+                              </div>
+                            )}
+                          </div>
+                          {entry.meeting_url && (
+                            <a
+                              href={entry.meeting_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                              Deelnemen
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </CardContent>
             </Card>

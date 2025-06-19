@@ -19,11 +19,11 @@ export interface Program {
   id: string;
   name: string;
   description?: string;
-  anchor_date?: string;
-  cycle_weeks: number;
-  is_active: boolean;
   start_date?: string;
   end_date?: string;
+  anchor_date?: string;
+  cycle_weeks?: number;
+  is_active?: boolean;
   created_at: string;
   updated_at: string;
 }
