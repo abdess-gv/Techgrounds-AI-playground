@@ -25,8 +25,8 @@ export const useRosterData = (programId?: string) => {
         description: program.description,
         start_date: program.start_date,
         end_date: program.end_date,
-        anchor_date: program.anchor_date || program.start_date, // Use anchor_date or fallback to start_date
-        cycle_weeks: program.cycle_weeks || 4, // Use cycle_weeks or default to 4
+        anchor_date: program.start_date, // Use start_date as anchor_date for now
+        cycle_weeks: 4, // Default to 4 weeks
         is_active: true, // Default to active
         created_at: program.created_at,
         updated_at: program.updated_at
@@ -34,45 +34,16 @@ export const useRosterData = (programId?: string) => {
       
       setPrograms(mappedPrograms);
     } catch (e: any) {
-      console.error('Error fetching programs:', e);
       setError(`Kon programma's niet laden: ${e.message}`);
     }
   };
 
   const fetchRosterEntries = async (targetProgramId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('roster_entries')
-        .select('*')
-        .eq('program_id', targetProgramId)
-        .order('week_number')
-        .order('day_of_week')
-        .order('start_time');
-
-      if (error) throw error;
-      
-      console.log('Fetched roster entries:', data);
-      
-      // Map the database response to our RosterEntry type with proper type casting
-      const mappedEntries: RosterEntry[] = (data || []).map(entry => ({
-        id: entry.id,
-        program_id: entry.program_id,
-        week_number: entry.week_number,
-        day_of_week: entry.day_of_week,
-        start_time: entry.start_time,
-        end_time: entry.end_time,
-        title: entry.title,
-        description: entry.description,
-        location_type: entry.location_type as 'Online' | 'Fysiek' | 'Zelfstudie',
-        location_details: entry.location_details,
-        meeting_url: entry.meeting_url,
-        created_at: entry.created_at,
-        updated_at: entry.updated_at
-      }));
-      
-      setRosterEntries(mappedEntries);
+      // For now, return empty array since roster_entries table doesn't exist yet
+      // This will be populated once the database migration is complete
+      setRosterEntries([]);
     } catch (e: any) {
-      console.error('Error fetching roster entries:', e);
       setError(`Kon rooster entries niet laden: ${e.message}`);
     }
   };

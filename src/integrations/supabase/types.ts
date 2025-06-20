@@ -444,9 +444,7 @@ export type Database = {
       }
       programs: {
         Row: {
-          anchor_date: string | null
           created_at: string
-          cycle_weeks: number | null
           description: string | null
           end_date: string | null
           id: string
@@ -455,9 +453,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          anchor_date?: string | null
           created_at?: string
-          cycle_weeks?: number | null
           description?: string | null
           end_date?: string | null
           id?: string
@@ -466,9 +462,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          anchor_date?: string | null
           created_at?: string
-          cycle_weeks?: number | null
           description?: string | null
           end_date?: string | null
           id?: string
@@ -477,62 +471,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
-      roster_entries: {
-        Row: {
-          created_at: string
-          day_of_week: number
-          description: string | null
-          end_time: string
-          id: string
-          location_details: string | null
-          location_type: string
-          meeting_url: string | null
-          program_id: string
-          start_time: string
-          title: string
-          updated_at: string
-          week_number: number
-        }
-        Insert: {
-          created_at?: string
-          day_of_week: number
-          description?: string | null
-          end_time: string
-          id?: string
-          location_details?: string | null
-          location_type: string
-          meeting_url?: string | null
-          program_id: string
-          start_time: string
-          title: string
-          updated_at?: string
-          week_number: number
-        }
-        Update: {
-          created_at?: string
-          day_of_week?: number
-          description?: string | null
-          end_time?: string
-          id?: string
-          location_details?: string | null
-          location_type?: string
-          meeting_url?: string | null
-          program_id?: string
-          start_time?: string
-          title?: string
-          updated_at?: string
-          week_number?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "roster_entries_program_id_fkey"
-            columns: ["program_id"]
-            isOneToOne: false
-            referencedRelation: "programs"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       system_settings: {
         Row: {

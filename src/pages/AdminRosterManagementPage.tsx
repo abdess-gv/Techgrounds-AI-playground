@@ -1,3 +1,4 @@
+
 // src/pages/AdminRosterManagementPage.tsx
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
@@ -44,8 +45,7 @@ const AdminRosterManagementPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [editingCycleDetail, setEditingCycleDetail] = useState<Partial<CycleDetailFormData> & { program_id?: string, week_in_cycle?: number, day_of_week?: number } | null>(null);
-  // Updated to only show weekdays
-  const daysOfWeekDutch = ["Ma", "Di", "Wo", "Do", "Vr"];
+  const daysOfWeekDutch = ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"];
 
   const [editingDateOverride, setEditingDateOverride] = useState<Partial<DateOverrideFormData> & { program_id?: string } | null>(null);
 
@@ -299,7 +299,7 @@ const AdminRosterManagementPage: React.FC = () => {
             <CardHeader>
               <CardTitle>Standaard 4-Weken Cyclus</CardTitle>
               <p className="text-sm text-gray-600 mt-2">
-                Definieer het standaard weekschema voor <span className="font-semibold">{programs.find(p => p.id === selectedProgramId)?.name || 'geselecteerd programma'}</span> (alleen werkdagen).
+                Definieer het standaard weekschema voor <span className="font-semibold">{programs.find(p => p.id === selectedProgramId)?.name || 'geselecteerd programma'}</span>.
               </p>
             </CardHeader>
             <CardContent>
@@ -307,13 +307,11 @@ const AdminRosterManagementPage: React.FC = () => {
                 {[1, 2, 3, 4].map(week => (
                   <div key={`week-${week}`} className="border rounded-lg p-4 bg-gray-50">
                     <h3 className="text-lg font-semibold text-gray-700 mb-4">Week {week}</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
                       {daysOfWeekDutch.map((dayName, dayIndex) => {
-                        // Convert array index to database day index (1-5)
-                        const dbDayIndex = dayIndex + 1;
-                        const detail = cycleDetails.find(cd => cd.week_in_cycle === week && cd.day_of_week === dbDayIndex);
+                        const detail = cycleDetails.find(cd => cd.week_in_cycle === week && cd.day_of_week === dayIndex);
                         return (
-                          <Card key={`w${week}-d${dbDayIndex}`} className="min-h-[140px] flex flex-col">
+                          <Card key={`w${week}-d${dayIndex}`} className="min-h-[140px] flex flex-col">
                             <CardHeader className="p-3 pb-2">
                               <CardTitle className="text-sm font-medium text-gray-600">{dayName}</CardTitle>
                             </CardHeader>
@@ -327,12 +325,12 @@ const AdminRosterManagementPage: React.FC = () => {
                                     {detail.link_url && <p><a href={detail.link_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-xs">Link</a></p>}
                                   </div>
                                   <div className="mt-3 flex gap-1">
-                                    <Button variant="link" size="sm" onClick={() => openCycleDetailForm(week, dbDayIndex, detail)} className="p-0 h-auto text-xs">Bewerken</Button>
+                                    <Button variant="link" size="sm" onClick={() => openCycleDetailForm(week, dayIndex, detail)} className="p-0 h-auto text-xs">Bewerken</Button>
                                     <Button variant="link" size="sm" onClick={() => detail.id && handleDeleteCycleDetail(detail.id)} disabled={!detail.id || formLoading} className="p-0 h-auto text-xs text-red-600 hover:text-red-800">Verwijder</Button>
                                   </div>
                                 </>
                               ) : (
-                                <Button variant="link" size="sm" onClick={() => openCycleDetailForm(week, dbDayIndex)} className="p-0 h-auto self-start text-green-600 hover:text-green-800 text-xs">+ Toevoegen</Button>
+                                <Button variant="link" size="sm" onClick={() => openCycleDetailForm(week, dayIndex)} className="p-0 h-auto self-start text-green-600 hover:text-green-800 text-xs">+ Toevoegen</Button>
                               )}
                             </CardContent>
                           </Card>
@@ -351,7 +349,7 @@ const AdminRosterManagementPage: React.FC = () => {
                 <DialogHeader>
                   <DialogTitle>{editingCycleDetail?.id ? 'Cyclus Item Bewerken' : 'Nieuw Cyclus Item'}</DialogTitle>
                   {editingCycleDetail && editingCycleDetail.week_in_cycle !== undefined && editingCycleDetail.day_of_week !== undefined &&
-                    <DialogDescription>Week {editingCycleDetail.week_in_cycle}, {daysOfWeekDutch[editingCycleDetail.day_of_week - 1]}</DialogDescription>
+                    <DialogDescription>Week {editingCycleDetail.week_in_cycle}, {daysOfWeekDutch[editingCycleDetail.day_of_week]}</DialogDescription>
                   }
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
