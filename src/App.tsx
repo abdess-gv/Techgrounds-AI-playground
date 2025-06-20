@@ -1,41 +1,91 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LanguageProvider } from "@/contexts/LanguageContext";
-import { AuthProvider } from "@/contexts/AuthContext";
+import React from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import { Toaster } from "@/components/ui/toaster"
+import { HelmetProvider } from 'react-helmet-async';
 import Index from "./pages/Index";
-import AdminDashboardPage from "./pages/AdminDashboardPage";
-import AdminRosterManagementPage from "./pages/AdminRosterManagementPage";
-import ProgramRoosterPage from "./pages/ProgramRoosterPage";
-import RosterEmbedGeneratorPage from "./pages/RosterEmbedGeneratorPage";
-import EnhancedRosterPage from "./pages/EnhancedRosterPage";
+import NotFound from "./pages/NotFound";
+import TechgroundsPlayground from './pages/TechgroundsPlayground';
+import JSONEmbedNL from './pages/JSONEmbedNL';
+import PythonEmbedNL from './pages/PythonEmbedNL';
+import WorkflowEmbedNL from './pages/WorkflowEmbedNL';
+import AITermsQuizNL from './pages/AITermsQuizNL';
+import PromptEngineeringEmbedNL from './pages/PromptEngineeringEmbedNL';
+import SecurityEmbedNL from './pages/SecurityEmbedNL';
+import FrameworkEmbedNL from './pages/FrameworkEmbedNL';
+import DatabaseEmbedNL from './pages/DatabaseEmbedNL';
+import PromptEngineering2EmbedNL from "./pages/PromptEngineering2EmbedNL";
+// import TechgroundsRoosterEmbedNL from './pages/TechgroundsRoosterEmbedNL'; // Replaced by ProgramRoosterPage
+import ProgramRoosterPage from './pages/ProgramRoosterPage';
+import AdminDashboardPage from './pages/AdminDashboardPage'; // Assuming this page exists or will be created
+import AdminRosterManagementPage from './pages/AdminRosterManagementPage';
+import AdminGuard from './components/AdminAuth/AdminGuard'; // Assuming this guard exists or will be created
+import AppErrorBoundary from './components/ErrorBoundary/AppErrorBoundary';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3,
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    },
+  },
+});
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+function App() {
+  return (
+    <AppErrorBoundary>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <HelmetProvider>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/admin" element={<AdminDashboardPage />} />
-              <Route path="/admin/roster-management" element={<AdminRosterManagementPage />} />
-              <Route path="/roster/:programId" element={<ProgramRoosterPage />} />
-              <Route path="/enhanced-roster/:programId" element={<EnhancedRosterPage />} />
-              <Route path="/roster-embed-generator" element={<RosterEmbedGeneratorPage />} />
+              
+              {/* Techgrounds AI-Playground */}
+              <Route path="/playground" element={<TechgroundsPlayground />} />
+              
+              {/* Redirect base /rooster to main page */}
+              <Route path="/rooster" element={<Navigate to="/" replace />} />
+              {/* Techgrounds Rooster - New dynamic route */}
+              <Route path="/rooster/:programId" element={<ProgramRoosterPage />} />
+              {/* Old static roster route - <Route path="/rooster" element={<TechgroundsRoosterEmbedNL />} /> */}
+              
+              {/* Programming Learning Modules */}
+              <Route path="/embed/json" element={<JSONEmbedNL />} />
+              <Route path="/embed/python" element={<PythonEmbedNL />} />
+              <Route path="/embed/workflow" element={<WorkflowEmbedNL />} />
+              
+              {/* AI Training Modules */}
+              <Route path="/embed/prompt-engineering" element={<PromptEngineeringEmbedNL />} />
+              <Route path="/embed/prompt-engineering-2" element={<PromptEngineering2EmbedNL />} />
+              <Route path="/embed/ai-safety" element={<SecurityEmbedNL />} />
+              <Route path="/embed/frameworks" element={<FrameworkEmbedNL />} />
+              <Route path="/embed/database" element={<DatabaseEmbedNL />} />
+              
+              {/* Quiz Module */}
+              <Route path="/embed/quiz" element={<AITermsQuizNL />} />
+
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminGuard><AdminDashboardPage /></AdminGuard>} />
+              <Route path="/admin/roster" element={<AdminGuard><AdminRosterManagementPage /></AdminGuard>} />
+              
+              <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </LanguageProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+            <Toaster />
+          </HelmetProvider>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </AppErrorBoundary>
+  );
+}
 
 export default App;
