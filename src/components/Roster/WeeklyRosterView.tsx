@@ -55,7 +55,7 @@ const WeeklyRosterView: React.FC<WeeklyRosterViewProps> = ({
             year: 'numeric',
             month: 'long',
             day: 'numeric'
-          })} - {weekDates[5].toLocaleDateString('nl-NL', { // Changed from weekDates[6] to weekDates[5] (Friday)
+          })} - {weekDates[6].toLocaleDateString('nl-NL', { 
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -66,10 +66,6 @@ const WeeklyRosterView: React.FC<WeeklyRosterViewProps> = ({
 
       <div className="grid gap-4">
         {weekDates.map((date, dayIndex) => {
-          // dayIndex is 0 for Sunday, 1 for Monday, ..., 6 for Saturday
-          if (dayIndex === 0 || dayIndex === 6) { // Skip Sunday and Saturday
-            return null;
-          }
           const dayEntries = weekEntries.filter(entry => entry.day_of_week === dayIndex);
           
           return (
