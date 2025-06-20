@@ -1,4 +1,3 @@
-
 -- Create programs table
 CREATE TABLE public.programs (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -79,6 +78,6 @@ CREATE POLICY "Program date overrides are manageable by admins"
 
 -- Insert some sample data
 INSERT INTO public.programs (name, description) VALUES 
-  ('AI & Data Engineering', 'Complete AI and Data Engineering bootcamp'),
-  ('Cloud & DevOps', 'Cloud infrastructure and DevOps practices'),
-  ('Workready Program', 'Preparation program for the job market');
+  ('AI-Geletterd', 'Complete AI and Data Engineering bootcamp'),
+  ('Pathways', 'Cloud infrastructure and DevOps practices'),
+  ('Workready', 'Preparation program for the job market');

@@ -194,7 +194,13 @@ const ProgramRoosterPage: React.FC = () => {
           </div>
 
           <div className="space-y-4">
-            {roster.filter(entry => !entry.isEmpty).map((entry, index) => (
+            {roster.filter(entry => {
+              if (entry.isEmpty) return false;
+              // Parse date string as UTC to avoid timezone issues with getDay()
+              const dateObj = new Date(entry.date + 'T00:00:00Z');
+              const dayOfWeek = dateObj.getUTCDay(); // 0 for Sunday, 6 for Saturday
+              return dayOfWeek !== 0 && dayOfWeek !== 6;
+            }).map((entry, index) => (
               <div 
                 key={index} 
                 className={`p-6 rounded-xl shadow-sm border transition-all hover:shadow-md ${
@@ -258,11 +264,16 @@ const ProgramRoosterPage: React.FC = () => {
               </div>
             ))}
             
-            {roster.filter(entry => !entry.isEmpty).length === 0 && !loading && (
+            {roster.filter(entry => {
+              if (entry.isEmpty) return false;
+              const dateObj = new Date(entry.date + 'T00:00:00Z');
+              const dayOfWeek = dateObj.getUTCDay();
+              return dayOfWeek !== 0 && dayOfWeek !== 6;
+            }).length === 0 && !loading && (
               <div className="text-center py-12">
                 <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-gray-500 mb-2">Geen activiteiten gepland</h3>
-                <p className="text-gray-400">Er zijn momenteel geen roosteractiviteiten beschikbaar voor dit programma.</p>
+                <h3 className="text-xl font-medium text-gray-500 mb-2">Geen activiteiten gepland (op weekdagen)</h3>
+                <p className="text-gray-400">Er zijn momenteel geen roosteractiviteiten beschikbaar op maandag t/m vrijdag voor dit programma.</p>
               </div>
             )}
           </div>
