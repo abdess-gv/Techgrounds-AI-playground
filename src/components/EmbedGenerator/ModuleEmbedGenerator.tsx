@@ -3,7 +3,7 @@ import React from 'react';
 import EmbedCodeGenerator from './EmbedCodeGenerator';
 
 interface ModuleEmbedGeneratorProps {
-  moduleType: 'prompt-engineering' | 'prompt-engineering-2' | 'ai-safety' | 'frameworks' | 'database' | 'json' | 'python' | 'workflow';
+  moduleType: 'prompt-engineering' | 'ai-safety' | 'frameworks' | 'database' | 'json' | 'python' | 'workflow';
 }
 
 const ModuleEmbedGenerator: React.FC<ModuleEmbedGeneratorProps> = ({ moduleType }) => {
@@ -23,25 +23,6 @@ const ModuleEmbedGenerator: React.FC<ModuleEmbedGeneratorProps> = ({ moduleType 
               { value: 'beginner', label: 'Beginner' },
               { value: 'intermediate', label: 'Intermediate' },
               { value: 'advanced', label: 'Advanced' }
-            ]}
-          ]
-        };
-
-      case 'prompt-engineering-2':
-        return {
-          id: 'prompt-engineering-2',
-          name: 'Prompt Engineering 2.0',
-          path: '/embed/prompt-engineering-2',
-          description: 'Geavanceerde prompt engineering technieken met interactieve oefeningen en real-time evaluatie.',
-          options: [
-            { key: 'compact', label: 'Compact Weergave', type: 'boolean' as const, default: false },
-            { key: 'header', label: 'Toon Header', type: 'boolean' as const, default: true },
-            { key: 'legend', label: 'Toon Legenda', type: 'boolean' as const, default: true },
-            { key: 'level', label: 'Niveau Filter', type: 'select' as const, default: 'all', options: [
-              { value: 'all', label: 'Alle Niveaus' },
-              { value: '1', label: 'Level 1' },
-              { value: '2', label: 'Level 2' },
-              { value: '3', label: 'Level 3' }
             ]}
           ]
         };

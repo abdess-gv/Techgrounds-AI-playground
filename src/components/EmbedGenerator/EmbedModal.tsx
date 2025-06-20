@@ -8,7 +8,7 @@ import ModuleEmbedGenerator from './ModuleEmbedGenerator';
 interface EmbedModalProps {
   isOpen: boolean;
   onClose: () => void;
-  moduleType: 'quiz' | 'prompt-engineering' | 'prompt-engineering-2' | 'ai-safety' | 'frameworks' | 'database' | 'json' | 'python' | 'workflow';
+  moduleType: 'quiz' | 'prompt-engineering' | 'ai-safety' | 'frameworks' | 'database' | 'json' | 'python' | 'workflow';
 }
 
 const EmbedModal: React.FC<EmbedModalProps> = ({ isOpen, onClose, moduleType }) => {

@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -59,16 +60,6 @@ const ToolCard = ({ tool }: ToolCardProps) => {
     return source === 'open-source' ? 'Open Source' : 'Closed Source';
   };
 
-  const handleVisitWebsite = () => {
-    if (tool.website && tool.website.trim() !== '') {
-      window.open(tool.website, '_blank');
-    } else {
-      // Optional: Provide user feedback or log a warning
-      console.warn(`Attempted to open website for tool "${tool.name}", but URL is missing or empty.`);
-      // alert("Website URL is not available for this tool."); // Example user feedback
-    }
-  };
-
   return (
     <Card className="h-full hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
       <CardHeader className="space-y-3">
@@ -106,7 +97,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
         <div>
           <h4 className="font-medium text-sm text-gray-900 mb-2">Hoofdfeatures:</h4>
           <ul className="space-y-1">
-            {(tool.features || []).slice(0, 3).map((feature, index) => (
+            {tool.features.slice(0, 3).map((feature, index) => (
               <li key={index} className="text-sm text-gray-600 flex items-center">
                 <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2 flex-shrink-0"></div>
                 {feature}
@@ -116,7 +107,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
         </div>
         
         <div className="flex flex-wrap gap-1">
-          {(tool.tags || []).slice(0, 4).map((tag, index) => (
+          {tool.tags.slice(0, 4).map((tag, index) => (
             <Badge key={index} variant="secondary" className="text-xs">
               {tag}
             </Badge>
@@ -128,8 +119,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
             variant="outline" 
             size="sm" 
             className="w-full group-hover:bg-blue-50 group-hover:border-blue-300"
-            onClick={handleVisitWebsite}
-            disabled={!tool.website || tool.website.trim() === ''} // Optionally disable
+            onClick={() => window.open(tool.website, '_blank')}
           >
             <ExternalLink className="h-4 w-4 mr-2" />
             Bezoek Website

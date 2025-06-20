@@ -42,6 +42,47 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_conversations: {
+        Row: {
+          context_notes: string[] | null
+          created_at: string | null
+          id: string
+          messages: Json
+          provider: Database["public"]["Enums"]["ai_provider"]
+          title: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          context_notes?: string[] | null
+          created_at?: string | null
+          id?: string
+          messages?: Json
+          provider: Database["public"]["Enums"]["ai_provider"]
+          title?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          context_notes?: string[] | null
+          created_at?: string | null
+          id?: string
+          messages?: Json
+          provider?: Database["public"]["Enums"]["ai_provider"]
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_conversations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       content_modules: {
         Row: {
           content: Json
@@ -348,127 +389,6 @@ export type Database = {
             | null
           updated_at?: string | null
           user_role?: Database["public"]["Enums"]["user_role"] | null
-        }
-        Relationships: []
-      }
-      program_cycle_details: {
-        Row: {
-          created_at: string
-          day_of_week: number
-          general_info: string
-          id: string
-          link_url: string | null
-          location_info: string
-          program_id: string
-          time_info: string
-          updated_at: string
-          week_in_cycle: number
-        }
-        Insert: {
-          created_at?: string
-          day_of_week: number
-          general_info?: string
-          id?: string
-          link_url?: string | null
-          location_info?: string
-          program_id: string
-          time_info?: string
-          updated_at?: string
-          week_in_cycle: number
-        }
-        Update: {
-          created_at?: string
-          day_of_week?: number
-          general_info?: string
-          id?: string
-          link_url?: string | null
-          location_info?: string
-          program_id?: string
-          time_info?: string
-          updated_at?: string
-          week_in_cycle?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "program_cycle_details_program_id_fkey"
-            columns: ["program_id"]
-            isOneToOne: false
-            referencedRelation: "programs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      program_date_overrides: {
-        Row: {
-          created_at: string
-          general_info: string
-          id: string
-          link_url: string | null
-          location_info: string
-          override_date: string
-          program_id: string
-          time_info: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          general_info?: string
-          id?: string
-          link_url?: string | null
-          location_info?: string
-          override_date: string
-          program_id: string
-          time_info?: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          general_info?: string
-          id?: string
-          link_url?: string | null
-          location_info?: string
-          override_date?: string
-          program_id?: string
-          time_info?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "program_date_overrides_program_id_fkey"
-            columns: ["program_id"]
-            isOneToOne: false
-            referencedRelation: "programs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      programs: {
-        Row: {
-          created_at: string
-          description: string | null
-          end_date: string | null
-          id: string
-          name: string
-          start_date: string | null
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          end_date?: string | null
-          id?: string
-          name: string
-          start_date?: string | null
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          end_date?: string | null
-          id?: string
-          name?: string
-          start_date?: string | null
-          updated_at?: string
         }
         Relationships: []
       }
