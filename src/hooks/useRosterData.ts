@@ -52,7 +52,25 @@ export const useRosterData = (programId?: string) => {
       if (error) throw error;
       
       console.log('Fetched roster entries:', data);
-      setRosterEntries(data || []);
+      
+      // Map the database response to our RosterEntry type with proper type casting
+      const mappedEntries: RosterEntry[] = (data || []).map(entry => ({
+        id: entry.id,
+        program_id: entry.program_id,
+        week_number: entry.week_number,
+        day_of_week: entry.day_of_week,
+        start_time: entry.start_time,
+        end_time: entry.end_time,
+        title: entry.title,
+        description: entry.description,
+        location_type: entry.location_type as 'Online' | 'Fysiek' | 'Zelfstudie',
+        location_details: entry.location_details,
+        meeting_url: entry.meeting_url,
+        created_at: entry.created_at,
+        updated_at: entry.updated_at
+      }));
+      
+      setRosterEntries(mappedEntries);
     } catch (e: any) {
       console.error('Error fetching roster entries:', e);
       setError(`Kon rooster entries niet laden: ${e.message}`);
