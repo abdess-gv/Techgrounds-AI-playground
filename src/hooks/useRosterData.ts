@@ -25,8 +25,8 @@ export const useRosterData = (programId?: string) => {
         description: program.description,
         start_date: program.start_date,
         end_date: program.end_date,
-        anchor_date: program.start_date, // Use start_date as anchor_date for now
-        cycle_weeks: 4, // Default to 4 weeks
+        anchor_date: program.anchor_date || program.start_date, // Use anchor_date or fallback to start_date
+        cycle_weeks: program.cycle_weeks || 4, // Use cycle_weeks or default to 4
         is_active: true, // Default to active
         created_at: program.created_at,
         updated_at: program.updated_at
@@ -34,16 +34,27 @@ export const useRosterData = (programId?: string) => {
       
       setPrograms(mappedPrograms);
     } catch (e: any) {
+      console.error('Error fetching programs:', e);
       setError(`Kon programma's niet laden: ${e.message}`);
     }
   };
 
   const fetchRosterEntries = async (targetProgramId: string) => {
     try {
-      // For now, return empty array since roster_entries table doesn't exist yet
-      // This will be populated once the database migration is complete
-      setRosterEntries([]);
+      const { data, error } = await supabase
+        .from('roster_entries')
+        .select('*')
+        .eq('program_id', targetProgramId)
+        .order('week_number')
+        .order('day_of_week')
+        .order('start_time');
+
+      if (error) throw error;
+      
+      console.log('Fetched roster entries:', data);
+      setRosterEntries(data || []);
     } catch (e: any) {
+      console.error('Error fetching roster entries:', e);
       setError(`Kon rooster entries niet laden: ${e.message}`);
     }
   };

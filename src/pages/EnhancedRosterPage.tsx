@@ -25,9 +25,13 @@ const EnhancedRosterPage: React.FC = () => {
   useEffect(() => {
     if (selectedProgram?.anchor_date) {
       const anchorDate = new Date(selectedProgram.anchor_date + 'T00:00:00');
-      const calculation = calculateGroupWeek(anchorDate, selectedDate, selectedProgram.cycle_weeks);
+      const calculation = calculateGroupWeek(anchorDate, selectedDate, selectedProgram.cycle_weeks || 4);
       setCurrentWeek(calculation.currentWeek);
       setGroupNumber(calculation.groupNumber);
+    } else {
+      // Fallback for programs without anchor_date
+      setCurrentWeek(1);
+      setGroupNumber(1);
     }
   }, [selectedProgram, selectedDate]);
 
@@ -46,10 +50,16 @@ const EnhancedRosterPage: React.FC = () => {
   };
 
   const getWeekStartDate = () => {
-    if (!selectedProgram?.anchor_date) return selectedDate;
+    if (!selectedProgram?.anchor_date) {
+      // Fallback: use Monday of current week
+      const currentDate = new Date(selectedDate);
+      const monday = new Date(currentDate);
+      monday.setDate(currentDate.getDate() - currentDate.getDay() + 1);
+      return monday;
+    }
     
     const anchorDate = new Date(selectedProgram.anchor_date + 'T00:00:00');
-    const calculation = calculateGroupWeek(anchorDate, selectedDate, selectedProgram.cycle_weeks);
+    const calculation = calculateGroupWeek(anchorDate, selectedDate, selectedProgram.cycle_weeks || 4);
     return calculation.weekStartDate;
   };
 
@@ -95,17 +105,13 @@ const EnhancedRosterPage: React.FC = () => {
             />
           )}
 
-          {selectedProgramId && rosterEntries.length > 0 ? (
+          {selectedProgramId ? (
             <WeeklyRosterView
               entries={rosterEntries}
               weekNumber={currentWeek}
               groupNumber={groupNumber}
               weekStartDate={getWeekStartDate()}
             />
-          ) : selectedProgramId ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">Nog geen rooster entries beschikbaar voor dit programma.</p>
-            </div>
           ) : (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">Selecteer een programma om het rooster te bekijken.</p>
