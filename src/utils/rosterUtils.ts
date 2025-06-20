@@ -17,7 +17,7 @@ export const calculateGroupWeek = (anchorDate: Date, targetDate: Date, cycleWeek
   // Calculate which group number this represents
   const groupNumber = Math.floor(totalWeeks / cycleWeeks) + 1;
   
-  // Calculate the start date of the current week
+  // Calculate the start date of the current week (Monday)
   const weekStartDate = new Date(anchorDate);
   weekStartDate.setDate(anchorDate.getDate() + (totalWeeks * 7));
   
@@ -30,7 +30,8 @@ export const calculateGroupWeek = (anchorDate: Date, targetDate: Date, cycleWeek
 
 export const generateWeekDates = (startDate: Date): Date[] => {
   const dates: Date[] = [];
-  for (let i = 0; i < 7; i++) {
+  // Only generate weekdays (Monday to Friday)
+  for (let i = 0; i < 5; i++) {
     const date = new Date(startDate);
     date.setDate(startDate.getDate() + i);
     dates.push(date);
@@ -43,8 +44,9 @@ export const formatTime = (time: string): string => {
 };
 
 export const getDayName = (dayIndex: number): string => {
-  const days = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
-  return days[dayIndex];
+  // Updated to only handle weekdays: 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday
+  const days = ['', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag'];
+  return days[dayIndex] || '';
 };
 
 export const getLocationIcon = (locationType: string): string => {

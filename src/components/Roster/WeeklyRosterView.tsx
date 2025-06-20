@@ -55,7 +55,7 @@ const WeeklyRosterView: React.FC<WeeklyRosterViewProps> = ({
             year: 'numeric',
             month: 'long',
             day: 'numeric'
-          })} - {weekDates[6].toLocaleDateString('nl-NL', { 
+          })} - {weekDates[4].toLocaleDateString('nl-NL', { 
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -66,13 +66,15 @@ const WeeklyRosterView: React.FC<WeeklyRosterViewProps> = ({
 
       <div className="grid gap-4">
         {weekDates.map((date, dayIndex) => {
-          const dayEntries = weekEntries.filter(entry => entry.day_of_week === dayIndex);
+          // Convert array index (0-4) to database day index (1-5)
+          const dbDayIndex = dayIndex + 1;
+          const dayEntries = weekEntries.filter(entry => entry.day_of_week === dbDayIndex);
           
           return (
             <Card key={dayIndex} className="overflow-hidden">
               <CardHeader className="bg-blue-50 py-3">
                 <CardTitle className="text-lg">
-                  {getDayName(dayIndex)} - {date.toLocaleDateString('nl-NL')}
+                  {getDayName(dbDayIndex)} - {date.toLocaleDateString('nl-NL')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4">
