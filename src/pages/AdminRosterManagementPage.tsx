@@ -45,7 +45,7 @@ const AdminRosterManagementPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [editingCycleDetail, setEditingCycleDetail] = useState<Partial<CycleDetailFormData> & { program_id?: string, week_in_cycle?: number, day_of_week?: number } | null>(null);
-  const daysOfWeekDutch = ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"];
+  const daysOfWeekDutch = ["", "Ma", "Di", "Wo", "Do", "Vr", ""];
 
   const [editingDateOverride, setEditingDateOverride] = useState<Partial<DateOverrideFormData> & { program_id?: string } | null>(null);
 
@@ -309,6 +309,7 @@ const AdminRosterManagementPage: React.FC = () => {
                     <h3 className="text-lg font-semibold text-gray-700 mb-4">Week {week}</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
                       {daysOfWeekDutch.map((dayName, dayIndex) => {
+                        if (dayIndex === 0 || dayIndex === 6) return null;
                         const detail = cycleDetails.find(cd => cd.week_in_cycle === week && cd.day_of_week === dayIndex);
                         return (
                           <Card key={`w${week}-d${dayIndex}`} className="min-h-[140px] flex flex-col">
@@ -391,7 +392,19 @@ const AdminRosterManagementPage: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3 mb-6">
-                {dateOverrides.length > 0 ? dateOverrides.map((override) => (
+                {dateOverrides.length > 0 ? dateOverrides
+                  .filter(override => {
+                    const overrideDate = new Date(override.override_date);
+                    // Adjust for timezone differences if `override_date` is just a date string e.g. "YYYY-MM-DD"
+                    // Supabase typically stores DATE type as YYYY-MM-DD UTC.
+                    // When new Date("YYYY-MM-DD") is created, it might be interpreted as UTC or local time depending on the browser.
+                    // To be safe, and assuming override_date is meant to be a specific calendar day regardless of timezone:
+                    const userTimezoneOffset = overrideDate.getTimezoneOffset() * 60000;
+                    const dateInUserTimezone = new Date(overrideDate.getTime() + userTimezoneOffset);
+                    const dayOfWeek = dateInUserTimezone.getDay();
+                    return dayOfWeek !== 0 && dayOfWeek !== 6; // Exclude Sunday (0) and Saturday (6)
+                  })
+                  .map((override) => (
                   <Card key={override.id || override.override_date} className="p-4 border-l-4 border-l-orange-400">
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
@@ -414,7 +427,7 @@ const AdminRosterManagementPage: React.FC = () => {
                       </div>
                     </div>
                   </Card>
-                )) : <p className="text-gray-500 text-center py-8">Geen datum uitzonderingen gedefinieerd.</p>}
+                )) : <p className="text-gray-500 text-center py-8">Geen datum uitzonderingen gedefinieerd (of alleen in het weekend).</p>}
               </div>
               <Button onClick={() => openDateOverrideForm()} className="w-full">
                 + Nieuwe Uitzondering Toevoegen
