@@ -5,20 +5,24 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, XCircle, Lightbulb, Target, Clock } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Target, Clock, Info } from 'lucide-react';
 import PromptHighlighter from './PromptHighlighter';
+import { evaluateExercise, EvaluationSummary } from './utils/exerciseEvaluator';
 
 interface Exercise {
   id: string;
   title: string;
   description: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  category: string;
+  category?: string;
   prompt: string;
-  solution: string;
-  criteria: string[];
+  solution?: string;
+  criteria?: string[];
+  evaluationCriteria?: string[];
   hints: string[];
+  tips?: string[];
   timeLimit?: number;
+  estimatedTime?: string;
 }
 
 interface InteractiveExerciseProps {
@@ -30,33 +34,18 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({ exercise, onC
   const [userInput, setUserInput] = useState('');
   const [currentHint, setCurrentHint] = useState(0);
   const [showHints, setShowHints] = useState(false);
-  const [evaluation, setEvaluation] = useState<{ [key: string]: boolean }>({});
-  const [isEvaluated, setIsEvaluated] = useState(false);
+  const [evaluationSummary, setEvaluationSummary] = useState<EvaluationSummary | null>(null);
   const [timeLeft, setTimeLeft] = useState(exercise.timeLimit || 600);
 
   const evaluateResponse = () => {
-    const newEvaluation: { [key: string]: boolean } = {};
-    
-    exercise.criteria.forEach(criterion => {
-      // Simple keyword-based evaluation (in real app, use AI evaluation)
-      const keywords = criterion.toLowerCase().split(' ');
-      const hasKeywords = keywords.some(keyword => 
-        userInput.toLowerCase().includes(keyword)
-      );
-      newEvaluation[criterion] = hasKeywords;
-    });
-    
-    setEvaluation(newEvaluation);
-    setIsEvaluated(true);
-    
-    const score = Object.values(newEvaluation).filter(Boolean).length / exercise.criteria.length * 100;
-    onComplete(score);
+    const summary = evaluateExercise(exercise, userInput);
+    setEvaluationSummary(summary);
+    onComplete(summary.overallScore);
   };
 
   const resetExercise = () => {
     setUserInput('');
-    setEvaluation({});
-    setIsEvaluated(false);
+    setEvaluationSummary(null);
     setCurrentHint(0);
     setShowHints(false);
   };
@@ -171,23 +160,47 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({ exercise, onC
       </Card>
 
       {/* Evaluation Results */}
-      {isEvaluated && (
+      {evaluationSummary && (
         <Card>
           <CardHeader>
-            <CardTitle>Evaluation Results</CardTitle>
+            <CardTitle className="flex items-center space-x-2">
+              <span>Evaluation Results</span>
+              <Badge variant="outline" className={
+                evaluationSummary.overallScore >= 80 ? 'bg-green-100 text-green-800' :
+                evaluationSummary.overallScore >= 60 ? 'bg-yellow-100 text-yellow-800' :
+                'bg-red-100 text-red-800'
+              }>
+                {Math.round(evaluationSummary.overallScore)}%
+              </Badge>
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              {exercise.criteria.map((criterion, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  {evaluation[criterion] ? (
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                  ) : (
-                    <XCircle className="h-5 w-5 text-red-600" />
-                  )}
-                  <span className={evaluation[criterion] ? 'text-green-800' : 'text-red-800'}>
-                    {criterion}
-                  </span>
+            <div className="space-y-3">
+              {Object.entries(evaluationSummary.results).map(([criterion, result], index) => (
+                <div key={index} className="border rounded-lg p-3">
+                  <div className="flex items-start space-x-3">
+                    {result.passed ? (
+                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                    ) : (
+                      <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
+                    )}
+                    <div className="flex-1">
+                      <div className={`font-medium ${result.passed ? 'text-green-800' : 'text-red-800'}`}>
+                        {criterion}
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        {result.feedback}
+                      </div>
+                      {result.matchedKeywords.length > 0 && (
+                        <div className="text-xs text-blue-600 mt-1">
+                          Gevonden: {result.matchedKeywords.join(', ')}
+                        </div>
+                      )}
+                    </div>
+                    <Badge variant="outline" className="text-xs">
+                      {Math.round(result.score)}%
+                    </Badge>
+                  </div>
                 </div>
               ))}
             </div>
@@ -196,19 +209,35 @@ const InteractiveExercise: React.FC<InteractiveExerciseProps> = ({ exercise, onC
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium">Overall Score</span>
                 <span className="text-sm text-gray-600">
-                  {Object.values(evaluation).filter(Boolean).length} / {exercise.criteria.length}
+                  {evaluationSummary.passedCriteria} / {evaluationSummary.totalCriteria} criteria passed
                 </span>
               </div>
-              <Progress 
-                value={Object.values(evaluation).filter(Boolean).length / exercise.criteria.length * 100} 
-                className="h-2"
-              />
+              <Progress value={evaluationSummary.overallScore} className="h-3" />
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg mt-4">
-              <h4 className="font-semibold mb-2">Sample Solution:</h4>
-              <PromptHighlighter text={exercise.solution} />
-            </div>
+            {evaluationSummary.suggestions.length > 0 && (
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Info className="h-4 w-4 text-blue-600" />
+                  <h4 className="font-medium text-blue-900">Verbeteringsuggesties:</h4>
+                </div>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  {evaluationSummary.suggestions.map((suggestion, index) => (
+                    <li key={index} className="flex items-start space-x-1">
+                      <span>•</span>
+                      <span>{suggestion}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {exercise.solution && (
+              <div className="bg-gray-50 p-4 rounded-lg mt-4">
+                <h4 className="font-semibold mb-2">Sample Solution:</h4>
+                <PromptHighlighter text={exercise.solution} />
+              </div>
+            )}
           </CardContent>
         </Card>
       )}

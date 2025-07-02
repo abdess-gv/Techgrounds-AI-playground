@@ -6,9 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CheckCircle, XCircle, Lightbulb, Target, Clock, Award, ExternalLink, BookOpen } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Target, Clock, Award, ExternalLink, BookOpen, Info } from 'lucide-react';
 import PromptHighlighter from './PromptHighlighter';
-import { Exercise } from './ExerciseData';
+import { evaluateExercise, EvaluationSummary, Exercise } from './utils/exerciseEvaluator';
 
 interface EnhancedInteractiveExerciseProps {
   exercise: Exercise;
@@ -26,37 +26,18 @@ const EnhancedInteractiveExercise: React.FC<EnhancedInteractiveExerciseProps> = 
   const [currentTip, setCurrentTip] = useState(0);
   const [showHints, setShowHints] = useState(false);
   const [showTips, setShowTips] = useState(false);
-  const [evaluation, setEvaluation] = useState<{ [key: string]: boolean }>({});
-  const [isEvaluated, setIsEvaluated] = useState(false);
+  const [evaluationSummary, setEvaluationSummary] = useState<EvaluationSummary | null>(null);
   const [timeElapsed, setTimeElapsed] = useState(0);
 
   const evaluateResponse = () => {
-    const newEvaluation: { [key: string]: boolean } = {};
-    
-    exercise.criteria.forEach(criterion => {
-      // Enhanced evaluation logic
-      const keywords = criterion.toLowerCase().split(/[^\w]+/).filter(word => word.length > 2);
-      const userText = userInput.toLowerCase();
-      
-      // Check for keyword presence and context
-      const hasKeywords = keywords.some(keyword => userText.includes(keyword));
-      const hasContext = userText.length > 50; // Minimum length for meaningful content
-      const hasStructure = userText.includes('\n') || userText.includes(':') || userText.includes('-');
-      
-      newEvaluation[criterion] = hasKeywords && hasContext && hasStructure;
-    });
-    
-    setEvaluation(newEvaluation);
-    setIsEvaluated(true);
-    
-    const score = Object.values(newEvaluation).filter(Boolean).length / exercise.criteria.length * 100;
-    onComplete(score);
+    const summary = evaluateExercise(exercise, userInput);
+    setEvaluationSummary(summary);
+    onComplete(summary.overallScore);
   };
 
   const resetExercise = () => {
     setUserInput('');
-    setEvaluation({});
-    setIsEvaluated(false);
+    setEvaluationSummary(null);
     setCurrentHint(0);
     setCurrentTip(0);
     setShowHints(false);
@@ -64,9 +45,9 @@ const EnhancedInteractiveExercise: React.FC<EnhancedInteractiveExerciseProps> = 
     setTimeElapsed(0);
   };
 
-  const completedCriteria = Object.values(evaluation).filter(Boolean).length;
-  const totalCriteria = exercise.criteria.length;
-  const score = isEvaluated ? (completedCriteria / totalCriteria) * 100 : 0;
+  const completedCriteria = evaluationSummary?.passedCriteria || 0;
+  const totalCriteria = evaluationSummary?.totalCriteria || (exercise.evaluationCriteria || exercise.criteria || []).length;
+  const score = evaluationSummary?.overallScore || 0;
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600';
@@ -122,8 +103,8 @@ const EnhancedInteractiveExercise: React.FC<EnhancedInteractiveExerciseProps> = 
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="workspace">Workspace</TabsTrigger>
           <TabsTrigger value="hints">Hints ({exercise.hints.length})</TabsTrigger>
-          <TabsTrigger value="tips">Tips ({exercise.tips.length})</TabsTrigger>
-          <TabsTrigger value="resources">Resources ({exercise.resources.length})</TabsTrigger>
+          <TabsTrigger value="tips">Tips ({exercise.tips?.length || 0})</TabsTrigger>
+          <TabsTrigger value="resources">Resources ({exercise.resources?.length || 0})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="workspace" className="space-y-6">
@@ -167,7 +148,7 @@ const EnhancedInteractiveExercise: React.FC<EnhancedInteractiveExerciseProps> = 
                 <CardTitle className="text-orange-900">📊 Evaluation Results</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 pt-6">
-                {isEvaluated && (
+                {evaluationSummary && (
                   <>
                     <div className="text-center p-4 bg-gray-50 rounded-lg">
                       <div className={`text-3xl font-bold ${getScoreColor(score)}`}>
@@ -185,31 +166,51 @@ const EnhancedInteractiveExercise: React.FC<EnhancedInteractiveExerciseProps> = 
 
                 <div className="space-y-3">
                   <h4 className="font-semibold">Evaluation Criteria:</h4>
-                  {exercise.criteria.map((criterion, index) => (
+                  {Object.entries(evaluationSummary?.results || {}).map(([criterion, result], index) => (
                     <div key={index} className="flex items-start space-x-3 p-3 rounded-lg border">
-                      {isEvaluated ? (
-                        evaluation[criterion] ? (
-                          <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                        ) : (
-                          <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
-                        )
+                      {result.passed ? (
+                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
                       ) : (
-                        <div className="w-5 h-5 border-2 border-gray-300 rounded-full mt-0.5"></div>
+                        <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
                       )}
-                      <span className={`text-sm ${
-                        isEvaluated 
-                          ? evaluation[criterion] 
-                            ? 'text-green-800 font-medium' 
-                            : 'text-red-800'
-                          : 'text-gray-700'
-                      }`}>
-                        {criterion}
-                      </span>
+                      <div className="flex-1">
+                        <div className={`font-medium text-sm ${result.passed ? 'text-green-800' : 'text-red-800'}`}>
+                          {criterion}
+                        </div>
+                        <div className="text-xs text-gray-600 mt-1">
+                          {result.feedback}
+                        </div>
+                        {result.matchedKeywords.length > 0 && (
+                          <div className="text-xs text-blue-600 mt-1">
+                            Gevonden: {result.matchedKeywords.join(', ')}
+                          </div>
+                        )}
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        {Math.round(result.score)}%
+                      </Badge>
                     </div>
                   ))}
                 </div>
 
-                {isEvaluated && (
+                {evaluationSummary?.suggestions && evaluationSummary.suggestions.length > 0 && (
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Info className="h-4 w-4 text-blue-600" />
+                      <h4 className="font-medium text-blue-900">Verbeteringsuggesties:</h4>
+                    </div>
+                    <ul className="text-sm text-blue-800 space-y-1">
+                      {evaluationSummary.suggestions.map((suggestion, index) => (
+                        <li key={index} className="flex items-start space-x-1">
+                          <span>•</span>
+                          <span>{suggestion}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {evaluationSummary && exercise.solution && (
                   <div className="bg-gray-50 p-4 rounded-lg border-2 border-gray-200 mt-6">
                     <h4 className="font-semibold mb-3">✨ Sample Solution:</h4>
                     <div className="bg-white p-4 rounded border max-h-60 overflow-y-auto">
@@ -271,30 +272,36 @@ const EnhancedInteractiveExercise: React.FC<EnhancedInteractiveExerciseProps> = 
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">Tip {currentTip + 1} of {exercise.tips.length}</span>
-                  <div className="flex space-x-1">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setCurrentTip(Math.max(0, currentTip - 1))}
-                      disabled={currentTip === 0}
-                    >
-                      ← Previous
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setCurrentTip(Math.min(exercise.tips.length - 1, currentTip + 1))}
-                      disabled={currentTip === exercise.tips.length - 1}
-                    >
-                      Next →
-                    </Button>
-                  </div>
-                </div>
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <p className="text-blue-800">{exercise.tips[currentTip]}</p>
-                </div>
+                {exercise.tips && exercise.tips.length > 0 ? (
+                  <>
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">Tip {currentTip + 1} of {exercise.tips.length}</span>
+                      <div className="flex space-x-1">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setCurrentTip(Math.max(0, currentTip - 1))}
+                          disabled={currentTip === 0}
+                        >
+                          ← Previous
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setCurrentTip(Math.min(exercise.tips.length - 1, currentTip + 1))}
+                          disabled={currentTip === exercise.tips.length - 1}
+                        >
+                          Next →
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                      <p className="text-blue-800">{exercise.tips[currentTip]}</p>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-gray-500">Geen tips beschikbaar voor deze oefening.</p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -310,25 +317,29 @@ const EnhancedInteractiveExercise: React.FC<EnhancedInteractiveExerciseProps> = 
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-4">
-                {exercise.resources.map((resource, index) => (
-                  <div key={index} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-                    <div className="flex items-start space-x-3">
-                      <Badge variant="outline" className="mt-1">
-                        {resource.type}
-                      </Badge>
-                      <div className="flex-1">
-                        <h4 className="font-medium">{resource.title}</h4>
-                        <p className="text-sm text-gray-600 mt-1">{resource.description}</p>
-                        <Button variant="link" className="p-0 h-auto mt-2" asChild>
-                          <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="h-3 w-3 mr-1" />
-                            View Resource
-                          </a>
-                        </Button>
+                {exercise.resources && exercise.resources.length > 0 ? (
+                  exercise.resources.map((resource, index) => (
+                    <div key={index} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                      <div className="flex items-start space-x-3">
+                        <Badge variant="outline" className="mt-1">
+                          {resource.type}
+                        </Badge>
+                        <div className="flex-1">
+                          <h4 className="font-medium">{resource.title}</h4>
+                          <p className="text-sm text-gray-600 mt-1">{resource.description}</p>
+                          <Button variant="link" className="p-0 h-auto mt-2" asChild>
+                            <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                              <ExternalLink className="h-3 w-3 mr-1" />
+                              View Resource
+                            </a>
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-gray-500">Geen bronnen beschikbaar voor deze oefening.</p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -336,7 +347,7 @@ const EnhancedInteractiveExercise: React.FC<EnhancedInteractiveExerciseProps> = 
       </Tabs>
 
       {/* Performance Feedback */}
-      {isEvaluated && (
+      {evaluationSummary && (
         <Card className="border-2 border-blue-200 bg-blue-50">
           <CardContent className="p-6">
             <h3 className="font-bold text-blue-900 mb-4">🎯 Performance Analysis</h3>
@@ -354,7 +365,7 @@ const EnhancedInteractiveExercise: React.FC<EnhancedInteractiveExerciseProps> = 
                 <div className="text-sm text-purple-700">Performance Level</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-orange-600">{exercise.estimatedTime}</div>
+                <div className="text-2xl font-bold text-orange-600">{exercise.estimatedTime || 'N/A'}</div>
                 <div className="text-sm text-orange-700">Time Estimate</div>
               </div>
             </div>

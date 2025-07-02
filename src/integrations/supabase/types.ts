@@ -42,47 +42,6 @@ export type Database = {
         }
         Relationships: []
       }
-      ai_conversations: {
-        Row: {
-          context_notes: string[] | null
-          created_at: string | null
-          id: string
-          messages: Json
-          provider: Database["public"]["Enums"]["ai_provider"]
-          title: string | null
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          context_notes?: string[] | null
-          created_at?: string | null
-          id?: string
-          messages?: Json
-          provider: Database["public"]["Enums"]["ai_provider"]
-          title?: string | null
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          context_notes?: string[] | null
-          created_at?: string | null
-          id?: string
-          messages?: Json
-          provider?: Database["public"]["Enums"]["ai_provider"]
-          title?: string | null
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ai_conversations_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       content_modules: {
         Row: {
           content: Json
@@ -391,6 +350,189 @@ export type Database = {
           user_role?: Database["public"]["Enums"]["user_role"] | null
         }
         Relationships: []
+      }
+      program_cycle_details: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          general_info: string
+          id: string
+          link_url: string | null
+          location_info: string
+          program_id: string
+          time_info: string
+          updated_at: string
+          week_in_cycle: number
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          general_info?: string
+          id?: string
+          link_url?: string | null
+          location_info?: string
+          program_id: string
+          time_info?: string
+          updated_at?: string
+          week_in_cycle: number
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          general_info?: string
+          id?: string
+          link_url?: string | null
+          location_info?: string
+          program_id?: string
+          time_info?: string
+          updated_at?: string
+          week_in_cycle?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "program_cycle_details_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      program_date_overrides: {
+        Row: {
+          created_at: string
+          general_info: string
+          id: string
+          link_url: string | null
+          location_info: string
+          override_date: string
+          program_id: string
+          time_info: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          general_info?: string
+          id?: string
+          link_url?: string | null
+          location_info?: string
+          override_date: string
+          program_id: string
+          time_info?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          general_info?: string
+          id?: string
+          link_url?: string | null
+          location_info?: string
+          override_date?: string
+          program_id?: string
+          time_info?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "program_date_overrides_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      programs: {
+        Row: {
+          anchor_date: string | null
+          created_at: string
+          cycle_weeks: number | null
+          description: string | null
+          end_date: string | null
+          id: string
+          name: string
+          start_date: string | null
+          updated_at: string
+        }
+        Insert: {
+          anchor_date?: string | null
+          created_at?: string
+          cycle_weeks?: number | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          name: string
+          start_date?: string | null
+          updated_at?: string
+        }
+        Update: {
+          anchor_date?: string | null
+          created_at?: string
+          cycle_weeks?: number | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          name?: string
+          start_date?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      roster_entries: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          description: string | null
+          end_time: string
+          id: string
+          location_details: string | null
+          location_type: string
+          meeting_url: string | null
+          program_id: string
+          start_time: string
+          title: string
+          updated_at: string
+          week_number: number
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          description?: string | null
+          end_time: string
+          id?: string
+          location_details?: string | null
+          location_type: string
+          meeting_url?: string | null
+          program_id: string
+          start_time: string
+          title: string
+          updated_at?: string
+          week_number: number
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          description?: string | null
+          end_time?: string
+          id?: string
+          location_details?: string | null
+          location_type?: string
+          meeting_url?: string | null
+          program_id?: string
+          start_time?: string
+          title?: string
+          updated_at?: string
+          week_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roster_entries_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       system_settings: {
         Row: {
