@@ -10,6 +10,7 @@ import PromptHighlighter from './PromptHighlighter';
 import PromptLegend from './PromptLegend';
 import ExerciseNavigator from './ExerciseNavigator';
 import { Exercise, getExerciseDatabase } from './ExerciseData';
+import { evaluateExercise } from './utils/exerciseEvaluator';
 
 interface EmbeddableExerciseProps {
   exercise: Exercise;
@@ -21,12 +22,6 @@ interface EmbeddableExerciseProps {
   language?: 'en' | 'nl';
 }
 
-interface CriterionEvaluation {
-  met: boolean;
-  score: number;
-  matchedKeywords: string[];
-  feedback: string;
-}
 
 const EmbeddableExercise = ({ 
   exercise, 
@@ -40,7 +35,7 @@ const EmbeddableExercise = ({
   const [userPrompt, setUserPrompt] = useState("");
   const [showHints, setShowHints] = useState(false);
   const [currentHint, setCurrentHint] = useState(0);
-  const [evaluation, setEvaluation] = useState<{ [key: string]: CriterionEvaluation }>({});
+  const [evaluation, setEvaluation] = useState<any>(null);
   const [isEvaluated, setIsEvaluated] = useState(false);
   const [currentExercise, setCurrentExercise] = useState(exercise);
   const [currentLevel, setCurrentLevel] = useState<'beginner' | 'intermediate' | 'advanced'>(exercise.difficulty);
@@ -117,248 +112,16 @@ const EmbeddableExercise = ({
   };
 
   const evaluatePrompt = () => {
-    const criteria = currentExercise.criteria || currentExercise.evaluationCriteria || [];
-    const newEvaluation: { [key: string]: CriterionEvaluation } = {};
-    
-    criteria.forEach(criterion => {
-      const result = evaluateCriterion(criterion, userPrompt);
-      newEvaluation[criterion] = result;
-    });
-    
-    setEvaluation(newEvaluation);
+    const evaluationResult = evaluateExercise(currentExercise, userPrompt);
+    setEvaluation(evaluationResult);
     setIsEvaluated(true);
-    
-    const totalScore = Object.values(newEvaluation).reduce((sum, evalResult) => sum + evalResult.score, 0);
-    const averageScore = criteria.length > 0 ? (totalScore / criteria.length) * 100 : 0;
-    onComplete?.(averageScore);
+    onComplete?.(evaluationResult.overallScore);
   };
 
-  const evaluateCriterion = (criterion: string, userText: string): CriterionEvaluation => {
-    const lowerCriterion = criterion.toLowerCase();
-    const lowerUserText = userText.toLowerCase();
-    
-    // Extract key concepts and required elements from the criterion
-    const requiredElements = extractRequiredElements(lowerCriterion);
-    const keyPhrases = extractKeyPhrases(lowerCriterion);
-    const matchedKeywords: string[] = [];
-    let contentScore = 0;
-    
-    // Content relevance evaluation (60% weight)
-    let relevantMatches = 0;
-    const totalRequiredElements = Math.max(requiredElements.length, keyPhrases.length, 3);
-    
-    // Check for required elements
-    requiredElements.forEach(element => {
-      if (lowerUserText.includes(element.toLowerCase())) {
-        matchedKeywords.push(element);
-        relevantMatches += 1;
-      }
-    });
-    
-    // Check for key phrases with context
-    keyPhrases.forEach(phrase => {
-      if (lowerUserText.includes(phrase) && hasContextAroundPhrase(lowerUserText, phrase)) {
-        if (!matchedKeywords.includes(phrase)) {
-          matchedKeywords.push(phrase);
-          relevantMatches += 1;
-        }
-      }
-    });
-    
-    // Content score based on percentage of required elements found
-    contentScore = Math.min(relevantMatches / totalRequiredElements, 1.0) * 0.6;
-    
-    // Structure and clarity evaluation (20% weight)
-    let structureScore = 0;
-    const hasGoodStructure = userText.includes(':') || userText.includes('\n') || 
-                           userText.includes('1.') || userText.includes('•') || 
-                           userText.includes('-');
-    const hasClearSections = (userText.match(/\n/g) || []).length >= 2;
-    const hasProperFormatting = userText.includes(':') && userText.length > 100;
-    
-    if (hasGoodStructure) structureScore += 0.1;
-    if (hasClearSections) structureScore += 0.05;
-    if (hasProperFormatting) structureScore += 0.05;
-    
-    // Length and completeness evaluation (10% weight)
-    let lengthScore = 0;
-    if (userText.length > 50) lengthScore += 0.03;
-    if (userText.length > 150) lengthScore += 0.04;
-    if (userText.length > 300) lengthScore += 0.03;
-    
-    // Creativity and originality evaluation (10% weight)
-    let creativityScore = 0;
-    const hasExamples = userText.toLowerCase().includes('voorbeeld') || 
-                       userText.toLowerCase().includes('bijvoorbeeld') ||
-                       userText.toLowerCase().includes('zoals');
-    const hasPersona = userText.toLowerCase().includes('rol') || 
-                      userText.toLowerCase().includes('persona') ||
-                      userText.toLowerCase().includes('expert');
-    const hasSpecificInstructions = userText.split('.').length > 3;
-    
-    if (hasExamples) creativityScore += 0.03;
-    if (hasPersona) creativityScore += 0.04;
-    if (hasSpecificInstructions) creativityScore += 0.03;
-    
-    const finalScore = contentScore + structureScore + lengthScore + creativityScore;
-    const met = finalScore >= 0.6; // 60% threshold for success
-    
-    // Generate detailed feedback
-    let feedback = generateDetailedFeedback(
-      contentScore, structureScore, lengthScore, creativityScore,
-      matchedKeywords, userText.length, totalRequiredElements
-    );
-    
-    return {
-      met,
-      score: finalScore,
-      matchedKeywords,
-      feedback: feedback.trim()
-    };
-  };
-
-  const extractRequiredElements = (criterion: string): string[] => {
-    const elements: string[] = [];
-    
-    // Look for specific requirements in the criterion
-    const requirementPatterns = [
-      /moet\s+(\w+)/g,
-      /bevat\s+(\w+)/g,
-      /gebruik\s+(\w+)/g,
-      /specificeer\s+(\w+)/g,
-      /definieer\s+(\w+)/g,
-      /beschrijf\s+(\w+)/g
-    ];
-    
-    requirementPatterns.forEach(pattern => {
-      let match;
-      while ((match = pattern.exec(criterion)) !== null) {
-        elements.push(match[1]);
-      }
-    });
-    
-    return elements;
-  };
-
-  const hasContextAroundPhrase = (text: string, phrase: string): boolean => {
-    const index = text.indexOf(phrase);
-    if (index === -1) return false;
-    
-    const before = text.substring(Math.max(0, index - 20), index);
-    const after = text.substring(index + phrase.length, Math.min(text.length, index + phrase.length + 20));
-    
-    // Check if there's meaningful context around the phrase
-    const contextWords = (before + after).split(/\s+/).filter(word => word.length > 3);
-    return contextWords.length >= 3;
-  };
-
-  const generateDetailedFeedback = (
-    contentScore: number, 
-    structureScore: number, 
-    lengthScore: number, 
-    creativityScore: number,
-    matchedKeywords: string[],
-    textLength: number,
-    totalRequired: number
-  ): string => {
-    let feedback = "";
-    
-    // Content feedback (most important)
-    if (contentScore >= 0.4) {
-      feedback += `✓ Goede inhoudelijke relevantie (${matchedKeywords.length}/${totalRequired} elementen gevonden). `;
-    } else if (contentScore >= 0.2) {
-      feedback += `◐ Gedeeltelijk relevante inhoud (${matchedKeywords.length}/${totalRequired} elementen). Meer specifieke details nodig. `;
-    } else {
-      feedback += `✗ Onvoldoende relevante inhoud (${matchedKeywords.length}/${totalRequired} elementen). Focus op de kernelementen. `;
-    }
-    
-    // Structure feedback
-    if (structureScore >= 0.15) {
-      feedback += `✓ Uitstekende structuur en opmaak. `;
-    } else if (structureScore >= 0.1) {
-      feedback += `◐ Redelijke structuur, kan verbeterd worden. `;
-    } else {
-      feedback += `✗ Betere structuur nodig (gebruik : - nummering). `;
-    }
-    
-    // Length feedback
-    if (lengthScore >= 0.08) {
-      feedback += `✓ Uitgebreide en complete prompt. `;
-    } else if (lengthScore >= 0.05) {
-      feedback += `◐ Redelijke lengte (${textLength} karakters). `;
-    } else {
-      feedback += `✗ Te beknopt (${textLength} karakters), meer detail nodig. `;
-    }
-    
-    // Creativity feedback
-    if (creativityScore >= 0.08) {
-      feedback += `✓ Creatief en specifiek uitgewerkt. `;
-    } else if (creativityScore >= 0.05) {
-      feedback += `◐ Redelijk uitgewerkt, meer voorbeelden helpen. `;
-    } else {
-      feedback += `✗ Meer specificiteit en voorbeelden nodig. `;
-    }
-    
-    return feedback;
-  };
-
-  const extractKeyPhrases = (text: string): string[] => {
-    // Extract meaningful phrases and keywords from criteria
-    const phrases: string[] = [];
-    
-    // Common Dutch prompt engineering terms and their synonyms
-    const termMappings: { [key: string]: string[] } = {
-      'rol': ['rol', 'persona', 'karakter', 'expert', 'specialist'],
-      'context': ['context', 'achtergrond', 'situatie', 'omgeving'],
-      'taak': ['taak', 'opdracht', 'doel', 'assignment', 'instructie'],
-      'structuur': ['structuur', 'opbouw', 'format', 'indeling', 'organisatie'],
-      'voorbeeld': ['voorbeeld', 'sample', 'illustratie', 'demo'],
-      'specificeer': ['specificeer', 'detail', 'precies', 'exact', 'concreet'],
-      'uitvoer': ['uitvoer', 'output', 'resultaat', 'antwoord'],
-      'format': ['format', 'structuur', 'opmaak', 'vorm'],
-      'redenering': ['redenering', 'logica', 'stappen', 'proces']
-    };
-    
-    // Extract base terms from the criterion
-    Object.keys(termMappings).forEach(baseterm => {
-      termMappings[baseterm].forEach(synonym => {
-        if (text.includes(synonym)) {
-          phrases.push(synonym);
-          // Also add the base term if not already included
-          if (!phrases.includes(baseterm)) {
-            phrases.push(baseterm);
-          }
-        }
-      });
-    });
-    
-    // Extract quoted terms
-    const quotedTerms = text.match(/"([^"]+)"/g);
-    if (quotedTerms) {
-      quotedTerms.forEach(term => phrases.push(term.replace(/"/g, '')));
-    }
-    
-    // Extract capitalized terms (likely to be important)
-    const capitalizedWords = text.match(/\b[A-Z][a-z]+\b/g);
-    if (capitalizedWords) {
-      phrases.push(...capitalizedWords.map(w => w.toLowerCase()));
-    }
-    
-    // Split criterion into meaningful chunks and extract key terms
-    const words = text.split(/\s+/);
-    const importantWords = words.filter(word => 
-      word.length > 4 && 
-      !['heeft', 'moet', 'zijn', 'wordt', 'kunnen', 'zouden', 'wanneer', 'omdat'].includes(word)
-    );
-    
-    phrases.push(...importantWords);
-    
-    return [...new Set(phrases)]; // Remove duplicates
-  };
 
   const resetExercise = () => {
     setUserPrompt("");
-    setEvaluation({});
+    setEvaluation(null);
     setIsEvaluated(false);
     setShowHints(false);
     setCurrentHint(0);
@@ -376,12 +139,9 @@ const EmbeddableExercise = ({
   };
 
   const criteria = currentExercise.criteria || currentExercise.evaluationCriteria || [];
-  const evaluationEntries = Object.entries(evaluation);
-  const completedCriteria = evaluationEntries.filter(([_, evalResult]) => evalResult.met).length;
-  const totalCriteria = criteria.length;
-  const averageScore = evaluationEntries.length > 0 
-    ? (evaluationEntries.reduce((sum, [_, evalResult]) => sum + evalResult.score, 0) / evaluationEntries.length) * 100
-    : 0;
+  const completedCriteria = evaluation ? evaluation.passedCriteria : 0;
+  const totalCriteria = evaluation ? evaluation.totalCriteria : criteria.length;
+  const averageScore = evaluation ? evaluation.overallScore : 0;
 
   const difficultyColor = {
     beginner: 'bg-green-100 text-green-800',
@@ -617,12 +377,12 @@ const EmbeddableExercise = ({
             <div className="space-y-2">
               <h4 className="font-semibold text-sm">{t('criteria.evaluation')}</h4>
               {criteria.map((criterion, index) => {
-                const evalResult = evaluation[criterion];
+                const evalResult = evaluation?.results?.[criterion];
                 return (
                   <div key={index} className="p-3 rounded border text-sm">
                     <div className="flex items-start space-x-2 mb-2">
                       {isEvaluated ? (
-                        evalResult?.met ? (
+                        evalResult?.passed ? (
                           <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
                         ) : (
                           <XCircle className="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
@@ -633,7 +393,7 @@ const EmbeddableExercise = ({
                       <div className="flex-1">
                         <span className={
                           isEvaluated 
-                            ? evalResult?.met 
+                            ? evalResult?.passed 
                               ? 'text-green-800 font-medium' 
                               : 'text-red-800'
                             : 'text-gray-700'
@@ -643,12 +403,12 @@ const EmbeddableExercise = ({
                         {isEvaluated && evalResult && (
                           <div className="mt-1">
                             <div className="text-xs text-gray-600">
-                              Score: {Math.round(evalResult.score * 100)}%
+                              {evalResult.feedback}
                             </div>
                             {showDebug && (
                               <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
                                 <strong>Debug info:</strong><br />
-                                {evalResult.feedback}<br />
+                                Score: {Math.round(evalResult.score)}%<br />
                                 {evalResult.matchedKeywords.length > 0 && (
                                   <>Gevonden termen: {evalResult.matchedKeywords.join(', ')}</>
                                 )}
@@ -661,6 +421,21 @@ const EmbeddableExercise = ({
                   </div>
                 );
               })}
+              
+              {/* Show improvement suggestions */}
+              {evaluation?.suggestions && evaluation.suggestions.length > 0 && (
+                <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
+                  <h5 className="font-semibold text-blue-900 text-sm mb-2">💡 Verbeteringsuggesties:</h5>
+                  <ul className="text-blue-800 text-sm space-y-1">
+                    {evaluation.suggestions.map((suggestion: string, index: number) => (
+                      <li key={index} className="flex items-start space-x-1">
+                        <span>•</span>
+                        <span>{suggestion}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
