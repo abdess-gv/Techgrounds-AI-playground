@@ -71,7 +71,7 @@ Voor het afronden van analyse:
 </kwaliteit-controles>
 
 Analyseer dit bedrijf: [FINANCIËLE_DATA]`,
-    criteria: [
+    evaluationCriteria: [
       'Stelt duidelijke sequentiële redeneer stappen vast',
       'Bevat validatie en kwaliteitscontrole processen',
       'Geeft specifieke uitvoer structuur voor elke stap',
@@ -131,7 +131,7 @@ Analyseer dit bedrijf: [FINANCIËLE_DATA]`,
 4. **Actieplan**: Geef 3 concrete, prioriteit-gerangschikte aanbevelingen met verwachte impact
 
 Gebruik cijfers en redenering bij elke stap. Leg uit waarom elke aanbeveling logisch volgt uit je analyse.`,
-    criteria: [
+    evaluationCriteria: [
       'Stap-voor-stap analyse structuur',
       'Concrete cijfers en data',
       'Logische redenering per stap',
@@ -198,7 +198,7 @@ Gebruik cijfers en redenering bij elke stap. Leg uit waarom elke aanbeveling log
 
 **Sluit af met:**
 Een uitgebalanceerde synthese die een hybride model voorstelt met concrete implementatie richtlijnen die alle perspectieven respecteert.`,
-    criteria: [
+    evaluationCriteria: [
       'Meerdere duidelijk gedefinieerde perspectieven',
       'Onderbouwing met data/trends',
       'Praktische implicaties per perspectief',
@@ -264,7 +264,7 @@ Een uitgebalanceerde synthese die een hybride model voorstelt met concrete imple
 - **Vroege signalen**: Platform fee increases, marketplace policy changes
 
 **Actieplan**: Ontwikkel een adaptieve strategie die elementen van alle scenario's integreert, met mijlpalen om strategy aan te passen based on emerging trends.`,
-    criteria: [
+    evaluationCriteria: [
       'Meerdere concrete scenario\'s met waarschijnlijkheden',
       'Trends, implicaties en strategieën per scenario',
       'Risico analyse en vroege signalen',
