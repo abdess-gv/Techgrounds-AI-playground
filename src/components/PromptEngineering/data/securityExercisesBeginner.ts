@@ -158,5 +158,152 @@ Geef me een template voor het vermelden van AI hulp in academisch werk."`,
       bad: `Deze tekst is door AI geschreven.`,
       explanation: 'Het goede voorbeeld legt uit hoe AI werd gebruikt, het slechte is vaag en suggereert geen eigen bijdrage.'
     }
+  },
+  {
+    id: 'ai-transparency-basics',
+    title: 'AI Transparantie Basis',
+    description: 'Leer hoe je open en eerlijk bent over AI gebruik in dagelijkse situaties',
+    difficulty: 'beginner',
+    category: 'AI Veiligheid',
+    type: 'creative',
+    estimatedTime: '15 min',
+    prompt: 'Je gebruikt AI om een professionele email te schrijven aan een klant. Hoe ben je transparant over deze hulp?',
+    solution: `Transparant AI gebruik voor professionele communicatie:
+
+"Help me een transparante aanpak voor AI-geassisteerde communicatie:
+
+1. **Wanneer vermelden:**
+   - Bij belangrijke formele communicatie
+   - Wanneer AI meer dan spellingscontrole doet
+   - Als de ontvanger er mogelijk waarde aan hecht
+   - Bij creatieve content zoals voorstellen
+
+2. **Hoe vermelden:**
+   - Eenvoudige disclaimer: 'Met behulp van AI tools'
+   - In email footer: 'Deze email is geoptimaliseerd met AI assistentie'
+   - Direct in tekst: 'Ik heb AI gebruikt om deze tekst te structureren'
+
+3. **Praktische Template:**
+   'Beste [Naam], 
+   
+   [Hoofdinhoud van je email]
+   
+   Met vriendelijke groet,
+   [Jouw naam]
+   
+   P.S. Deze email is gestructureerd met behulp van AI tools om duidelijkheid te verbeteren.'
+
+4. **Waarom belangrijk:**
+   - Bouwt vertrouwen op
+   - Voorkomt verrassingen
+   - Toont professionele integriteit
+   - Helpt anderen leren van je aanpak"`,
+    criteria: [
+      'Geeft concrete momenten wanneer transparantie nodig is',
+      'Biedt praktische manieren om AI gebruik te vermelden',
+      'Toont begrip van waarom transparantie belangrijk is',
+      'Balanceert eerlijkheid met praktische toepasbaarheid'
+    ],
+    hints: [
+      'Niet elke AI hulp hoeft vermeld - focus op significante bijdragen',
+      'Houd het simpel en niet aflelend van de hoofdboodschap',
+      'Een korte vermelding is vaak genoeg',
+      'Denk na: zou jij het willen weten als ontvanger?'
+    ],
+    tips: [
+      'Transparantie bouwt vertrouwen op lange termijn',
+      'Begin met transparantie - het wordt dan een natuurlijke gewoonte',
+      'Verschillende situaties vragen verschillende niveaus van disclosure',
+      'Je integriteit is waardevoller dan perfecte teksten'
+    ],
+    resources: [
+      {
+        title: 'AI Transparantie in Bedrijfscommunicatie',
+        type: 'article',
+        url: 'https://example.com/ai-transparency-business',
+        description: 'Praktische gids voor eerlijke AI communicatie in professionele settings'
+      }
+    ],
+    examples: {
+      good: `Email footer: "Deze bericht is gestructureerd met AI assistentie voor duidelijkheid"`,
+      bad: `[Geen vermelding van substantiële AI hulp bij belangrijke zakelijke communicatie]`,
+      explanation: 'Het goede voorbeeld is transparant zonder afleidend te zijn, het slechte kan vertrouwen schaden als het later ontdekt wordt.'
+    }
+  },
+  {
+    id: 'safe-data-sharing',
+    title: 'Veilige Data Deling',
+    description: 'Leer welke informatie wel en niet veilig is om met AI te delen',
+    difficulty: 'beginner',
+    category: 'AI Veiligheid',
+    type: 'analysis',
+    estimatedTime: '20 min',
+    prompt: 'Je wilt AI hulp bij verschillende taken. Hoe bepaal je welke informatie veilig is om te delen en welke niet?',
+    solution: `Systematische aanpak voor veilige data deling met AI:
+
+"Ontwikkel een beslisboom voor veilige AI data deling:
+
+**NIVEAU 1 - NOOIT DELEN:**
+- Wachtwoorden, inloggegevens, API keys
+- Volledige bankrekeningnummers, creditcard info
+- Burgerservicenummers, paspoort nummers
+- Medische dossiers van echte personen
+- Vertrouwelijke bedrijfsdata (klantlijsten, financiële cijfers)
+
+**NIVEAU 2 - ALLEEN GEANONIMISEERD:**
+- Namen → [NAAM] of fictieve namen
+- Adressen → [ADRES] of fictieve locaties
+- Bedrijfsnamen → [BEDRIJF] of algemene beschrijvingen
+- Email adressen → [EMAIL] of voorbeeld@bedrijf.nl
+
+**NIVEAU 3 - VEILIG OM TE DELEN:**
+- Algemene werkprocessen en procedures
+- Theoretische vragen en concepten
+- Fictieve scenario's die je zelf maakt
+- Openbare informatie en algemene kennis
+
+**PRAKTISCHE CHECKLIST:**
+1. Is dit persoonlijk identificeerbare informatie (PII)?
+2. Zou ik dit in een openbare ruimte bespreken?
+3. Zijn er contractuele of wettelijke beperkingen?
+4. Kan ik het anonimiseren zonder context te verliezen?
+5. Heb ik toestemming van alle betrokkenen?
+
+**VEILIG ALTERNATIEF MAKEN:**
+- Gebruik realistische maar fictieve voorbeelden
+- Verander specifieke details maar behoud de structuur
+- Vraag om templates die je zelf kunt invullen
+- Focus op de methodologie, niet de specifieke data"`,
+    criteria: [
+      'Onderscheidt duidelijk tussen veilige en onveilige data types',
+      'Biedt praktische anonimisering strategieën',
+      'Geeft concrete besliscriteria voor data sharing',
+      'Toont begrip van privacy en veiligheidsrisicos'
+    ],
+    hints: [
+      'Bij twijfel: deel het niet - vraag om een algemene aanpak',
+      'Echte namen kunnen vaak vervangen worden door rollen of functies',
+      'Test je anonimisering: zou iemand de persoon nog kunnen identificeren?',
+      'Denk aan indirecte identificatie via combinatie van gegevens'
+    ],
+    tips: [
+      'Beter te voorzichtig dan spijt hebben later',
+      'Ontwikkel standaard masking templates voor veelgebruikte data types',
+      'Train jezelf in het herkennen van PII in verschillende contexten',
+      'Houd je organisatie\'s data classificatie richtlijnen in gedachten'
+    ],
+    resources: [
+      {
+        title: 'GDPR en AI: Data Protection Best Practices',
+        type: 'article',
+        url: 'https://example.com/gdpr-ai-data-protection',
+        description: 'Uitleg over privacy wetgeving en veilige data praktijken voor AI gebruik'
+      }
+    ],
+    examples: {
+      good: `"Help me een email template maken voor klant feedback, gebruik [KLANTNAAM] en [PRODUCT] als placeholders"`,
+      bad: `"Help me een email schrijven aan Jan de Vries over zijn klacht over Product X van ons bedrijf ABC"`,
+      explanation: 'Het goede voorbeeld gebruikt placeholders, het slechte deelt echte naam- en bedrijfsinformatie.'
+    }
   }
 ];
