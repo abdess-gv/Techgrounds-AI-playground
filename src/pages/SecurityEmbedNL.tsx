@@ -1,7 +1,7 @@
 
 import { useSearchParams } from 'react-router-dom';
 import { Suspense } from 'react';
-import EnhancedSecurityModule from '@/components/PromptEngineering/EnhancedSecurityModule';
+import EmbeddableSecurityModule from '@/components/PromptEngineering/EmbeddableSecurityModule';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -26,7 +26,7 @@ const SecurityEmbedNL = () => {
       <div className="min-h-screen bg-gray-50 p-4">
         <div className="max-w-7xl mx-auto">
           <Suspense fallback={<LoadingFallback />}>
-            <EnhancedSecurityModule
+            <EmbeddableSecurityModule
               compact={compact}
               showHeader={showHeader}
               showLegend={showLegend}

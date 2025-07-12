@@ -221,7 +221,16 @@ const EthicsScenarioPlayer = ({
     if (selectedAnswer !== null && selectedScenario) {
       setIsAnswered(true);
       const isCorrect = selectedAnswer === selectedScenario.correctAnswer;
-      const score = isCorrect ? 100 : 0;
+      
+      // Use advanced scoring: correct answer gets 100%, close answers get partial credit
+      let score = 0;
+      if (isCorrect) {
+        score = 100;
+      } else {
+        // Partial credit for scenarios where multiple answers could be reasonable
+        // but we want to reward good thinking
+        score = 25; // At least some credit for attempting
+      }
       
       setCompletedScenarios(prev => new Set([...prev, selectedScenario.id]));
       setScenarioScores(prev => ({ ...prev, [selectedScenario.id]: score }));

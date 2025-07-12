@@ -173,26 +173,46 @@ const PrivacyDetectionExercise = ({
   const analyzePrompt = () => {
     if (!exercise) return;
     
-    const found: PrivacyIssue[] = [];
-    const text = userPrompt.toLowerCase();
+    // Use advanced evaluation logic
+    const userAnswer = userPrompt.trim();
+    const expectedSolution = exercise.solution.trim();
     
-    // Simple pattern matching voor demo doeleinden
-    const patterns = {
-      personal: /\b[A-Z][a-z]+ [A-Z][a-z]+\b/g,
-      email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
-      phone: /\b0[0-9]{1,2}[-\s]?[0-9]{7,8}\b/g,
-      address: /\b[A-Z][a-z]+straat \d+/g,
-      bsn: /\bBSN:?\s*\d{9}\b/g,
-      creditcard: /\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b/g
-    };
-
-    // Bereken accuracy score
-    const totalIssues = exercise.issues.length;
-    const foundCount = Math.min(found.length, totalIssues);
-    const accuracy = (foundCount / totalIssues) * 100;
+    if (!userAnswer) {
+      setScore(0);
+      setShowResults(true);
+      return;
+    }
     
-    setDetectedIssues(found);
-    setScore(Math.round(accuracy));
+    // Check if user provided the exact solution
+    if (userAnswer.toLowerCase() === expectedSolution.toLowerCase()) {
+      setScore(100);
+      setShowResults(true);
+      return;
+    }
+    
+    // Advanced scoring based on privacy replacements
+    let score = 0;
+    const text = userAnswer.toLowerCase();
+    const originalText = exercise.prompt.toLowerCase();
+    
+    // Check if original sensitive data is removed
+    const stillContainsSensitiveData = exercise.issues.some(issue => 
+      text.includes(issue.text.toLowerCase())
+    );
+    
+    if (stillContainsSensitiveData) {
+      score = Math.max(0, 25); // Some effort but still has sensitive data
+    } else {
+      // Check for proper placeholder usage
+      const hasPlaceholders = /\[[A-Z_]+\]/.test(userAnswer);
+      if (hasPlaceholders) {
+        score = Math.min(95, 70 + (exercise.issues.length * 5)); // High score for proper placeholders
+      } else {
+        score = Math.min(80, 50 + (exercise.issues.length * 3)); // Medium score for removing data
+      }
+    }
+    
+    setScore(Math.round(score));
     setShowResults(true);
   };
 
